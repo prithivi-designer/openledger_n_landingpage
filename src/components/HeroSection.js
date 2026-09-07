@@ -1,0 +1,234 @@
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import HeroChatBox from './HeroChatBox';
+import SuggestionChips from './SuggestionChips';
+import TrustBadges from './TrustBadges';
+import ScrambledText from './ui/ScrambledText';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+export default function HeroSection() {
+  const [prompt, setPrompt] = React.useState('');
+  const rootRef = React.useRef(null);
+  const curvePathRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out', duration: 0.8 } });
+
+      tl.fromTo(
+        '#hero-headline',
+        { y: 25, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.9 }
+      )
+        .fromTo(
+          '#hero-subtitle',
+          { y: 18, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.75 },
+          '-=0.5'
+        )
+        .fromTo(
+          '#hero-chat-container',
+          { y: 24, opacity: 0, scale: 0.98 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.85 },
+          '-=0.45'
+        )
+        .fromTo(
+          '#hero-suggestion-chips button',
+          { y: 12, opacity: 0 },
+          { y: 0, opacity: 1, stagger: 0.06, duration: 0.6 },
+          '-=0.45'
+        )
+        .fromTo(
+          '#hero-trust-badges',
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.75 },
+          '-=0.35'
+        );
+
+      // Scroll-driven bottom curve: curves inward as hero scrolls off, then flattens back
+      const curveObj = { val: 0 };
+      const maxCurve = 140;
+
+      const updatePath = (v) => {
+        if (curvePathRef.current) {
+          const cy = 150 - v;
+          curvePathRef.current.setAttribute(
+            'd',
+            `M 0,150 Q 720,${cy} 1440,150 L 1440,155 L 0,155 Z`
+          );
+        }
+      };
+
+      const curveTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: rootRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.5,
+        },
+      });
+
+      curveTl
+        .to(curveObj, {
+          val: maxCurve,
+          ease: 'power2.out',
+          duration: 0.5,
+          onUpdate: () => updatePath(curveObj.val),
+        })
+        .to(curveObj, {
+          val: 0,
+          ease: 'power2.in',
+          duration: 0.5,
+          onUpdate: () => updatePath(curveObj.val),
+        });
+    }, rootRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  const handleSelectPrompt = (samplePrompt) => {
+    setPrompt(samplePrompt);
+    // Auto-focus input
+    setTimeout(() => {
+      const inputEl = document.querySelector('#hero-chat-container textarea');
+      if (inputEl) {
+        inputEl.focus();
+      }
+    }, 50);
+  };
+
+  return (
+    <Box
+      ref={rootRef}
+      component="section"
+      id="hero"
+      sx={{
+        position: 'relative',
+        minHeight: '100vh',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        backgroundImage: 'url(/images/hero_BG.png)',
+        backgroundPosition: 'bottom center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundColor: '#EEF0F0',
+        overflow: 'hidden',
+        pt: { xs: 7, sm: 9, md: 11 },
+        pb: 2,
+      }}
+    >
+      {/* Main Content Area */}
+      <Container
+        maxWidth="md"
+        sx={{
+          position: 'relative',
+          zIndex: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
+          my: 'auto',
+          py: { xs: 1.5, md: 3 },
+        }}
+      >
+        {/* Headline with ScrambledText effect */}
+        <Box id="hero-headline" sx={{ mb: 1.8, opacity: 1 }}>
+          <Typography
+            component="h1"
+            sx={{
+              fontFamily: '"Inter", -apple-system, sans-serif',
+              fontWeight: 700,
+              fontSize: { xs: '2.5rem', sm: '3.4rem', md: '4.2rem' },
+              lineHeight: 1.1,
+              letterSpacing: '-0.035em',
+              color: '#0F172A',
+              display: 'block',
+            }}
+          >
+            <ScrambledText text="Ask anything." />
+          </Typography>
+          <Typography
+            component="span"
+            sx={{
+              fontFamily: '"Inter", -apple-system, sans-serif',
+              fontWeight: 700,
+              fontSize: { xs: '2.5rem', sm: '3.4rem', md: '4.2rem' },
+              lineHeight: 1.15,
+              letterSpacing: '-0.035em',
+              color: '#64748B',
+              display: 'block',
+            }}
+          >
+            Think in the open.
+          </Typography>
+        </Box>
+
+        {/* Subtitle */}
+        <Typography
+          id="hero-subtitle"
+          variant="body1"
+          sx={{
+            maxWidth: 520,
+            mx: 'auto',
+            mb: { xs: 3, sm: 4 },
+            fontSize: { xs: '0.98rem', sm: '1.1rem' },
+            lineHeight: 1.6,
+            color: '#475569',
+            fontWeight: 450,
+            opacity: 1,
+          }}
+        >
+          A private, multi-model AI experience
+          <br />
+          with no account required to start.
+        </Typography>
+
+        {/* Interactive Chat Box matching openledger_chat */}
+        <HeroChatBox
+          prompt={prompt}
+          setPrompt={setPrompt}
+        />
+      </Container>
+
+      {/* Trust Badges */}
+      <TrustBadges />
+
+      {/* Dynamic Curved Bottom Divider - Curves inwards on scroll and flattens back */}
+      <Box
+        id="hero-curve-container"
+        sx={{
+          position: 'absolute',
+          bottom: -1,
+          left: 0,
+          width: '100%',
+          height: { xs: 80, sm: 110, md: 150 },
+          pointerEvents: 'none',
+          zIndex: 10,
+          overflow: 'hidden',
+        }}
+      >
+        <svg
+          viewBox="0 0 1440 150"
+          preserveAspectRatio="none"
+          style={{ width: '100%', height: '100%', display: 'block' }}
+        >
+          <path
+            ref={curvePathRef}
+            id="hero-curve-path"
+            d="M 0,150 Q 720,150 1440,150 L 1440,155 L 0,155 Z"
+            fill="#0A0C10"
+          />
+        </svg>
+      </Box>
+    </Box>
+  );
+}

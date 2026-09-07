@@ -1,0 +1,72 @@
+import * as React from 'react';
+import Head from 'next/head';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { CacheProvider } from '@emotion/react';
+import theme from '@/theme/theme';
+import createEmotionCache from '@/utils/createEmotionCache';
+import SmoothScroll from '@/components/SmoothScroll';
+import 'lenis/dist/lenis.css';
+
+// Client-side cache, shared for the whole session of the user in the browser.
+const clientSideEmotionCache = createEmotionCache();
+
+export default function MyApp(props) {
+  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+
+  React.useEffect(() => {
+    const isIgnoredError = (err) => {
+      if (!err) return false;
+      const message = typeof err === 'string' ? err : err.message || '';
+      const stack = err.stack || '';
+      return (
+        message.includes('MetaMask') ||
+        message.includes('Failed to connect to MetaMask') ||
+        stack.includes('chrome-extension://') ||
+        stack.includes('moz-extension://') ||
+        stack.includes('safari-web-extension://')
+      );
+    };
+
+    const handleUnhandledRejection = (event) => {
+      if (isIgnoredError(event.reason)) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }
+    };
+
+    const handleError = (event) => {
+      if (
+        isIgnoredError(event.error) ||
+        (event.filename &&
+          (event.filename.includes('extension://') || event.filename.includes('inpage.js')))
+      ) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }
+    };
+
+    window.addEventListener('unhandledrejection', handleUnhandledRejection, true);
+    window.addEventListener('error', handleError, true);
+
+    return () => {
+      window.removeEventListener('unhandledrejection', handleUnhandledRejection, true);
+      window.removeEventListener('error', handleError, true);
+    };
+  }, []);
+
+  return (
+    <CacheProvider value={emotionCache}>
+      <Head>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <title>OpenLedger | AI-Powered Infrastructure</title>
+      </Head>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <SmoothScroll>
+          <Component {...pageProps} />
+        </SmoothScroll>
+      </ThemeProvider>
+    </CacheProvider>
+  );
+}

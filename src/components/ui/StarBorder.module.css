@@ -1,0 +1,97 @@
+.starBorderContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 1.25rem;
+  padding: 1px;
+  z-index: 1;
+  width: 100%;
+}
+
+.starBorderCanvas {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.starBorderRevolveGlow {
+  position: absolute;
+  inset: -100px;
+  background: conic-gradient(
+    from var(--star-angle, 0deg) at 50% 50%,
+    transparent 0%,
+    transparent 50%,
+    var(--star-color, #c0c0c0) 85%,
+    #e2e8f0 98%,
+    transparent 100%
+  );
+  animation: starRevolveSpin var(--star-speed, 4s) linear infinite;
+  filter: blur(6px);
+  opacity: 0.35;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.starBorderRevolve {
+  position: absolute;
+  inset: -100px;
+  background: conic-gradient(
+    from var(--star-angle, 0deg) at 50% 50%,
+    transparent 0%,
+    transparent 50%,
+    var(--star-color, #c0c0c0) 90%,
+    #ffffff 99%,
+    transparent 100%
+  );
+  animation: starRevolveSpin var(--star-speed, 4s) linear infinite;
+  opacity: 0.55;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.isTemporaryBorder .starBorderRevolveGlow {
+  background: conic-gradient(
+    from var(--star-angle, 0deg) at 50% 50%,
+    transparent 0%,
+    transparent 50%,
+    #f59e0b 85%,
+    #ffc107 98%,
+    transparent 100%
+  );
+  opacity: 0.8;
+  filter: blur(8px);
+  animation: starRevolveSpin 2.5s linear infinite;
+}
+
+.isTemporaryBorder .starBorderRevolve {
+  background: conic-gradient(
+    from var(--star-angle, 0deg) at 50% 50%,
+    transparent 0%,
+    transparent 50%,
+    #f59e0b 90%,
+    #ffc107 99%,
+    transparent 100%
+  );
+  opacity: 0.95;
+  animation: starRevolveSpin 2.5s linear infinite;
+}
+
+.innerContent {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+@keyframes starRevolveSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
