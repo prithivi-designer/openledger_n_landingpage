@@ -13,28 +13,379 @@ if (typeof window !== 'undefined') {
 const FEATURES = [
   {
     icon: '⚡',
-    title: 'Multi-Model in Your Pocket',
-    desc: 'Instant access to Claude 3.5, GPT-4o, and Gemini with one-tap model routing.',
+    title: 'Instant Model Execution',
+    desc: 'Pay-as-you-go compute for Claude 3.5, GPT-4o, and Gemini with auto-routing.',
   },
   {
-    icon: '🔒',
-    title: 'Device-Native Privacy',
-    desc: 'End-to-end encrypted storage. Your mobile chats never train third-party models.',
+    icon: '💳',
+    title: 'Virtual Compute Card',
+    desc: 'Spendable ledger balance backed by zero-knowledge encrypted on-chain reserves.',
   },
   {
-    icon: '🧠',
-    title: 'Cross-Device Memory',
-    desc: 'Pick up on iOS or Android exactly where you paused on your desktop workspace.',
+    icon: '🔄',
+    title: 'Cross-Device Sync',
+    desc: 'Your balances, subscriptions, and conversational contexts sync seamlessly.',
   },
   {
-    icon: '🤖',
-    title: 'Autonomous Mobile Agents',
-    desc: 'Run background research, code audits, and alerts right from push notifications.',
+    icon: '🪙',
+    title: 'Cashback & Yield Rewards',
+    desc: 'Earn compute credits and staking rewards on every model inference and transaction.',
   },
 ];
 
 /* -------------------------------------------------------------------------- */
-/* 1. DESKTOP PRODUCT SCREEN (Reference 1 style)                               */
+/* 1. EXACT SPENDABLE APP SCREEN (User Reference)                              */
+/* -------------------------------------------------------------------------- */
+function SpendableAppScreen() {
+  return (
+    <Box
+      sx={{
+        width: '100%',
+        height: '100%',
+        background: '#EBECEF',
+        color: '#0F172A',
+        display: 'flex',
+        flexDirection: 'column',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif',
+        userSelect: 'none',
+        overflow: 'hidden',
+        position: 'relative',
+        p: { xs: '8px 10px 6px', md: '10px 14px 8px' },
+        boxSizing: 'border-box',
+      }}
+    >
+      {/* Top Bar: Profile Avatar 'M' & Time / Status */}
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', pt: 0.2, mb: 1 }}>
+        <Box
+          sx={{
+            width: 26,
+            height: 26,
+            borderRadius: '50%',
+            background: '#FFFFFF',
+            border: '1px solid rgba(0,0,0,0.08)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '0.74rem',
+            fontWeight: 700,
+            color: '#1E293B',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+          }}
+        >
+          M
+        </Box>
+        <Typography sx={{ fontSize: '0.65rem', fontWeight: 600, color: 'rgba(0,0,0,0.45)' }}>
+          10:32
+        </Typography>
+      </Box>
+
+      {/* Spendable Balance Heading */}
+      <Box sx={{ textAlign: 'center', mb: 1 }}>
+        <Typography sx={{ fontSize: '0.66rem', color: '#64748B', fontWeight: 500, mb: 0.1 }}>
+          Spendable
+        </Typography>
+        <Typography sx={{ fontSize: '1.75rem', fontWeight: 750, letterSpacing: '-0.035em', color: '#0F172A', lineHeight: 1.1 }}>
+          $9,076.56
+        </Typography>
+
+        {/* Sub-Pill: Total Balance */}
+        <Box
+          sx={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 0.5,
+            background: 'rgba(255,255,255,0.85)',
+            border: '1px solid rgba(0,0,0,0.06)',
+            borderRadius: 999,
+            px: 0.9,
+            py: 0.2,
+            mt: 0.5,
+            boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
+          }}
+        >
+          <Box sx={{ width: 8, height: 8, borderRadius: '50%', background: 'linear-gradient(135deg, #3B82F6, #8B5CF6)' }} />
+          <Typography sx={{ fontSize: '0.62rem', fontWeight: 500, color: '#475569' }}>
+            $19,176.56
+          </Typography>
+          <Typography sx={{ fontSize: '0.55rem', color: '#94A3B8' }}>↺</Typography>
+        </Box>
+      </Box>
+
+      {/* Dual Button: Add funds (Black) & Send (Light) */}
+      <Box
+        sx={{
+          display: 'flex',
+          gap: 0.6,
+          background: 'rgba(255,255,255,0.7)',
+          p: '3px',
+          borderRadius: 999,
+          border: '1px solid rgba(0,0,0,0.05)',
+          mb: 1.2,
+        }}
+      >
+        <Box
+          sx={{
+            flex: 1,
+            background: '#181A20',
+            color: '#FFFFFF',
+            borderRadius: 999,
+            py: 0.55,
+            textAlign: 'center',
+            fontSize: '0.7rem',
+            fontWeight: 600,
+            cursor: 'pointer',
+            boxShadow: '0 2px 5px rgba(0,0,0,0.12)',
+          }}
+        >
+          Add funds
+        </Box>
+        <Box
+          sx={{
+            flex: 1,
+            background: 'transparent',
+            color: '#1E293B',
+            borderRadius: 999,
+            py: 0.55,
+            textAlign: 'center',
+            fontSize: '0.7rem',
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
+        >
+          Send
+        </Box>
+      </Box>
+
+      {/* Floating Dark Virtual Card */}
+      <Box
+        sx={{
+          width: '100%',
+          aspectRatio: '1.7 / 1',
+          background: 'linear-gradient(145deg, #242830 0%, #171A21 55%, #0F1116 100%)',
+          borderRadius: 2.8,
+          p: 1.2,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          color: '#FFFFFF',
+          position: 'relative',
+          boxShadow: '0 8px 20px -3px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.15)',
+          border: '1px solid rgba(255,255,255,0.08)',
+          mb: 1.2,
+          overflow: 'hidden',
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            width: '60%',
+            height: '100%',
+            background: 'radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 60%)',
+            pointerEvents: 'none',
+          },
+        }}
+      >
+        {/* Card Header */}
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box
+            sx={{
+              width: 20,
+              height: 20,
+              borderRadius: '50%',
+              border: '2px solid rgba(255,255,255,0.35)',
+              borderRightColor: 'transparent',
+              transform: 'rotate(-45deg)',
+            }}
+          />
+          <Typography sx={{ fontSize: '0.55rem', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.06em' }}>
+            OPENLEDGER
+          </Typography>
+        </Box>
+
+        {/* Card Bottom */}
+        <Box sx={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <Typography sx={{ fontSize: '0.78rem', fontWeight: 700, letterSpacing: '-0.01em' }}>
+              $1,337.19
+            </Typography>
+            <Box sx={{ width: 5, height: 5, borderRadius: '50%', background: '#22C55E' }} />
+          </Box>
+          <Typography sx={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.7)', letterSpacing: '0.08em' }}>
+            •••• 2312 &gt;
+          </Typography>
+        </Box>
+      </Box>
+
+      {/* Activity / Transactions List */}
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0.8, overflow: 'hidden' }}>
+        {/* Uber */}
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.9 }}>
+            <Box
+              sx={{
+                width: 24,
+                height: 24,
+                borderRadius: '50%',
+                background: '#000000',
+                color: '#fff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '0.52rem',
+                fontWeight: 700,
+              }}
+            >
+              Uber
+            </Box>
+            <Box>
+              <Typography sx={{ fontSize: '0.68rem', fontWeight: 600, color: '#0F172A', lineHeight: 1.2 }}>
+                Uber
+              </Typography>
+              <Typography sx={{ fontSize: '0.55rem', color: '#94A3B8' }}>
+                Today 13:27
+              </Typography>
+            </Box>
+          </Box>
+          <Box sx={{ textAlign: 'right' }}>
+            <Typography sx={{ fontSize: '0.7rem', fontWeight: 600, color: '#0F172A', lineHeight: 1.2 }}>
+              -$35.19
+            </Typography>
+            <Typography sx={{ fontSize: '0.55rem', fontWeight: 600, color: '#2563EB' }}>
+              +$1.42 🪙
+            </Typography>
+          </Box>
+        </Box>
+
+        {/* Claude */}
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.9 }}>
+            <Box
+              sx={{
+                width: 24,
+                height: 24,
+                borderRadius: '50%',
+                background: '#D97706',
+                color: '#fff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '0.7rem',
+              }}
+            >
+              ✳
+            </Box>
+            <Box>
+              <Typography sx={{ fontSize: '0.68rem', fontWeight: 600, color: '#0F172A', lineHeight: 1.2 }}>
+                Claude
+              </Typography>
+              <Typography sx={{ fontSize: '0.55rem', color: '#94A3B8' }}>
+                05 Dec 10:07
+              </Typography>
+            </Box>
+          </Box>
+          <Box sx={{ textAlign: 'right' }}>
+            <Typography sx={{ fontSize: '0.7rem', fontWeight: 600, color: '#0F172A', lineHeight: 1.2 }}>
+              -$22.59
+            </Typography>
+            <Typography sx={{ fontSize: '0.55rem', fontWeight: 600, color: '#2563EB' }}>
+              +$1.02 🪙
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
+
+      {/* Bottom Navigation Bar */}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+          pt: 0.6,
+          borderTop: '1px solid rgba(0,0,0,0.06)',
+          mt: 'auto',
+        }}
+      >
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.15 }}>
+          <Typography sx={{ fontSize: '0.75rem' }}>🏠</Typography>
+          <Typography sx={{ fontSize: '0.52rem', fontWeight: 700, color: '#0F172A' }}>Home</Typography>
+          <Box sx={{ width: 12, height: 2, background: '#0F172A', borderRadius: 1 }} />
+        </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.15 }}>
+          <Typography sx={{ fontSize: '0.75rem', color: '#94A3B8' }}>🪙</Typography>
+          <Typography sx={{ fontSize: '0.52rem', color: '#94A3B8' }}>Earn</Typography>
+        </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.15 }}>
+          <Typography sx={{ fontSize: '0.75rem', color: '#94A3B8' }}>📊</Typography>
+          <Typography sx={{ fontSize: '0.52rem', color: '#94A3B8' }}>Stats</Typography>
+        </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.15 }}>
+          <Typography sx={{ fontSize: '0.75rem', color: '#94A3B8' }}>⚙️</Typography>
+          <Typography sx={{ fontSize: '0.52rem', color: '#94A3B8' }}>Tier</Typography>
+        </Box>
+      </Box>
+    </Box>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. TABLET PRODUCT SCREEN (Adapted Ledger Dashboard)                         */
+/* -------------------------------------------------------------------------- */
+function TabletLedgerScreen() {
+  return (
+    <Box sx={{ width: '100%', height: '100%', background: '#EBECEF', color: '#0F172A', display: 'flex', flexDirection: 'column', p: 1.6, userSelect: 'none', overflow: 'hidden' }}>
+      {/* Top Bar */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 1, borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+          <Box sx={{ width: 26, height: 26, borderRadius: '50%', background: '#fff', border: '1px solid rgba(0,0,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.74rem', fontWeight: 700 }}>M</Box>
+          <Typography sx={{ fontSize: '0.75rem', fontWeight: 700 }}>OpenLedger Account</Typography>
+        </Box>
+        <Box sx={{ display: 'flex', gap: 0.6, alignItems: 'center' }}>
+          <Box sx={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981' }} />
+          <Typography sx={{ fontSize: '0.62rem', color: '#059669', fontWeight: 600 }}>Active Enclave</Typography>
+        </Box>
+      </Box>
+
+      {/* Dual Column Layout */}
+      <Box sx={{ flex: 1, display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 1.4, py: 1.2, overflow: 'hidden' }}>
+        {/* Left: Spendable & Card */}
+        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <Box>
+            <Typography sx={{ fontSize: '0.65rem', color: '#64748B', fontWeight: 500 }}>Spendable</Typography>
+            <Typography sx={{ fontSize: '1.8rem', fontWeight: 800, color: '#0F172A', lineHeight: 1.1 }}>$9,076.56</Typography>
+            <Typography sx={{ fontSize: '0.65rem', color: '#64748B', mt: 0.4 }}>Total Balance: $19,176.56 ↺</Typography>
+          </Box>
+          <Box sx={{ aspectRatio: '1.7 / 1', background: 'linear-gradient(145deg, #242830 0%, #121419 100%)', borderRadius: 2.5, p: 1.2, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', color: '#fff' }}>
+            <Typography sx={{ fontSize: '0.55rem', color: 'rgba(255,255,255,0.5)' }}>OPENLEDGER CARD</Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+              <Typography sx={{ fontSize: '0.75rem', fontWeight: 700 }}>$1,337.19 🟢</Typography>
+              <Typography sx={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.7)' }}>•••• 2312 &gt;</Typography>
+            </Box>
+          </Box>
+        </Box>
+
+        {/* Right: Activity */}
+        <Box sx={{ background: '#fff', borderRadius: 2, p: 1.2, border: '1px solid rgba(0,0,0,0.06)', display: 'flex', flexDirection: 'column', gap: 0.8 }}>
+          <Typography sx={{ fontSize: '0.68rem', fontWeight: 700, color: '#0F172A' }}>Recent Activity</Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography sx={{ fontSize: '0.65rem', fontWeight: 600 }}>Uber</Typography>
+            <Typography sx={{ fontSize: '0.65rem', fontWeight: 600 }}>-$35.19</Typography>
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography sx={{ fontSize: '0.65rem', fontWeight: 600 }}>Claude 3.5 Sonnet</Typography>
+            <Typography sx={{ fontSize: '0.65rem', fontWeight: 600 }}>-$22.59</Typography>
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography sx={{ fontSize: '0.65rem', fontWeight: 600 }}>GPT-4o Omniverse</Typography>
+            <Typography sx={{ fontSize: '0.65rem', fontWeight: 600 }}>-$14.20</Typography>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. DESKTOP PRODUCT SCREEN (Reference 1 style)                               */
 /* -------------------------------------------------------------------------- */
 function DesktopProductScreen() {
   return (
@@ -65,14 +416,12 @@ function DesktopProductScreen() {
           flexShrink: 0,
         }}
       >
-        {/* macOS Traffic Lights */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
           <Box sx={{ width: 10, height: 10, borderRadius: '50%', background: '#FF5F56', boxShadow: '0 0 6px rgba(255,95,86,0.5)' }} />
           <Box sx={{ width: 10, height: 10, borderRadius: '50%', background: '#FFBD2E', boxShadow: '0 0 6px rgba(255,189,46,0.5)' }} />
           <Box sx={{ width: 10, height: 10, borderRadius: '50%', background: '#27C93F', boxShadow: '0 0 6px rgba(39,201,63,0.5)' }} />
         </Box>
 
-        {/* Title & Path */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <Box sx={{ width: 14, height: 14, borderRadius: 3, background: 'linear-gradient(135deg, #7C3AED, #3B82F6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 8 }}>🐙</Box>
           <Typography sx={{ fontSize: '0.74rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', letterSpacing: '0.02em' }}>
@@ -80,7 +429,6 @@ function DesktopProductScreen() {
           </Typography>
         </Box>
 
-        {/* Status badges */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, px: 0.9, py: 0.2, borderRadius: 999, background: 'rgba(39,201,63,0.12)', border: '1px solid rgba(39,201,63,0.3)' }}>
             <Box sx={{ width: 5, height: 5, borderRadius: '50%', background: '#27C93F' }} />
@@ -92,7 +440,6 @@ function DesktopProductScreen() {
 
       {/* Main Workspace Body */}
       <Box sx={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
-        {/* Left Sidebar */}
         <Box
           sx={{
             width: 140,
@@ -135,26 +482,16 @@ function DesktopProductScreen() {
               </Box>
             ))}
           </Box>
-
-          <Box sx={{ mt: 'auto', pt: 1, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-            <Typography sx={{ fontSize: '0.58rem', color: 'rgba(255,255,255,0.35)' }}>
-              🔒 Zero-Knowledge Enclave
-            </Typography>
-          </Box>
         </Box>
 
-        {/* Center / Right Multi-Model Comparison Canvas */}
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', p: 1.8, gap: 1.4, overflow: 'hidden', background: 'radial-gradient(ellipse 70% 50% at 50% 30%, rgba(59,130,246,0.06) 0%, transparent 80%)' }}>
-          {/* User Prompt Bubble */}
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', p: 1.8, gap: 1.4, overflow: 'hidden' }}>
           <Box sx={{ alignSelf: 'flex-end', maxWidth: '75%', background: 'linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%)', borderRadius: '14px 14px 2px 14px', px: 1.6, py: 0.8, boxShadow: '0 4px 16px rgba(37,99,235,0.3)' }}>
             <Typography sx={{ fontSize: '0.78rem', color: '#fff', fontWeight: 500 }}>
               Compare cryptographic consensus across ZK-rollups and generate Rust verification logic.
             </Typography>
           </Box>
 
-          {/* Dual Parallel Responses Grid */}
           <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.4, flex: 1, minHeight: 0 }}>
-            {/* Claude 3.5 Output Card */}
             <Box sx={{ background: 'rgba(18,22,30,0.85)', border: '1px solid rgba(217,119,6,0.3)', borderRadius: 2.5, p: 1.4, display: 'flex', flexDirection: 'column', gap: 0.8, overflow: 'hidden' }}>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6 }}>
@@ -167,146 +504,32 @@ function DesktopProductScreen() {
                 <Typography sx={{ fontFamily: 'monospace', fontSize: '0.62rem', color: '#93C5FD', lineHeight: 1.5 }}>
                   {`pub fn verify_zk_proof(proof: &[u8], vk: &VerifyingKey) -> bool {\n  let snark = SnarkVerifier::new(vk);\n  snark.verify_batch(proof).is_ok()\n}`}
                 </Typography>
-                <Typography sx={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.75)', mt: 0.8, lineHeight: 1.4 }}>
-                  Batch verification reduces on-chain gas overhead by ~42% compared to sequential SNARK proofs.
-                </Typography>
               </Box>
             </Box>
 
-            {/* GPT-4o Output Card */}
             <Box sx={{ background: 'rgba(18,22,30,0.85)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: 2.5, p: 1.4, display: 'flex', flexDirection: 'column', gap: 0.8, overflow: 'hidden' }}>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6 }}>
                   <Box sx={{ width: 7, height: 7, borderRadius: '50%', background: '#10B981' }} />
                   <Typography sx={{ fontSize: '0.72rem', fontWeight: 700, color: '#34D399' }}>GPT-4o Omniverse</Typography>
                 </Box>
-                <Typography sx={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.4)' }}>180ms · Synthesis Match</Typography>
+                <Typography sx={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.4)' }}>180ms · Match</Typography>
               </Box>
               <Box sx={{ background: 'rgba(0,0,0,0.4)', borderRadius: 1.5, p: 1, border: '1px solid rgba(255,255,255,0.04)', flex: 1, overflow: 'hidden' }}>
                 <Typography sx={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.78)', lineHeight: 1.45 }}>
-                  Consensus synthesis confirmed. Security guarantees remain identical across both Groth16 and Plonk proving systems.
+                  Batch verification confirmed. Security guarantees remain identical across Groth16 and Plonk.
                 </Typography>
-                <Box sx={{ display: 'flex', gap: 0.6, mt: 1 }}>
-                  <Box sx={{ px: 0.8, py: 0.2, borderRadius: 1, background: 'rgba(16,185,129,0.15)', color: '#6EE7B7', fontSize: '0.58rem', fontWeight: 600 }}>3.4x Faster</Box>
-                  <Box sx={{ px: 0.8, py: 0.2, borderRadius: 1, background: 'rgba(59,130,246,0.15)', color: '#93C5FD', fontSize: '0.58rem', fontWeight: 600 }}>Gas Efficient</Box>
-                </Box>
               </Box>
             </Box>
           </Box>
-
-          {/* Bottom Prompt Bar */}
-          <Box sx={{ background: 'rgba(22,27,34,0.9)', borderRadius: 2, border: '1px solid rgba(255,255,255,0.1)', p: '8px 12px', display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Box sx={{ flex: 1, color: 'rgba(255,255,255,0.4)', fontSize: '0.72rem' }}>
-              Query Claude 3.5 + GPT-4o concurrently...
-            </Box>
-            <Box sx={{ display: 'flex', gap: 0.5 }}>
-              {['GPT-4o', 'Claude', 'Gemini'].map((m) => (
-                <Box key={m} sx={{ px: 0.6, py: 0.15, borderRadius: 1, background: 'rgba(255,255,255,0.08)', fontSize: '0.58rem', color: 'rgba(255,255,255,0.6)' }}>
-                  {m}
-                </Box>
-              ))}
-            </Box>
-            <Box sx={{ width: 22, height: 22, borderRadius: '50%', background: '#3B82F6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '0.7rem' }}>
-              ↑
-            </Box>
-          </Box>
         </Box>
-      </Box>
-
-      {/* Screen Glare Overlay */}
-      <Box sx={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 40%, rgba(255,255,255,0.01) 100%)', pointerEvents: 'none' }} />
-    </Box>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* 2. TABLET PRODUCT SCREEN                                                   */
-/* -------------------------------------------------------------------------- */
-function TabletProductScreen() {
-  return (
-    <Box sx={{ width: '100%', height: '100%', background: '#090C12', color: '#E2E8F0', display: 'flex', flexDirection: 'column', p: 1.4, userSelect: 'none', overflow: 'hidden' }}>
-      {/* Tablet Status Bar */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 1, borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-        <Typography sx={{ fontSize: '0.65rem', fontWeight: 600, color: 'rgba(255,255,255,0.9)' }}>9:41 AM · OpenLedger Pro</Typography>
-        <Box sx={{ display: 'flex', gap: 0.6, alignItems: 'center' }}>
-          <Box sx={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981' }} />
-          <Typography sx={{ fontSize: '0.6rem', color: '#34D399', fontWeight: 600 }}>Connected</Typography>
-        </Box>
-      </Box>
-
-      {/* Tablet Chat View */}
-      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 1, py: 1.2, overflow: 'hidden' }}>
-        <Box sx={{ alignSelf: 'flex-end', background: '#2563EB', color: '#fff', borderRadius: '12px 12px 2px 12px', px: 1.2, py: 0.6, fontSize: '0.7rem', maxWidth: '85%' }}>
-          Compare token throughput across models
-        </Box>
-        <Box sx={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '12px 12px 12px 2px', p: 1.2 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6, mb: 0.5 }}>
-            <Box sx={{ width: 6, height: 6, borderRadius: '50%', background: '#F59E0B' }} />
-            <Typography sx={{ fontSize: '0.68rem', fontWeight: 700, color: '#FCD34D' }}>Claude 3.5 Sonnet</Typography>
-          </Box>
-          <Typography sx={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.8)', lineHeight: 1.4 }}>
-            Benchmark complete. OpenLedger dynamic router delivered 3.2x lower latency with zero degradation.
-          </Typography>
-        </Box>
-      </Box>
-
-      {/* Input */}
-      <Box sx={{ background: '#141820', borderRadius: 2, border: '1px solid rgba(255,255,255,0.1)', px: 1, py: 0.6, display: 'flex', alignItems: 'center', gap: 0.8 }}>
-        <Box sx={{ flex: 1, color: 'rgba(255,255,255,0.3)', fontSize: '0.68rem' }}>Ask OpenLedger...</Box>
-        <Box sx={{ width: 18, height: 18, borderRadius: '50%', background: '#3B82F6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '0.6rem' }}>↑</Box>
       </Box>
     </Box>
   );
 }
 
 /* -------------------------------------------------------------------------- */
-/* 3. MOBILE APP SCREEN (Single column chat)                                  */
-/* -------------------------------------------------------------------------- */
-function MobileAppScreen() {
-  return (
-    <Box sx={{ width: '100%', height: '100%', background: '#090C12', color: '#fff', display: 'flex', flexDirection: 'column', p: 1.2, userSelect: 'none', overflow: 'hidden' }}>
-      {/* Mobile Top Bar */}
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1, pt: 1.2 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6 }}>
-          <Box sx={{ width: 18, height: 18, borderRadius: '50%', background: 'linear-gradient(135deg, #7C3AED, #3B82F6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9 }}>🐙</Box>
-          <Typography sx={{ fontSize: '0.75rem', fontWeight: 700 }}>OpenLedger</Typography>
-        </Box>
-        <Box sx={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981', boxShadow: '0 0 6px #10B981' }} />
-      </Box>
-
-      {/* Model Selector Pills */}
-      <Box sx={{ display: 'flex', gap: 0.4, mb: 1 }}>
-        {['Nova AI', 'GPT-4o', 'Claude'].map((m, i) => (
-          <Box key={m} sx={{ flex: 1, textAlign: 'center', py: 0.4, borderRadius: 1.5, background: i === 0 ? 'rgba(59,130,246,0.2)' : 'rgba(255,255,255,0.04)', border: i === 0 ? '1px solid rgba(59,130,246,0.4)' : '1px solid rgba(255,255,255,0.06)', fontSize: '0.6rem', fontWeight: i === 0 ? 600 : 400, color: i === 0 ? '#60A5FA' : 'rgba(255,255,255,0.6)' }}>
-            {m}
-          </Box>
-        ))}
-      </Box>
-
-      {/* Chat Stream */}
-      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0.8, overflow: 'hidden' }}>
-        <Box sx={{ alignSelf: 'flex-end', background: '#2563EB', color: '#fff', borderRadius: '10px 10px 2px 10px', px: 1, py: 0.5, fontSize: '0.65rem', maxWidth: '85%' }}>
-          Compare smartphone camera specs
-        </Box>
-        <Box sx={{ alignSelf: 'flex-start', background: '#131822', border: '1px solid rgba(59,130,246,0.25)', borderRadius: '10px 10px 10px 2px', p: 1, maxWidth: '92%' }}>
-          <Typography sx={{ fontSize: '0.62rem', color: '#93C5FD', fontWeight: 600, mb: 0.2 }}>✦ Nova Multi-Model</Typography>
-          <Typography sx={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.85)', lineHeight: 1.35 }}>
-            Flagship computational sensors focus on per-pixel photon gathering and on-device neural ISP processing.
-          </Typography>
-        </Box>
-      </Box>
-
-      {/* Input */}
-      <Box sx={{ background: '#131822', borderRadius: 999, border: '1px solid rgba(255,255,255,0.12)', px: 1, py: 0.5, display: 'flex', alignItems: 'center', gap: 0.6, mt: 0.8 }}>
-        <Box sx={{ flex: 1, color: 'rgba(255,255,255,0.4)', fontSize: '0.62rem' }}>Message OpenLedger...</Box>
-        <Box sx={{ width: 16, height: 16, borderRadius: '50%', background: '#3B82F6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '0.6rem' }}>↑</Box>
-      </Box>
-    </Box>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* MAIN EXPORT: MobileAppSection                                              */
+/* MAIN COMPONENT                                                             */
 /* -------------------------------------------------------------------------- */
 export default function MobileAppSection() {
   const sectionRef = React.useRef(null);
@@ -338,9 +561,8 @@ export default function MobileAppSection() {
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
-            // Inform header about light phase when self.progress >= 0.72
             if (sectionRef.current) {
-              const isLight = self.progress >= 0.72;
+              const isLight = self.progress >= 0.7;
               sectionRef.current.setAttribute('data-light-phase', isLight ? 'true' : 'false');
               window.dispatchEvent(new Event('scroll'));
             }
@@ -360,31 +582,24 @@ export default function MobileAppSection() {
       gsap.set(handRef.current, { y: 160, opacity: 0 });
       gsap.set(contentRef.current, { opacity: 0, x: -40 });
 
-      // PHASE 1: MacBook in dark background opens upright (Reference 1 style)
-      // t = 0 -> 1.4
+      // PHASE 1: MacBook in dark background opens upright (Reference 1)
       tl.to(laptopWrapRef.current, { opacity: 1, scale: 1, y: 0, ease: 'power3.out', duration: 0.8 }, 0);
       tl.to(macLidRef.current, { rotateX: 0, ease: 'power2.inOut', duration: 1.2 }, 0.1);
       tl.to(macScreenRef.current, { opacity: 1, ease: 'power2.in', duration: 0.6 }, 0.7);
-      // Dwell on open MacBook
       tl.to({}, { duration: 0.5 }, 1.4);
 
       // PHASE 2a: Screen size changes -> Laptop morphs to Tablet
-      // t = 1.9 -> 2.9
       tl.to(macBaseRef.current, { opacity: 0, y: 30, ease: 'power2.in', duration: 0.5 }, 1.9);
       tl.to(laptopWrapRef.current, { opacity: 0, scale: 0.85, ease: 'power2.inOut', duration: 0.6 }, 1.9);
       tl.to(tabletWrapRef.current, { opacity: 1, scale: 1, y: 0, ease: 'power3.out', duration: 0.6 }, 2.2);
-      // Dwell on Tablet
       tl.to({}, { duration: 0.4 }, 2.8);
 
       // PHASE 2b: Tablet morphs to Mobile Phone
-      // t = 3.2 -> 4.1
       tl.to(tabletWrapRef.current, { opacity: 0, scale: 0.88, ease: 'power2.inOut', duration: 0.5 }, 3.2);
       tl.to(phoneWrapRef.current, { opacity: 1, scale: 1, y: 0, ease: 'power3.out', duration: 0.55 }, 3.5);
-      // Dwell on Mobile Mockup
       tl.to({}, { duration: 0.4 }, 4.0);
 
       // PHASE 3: Background turns LIGHT + Hand holding mobile rises + Content animates in
-      // t = 4.4 -> 5.8
       tl.to(bgOverlayRef.current, { opacity: 1, ease: 'power2.inOut', duration: 0.8 }, 4.4);
       tl.to(topBadgeRef.current, { opacity: 0, duration: 0.3 }, 4.4);
       tl.to(phoneWrapRef.current, { opacity: 0, scale: 0.95, ease: 'power2.in', duration: 0.4 }, 4.5);
@@ -392,7 +607,6 @@ export default function MobileAppSection() {
       tl.to(handRef.current, { y: 0, opacity: 1, ease: 'power3.out', duration: 1.1 }, 4.8);
       tl.to(contentRef.current, { opacity: 1, x: 0, ease: 'power3.out', duration: 0.9 }, 5.0);
 
-      // End plateau
       tl.set({}, {}, 6.0);
 
       return () => {
@@ -428,7 +642,7 @@ export default function MobileAppSection() {
           justifyContent: 'center',
         }}
       >
-        {/* 1. Deep Dark Background (Phases 1 & 2) */}
+        {/* Dark Background */}
         <Box
           sx={{
             position: 'absolute',
@@ -438,7 +652,7 @@ export default function MobileAppSection() {
           }}
         />
 
-        {/* 2. Luminous Light Overlay (Phase 3) */}
+        {/* Light Overlay (Phase 3) */}
         <Box
           ref={bgOverlayRef}
           sx={{
@@ -449,7 +663,6 @@ export default function MobileAppSection() {
             pointerEvents: 'none',
           }}
         >
-          {/* Subtle decorative ambient blobs in light mode */}
           <Box
             sx={{
               position: 'absolute',
@@ -476,7 +689,7 @@ export default function MobileAppSection() {
           />
         </Box>
 
-        {/* Top Floating Badge (Phases 1 & 2) */}
+        {/* Top Floating Badge */}
         <Box
           ref={topBadgeRef}
           sx={{
@@ -502,25 +715,9 @@ export default function MobileAppSection() {
               boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
             }}
           >
-            <Box
-              sx={{
-                width: 7,
-                height: 7,
-                borderRadius: '50%',
-                background: '#7C3AED',
-                boxShadow: '0 0 10px #7C3AED',
-              }}
-            />
-            <Typography
-              sx={{
-                fontSize: '0.8rem',
-                fontWeight: 600,
-                color: 'rgba(255,255,255,0.9)',
-                letterSpacing: '0.05em',
-                fontFamily: '"Inter", sans-serif',
-              }}
-            >
-              Desktop to Mobile · Synchronized AI
+            <Box sx={{ width: 7, height: 7, borderRadius: '50%', background: '#7C3AED', boxShadow: '0 0 10px #7C3AED' }} />
+            <Typography sx={{ fontSize: '0.8rem', fontWeight: 600, color: 'rgba(255,255,255,0.9)', letterSpacing: '0.05em' }}>
+              Desktop to Mobile · Synchronized AI & Global Ledger
             </Typography>
           </Box>
         </Box>
@@ -539,7 +736,7 @@ export default function MobileAppSection() {
             pointerEvents: 'none',
           }}
         >
-          {/* 1. REALISTIC MACBOOK PRO (Reference 1 style) */}
+          {/* 1. REALISTIC MACBOOK PRO */}
           <Box
             ref={laptopWrapRef}
             sx={{
@@ -551,13 +748,12 @@ export default function MobileAppSection() {
               alignItems: 'center',
             }}
           >
-            {/* 3D Perspective container for screen lid */}
             <Box sx={{ width: '100%', perspective: '1200px' }}>
               <Box
                 ref={macLidRef}
                 sx={{
                   width: '100%',
-                  paddingTop: '62.5%', // 16:10 aspect ratio
+                  paddingTop: '62.5%',
                   position: 'relative',
                   background: 'linear-gradient(180deg, #1C1E24 0%, #0F1116 100%)',
                   borderRadius: '16px 16px 0 0',
@@ -567,7 +763,6 @@ export default function MobileAppSection() {
                   overflow: 'hidden',
                 }}
               >
-                {/* Camera Notch / Lens */}
                 <Box
                   sx={{
                     position: 'absolute',
@@ -584,18 +779,8 @@ export default function MobileAppSection() {
                     zIndex: 10,
                   }}
                 >
-                  <Box
-                    sx={{
-                      width: 5,
-                      height: 5,
-                      borderRadius: '50%',
-                      background: '#1A202C',
-                      border: '1px solid #2D3748',
-                    }}
-                  />
+                  <Box sx={{ width: 5, height: 5, borderRadius: '50%', background: '#1A202C', border: '1px solid #2D3748' }} />
                 </Box>
-
-                {/* Inside Screen Content */}
                 <Box
                   ref={macScreenRef}
                   sx={{
@@ -611,7 +796,6 @@ export default function MobileAppSection() {
               </Box>
             </Box>
 
-            {/* MacBook Base (Keyboard Chassis + Notch) */}
             <Box
               ref={macBaseRef}
               sx={{
@@ -621,30 +805,20 @@ export default function MobileAppSection() {
                 borderRadius: '0 0 14px 14px',
                 border: '1.5px solid rgba(255,255,255,0.12)',
                 borderTop: '1px solid #3F4452',
-                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.9), inset 0 1px 1px rgba(255,255,255,0.2)',
+                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.9)',
                 position: 'relative',
                 display: 'flex',
                 alignItems: 'flex-start',
                 justifyContent: 'center',
               }}
             >
-              {/* Front Thumb Scoop Notch */}
-              <Box
-                sx={{
-                  width: 90,
-                  height: 4,
-                  background: '#0D0E12',
-                  borderRadius: '0 0 6px 6px',
-                  boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.8)',
-                }}
-              />
-              {/* Left & Right Rubber Feet */}
+              <Box sx={{ width: 90, height: 4, background: '#0D0E12', borderRadius: '0 0 6px 6px' }} />
               <Box sx={{ position: 'absolute', bottom: -3, left: '12%', width: 28, height: 3, background: '#090A0D', borderRadius: '0 0 3px 3px' }} />
               <Box sx={{ position: 'absolute', bottom: -3, right: '12%', width: 28, height: 3, background: '#090A0D', borderRadius: '0 0 3px 3px' }} />
             </Box>
           </Box>
 
-          {/* 2. TABLET MOCKUP (iPad Pro style) */}
+          {/* 2. TABLET MOCKUP */}
           <Box
             ref={tabletWrapRef}
             sx={{
@@ -655,49 +829,34 @@ export default function MobileAppSection() {
               borderRadius: '26px',
               background: 'linear-gradient(145deg, #252830 0%, #15171E 100%)',
               border: '3px solid rgba(255,255,255,0.12)',
-              boxShadow: '0 30px 90px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.2)',
+              boxShadow: '0 30px 90px rgba(0,0,0,0.8)',
               p: '14px 12px',
               boxSizing: 'border-box',
               overflow: 'hidden',
             }}
           >
-            {/* Tablet Front Camera */}
-            <Box
-              sx={{
-                position: 'absolute',
-                top: 6,
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: 6,
-                height: 6,
-                borderRadius: '50%',
-                background: '#0D0E12',
-                border: '1px solid #2D3748',
-              }}
-            />
-            {/* Tablet Screen */}
+            <Box sx={{ position: 'absolute', top: 6, left: '50%', transform: 'translateX(-50%)', width: 6, height: 6, borderRadius: '50%', background: '#0D0E12', border: '1px solid #2D3748' }} />
             <Box sx={{ width: '100%', height: '100%', borderRadius: '16px', overflow: 'hidden' }}>
-              <TabletProductScreen />
+              <TabletLedgerScreen />
             </Box>
           </Box>
 
-          {/* 3. SMARTPHONE MOCKUP (iPhone 16 Pro style) */}
+          {/* 3. PHONE MOCKUP (Showing User's Exact App Screen) */}
           <Box
             ref={phoneWrapRef}
             sx={{
               position: 'absolute',
-              width: { md: '20vw', lg: '17vw' },
-              maxWidth: 270,
+              width: { md: '21vw', lg: '18vw' },
+              maxWidth: 290,
               aspectRatio: '9/19.2',
               borderRadius: '44px',
               background: 'linear-gradient(145deg, #252830 0%, #121419 100%)',
               border: '3px solid rgba(255,255,255,0.14)',
-              boxShadow: '0 40px 100px rgba(0,0,0,0.85), inset 0 1px 2px rgba(255,255,255,0.25)',
+              boxShadow: '0 40px 100px rgba(0,0,0,0.85)',
               p: '12px 9px',
               boxSizing: 'border-box',
             }}
           >
-            {/* Dynamic Island */}
             <Box
               sx={{
                 position: 'absolute',
@@ -715,12 +874,11 @@ export default function MobileAppSection() {
                 px: 1,
               }}
             >
-              <Box sx={{ width: 6, height: 6, borderRadius: '50%', background: '#111', border: '1px solid #222' }} />
+              <Box sx={{ width: 6, height: 6, borderRadius: '50%', background: '#111' }} />
               <Box sx={{ width: 4, height: 4, borderRadius: '50%', background: '#0F2C59' }} />
             </Box>
-            {/* Mobile Screen */}
             <Box sx={{ width: '100%', height: '100%', borderRadius: '34px', overflow: 'hidden' }}>
-              <MobileAppScreen />
+              <SpendableAppScreen />
             </Box>
           </Box>
         </Box>
@@ -756,8 +914,9 @@ export default function MobileAppSection() {
                 ref={contentRef}
                 sx={{
                   flex: 1,
-                  maxWidth: { xs: '100%', md: 580 },
-                  py: { xs: 4, md: 0 },
+                  maxWidth: { xs: '100%', md: 560 },
+                  pt: { xs: 4, md: 8 },
+                  pb: { xs: 4, md: 0 },
                   zIndex: 2,
                 }}
               >
@@ -777,11 +936,11 @@ export default function MobileAppSection() {
                 >
                   <Box sx={{ width: 7, height: 7, borderRadius: '50%', background: '#2563EB', boxShadow: '0 0 8px #2563EB' }} />
                   <Typography sx={{ fontSize: '0.78rem', fontWeight: 700, color: '#1D4ED8', letterSpacing: '0.06em' }}>
-                    ✦ POCKET SUPERINTELLIGENCE
+                    ✦ ONE ACCOUNT FOR GLOBAL INTELLIGENCE
                   </Typography>
                 </Box>
 
-                {/* Catchy Main Headline */}
+                {/* Catchy Main Headline (Matching User's "One account for global money" vibe) */}
                 <Typography
                   variant="h2"
                   sx={{
@@ -794,7 +953,7 @@ export default function MobileAppSection() {
                     fontFamily: '"Inter", sans-serif',
                   }}
                 >
-                  Desk to Pocket.{' '}
+                  One account for{' '}
                   <Box
                     component="span"
                     sx={{
@@ -804,7 +963,7 @@ export default function MobileAppSection() {
                       display: 'inline-block',
                     }}
                   >
-                    Zero Compromise.
+                    global money & AI.
                   </Box>
                 </Typography>
 
@@ -818,8 +977,8 @@ export default function MobileAppSection() {
                     mb: 4,
                   }}
                 >
-                  All your frontier models, autonomous agents, and persistent memory — now
-                  frictionlessly synchronized in your pocket. Built for thinkers who never stop.
+                  Spend, run frontier models, and manage decentralized compute from a single
+                  unified ledger. Zero switching friction, zero compromise.
                 </Typography>
 
                 {/* 4 Feature Highlights Grid */}
@@ -859,8 +1018,8 @@ export default function MobileAppSection() {
                   ))}
                 </Box>
 
-                {/* Store Download CTAs */}
-                <Box sx={{ display: 'flex', gap: 1.8, alignItems: 'center', flexWrap: 'wrap', mb: 2 }}>
+                {/* Download CTAs & QR Code Badge */}
+                <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
                   <Button
                     variant="contained"
                     sx={{
@@ -884,7 +1043,7 @@ export default function MobileAppSection() {
                     }}
                   >
                     <Box component="span" sx={{ fontSize: '1.1rem', lineHeight: 1 }}></Box>
-                    Download on App Store
+                    Download for iOS
                   </Button>
 
                   <Button
@@ -910,33 +1069,57 @@ export default function MobileAppSection() {
                     }}
                   >
                     <Box component="span" sx={{ fontSize: '1.05rem', lineHeight: 1 }}>▶</Box>
-                    Get on Google Play
+                    Get on Android
                   </Button>
-                </Box>
 
-                {/* Social Proof Badge */}
-                <Typography sx={{ fontSize: '0.78rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: 0.6 }}>
-                  <Box component="span" sx={{ color: '#F59E0B', fontSize: '0.9rem' }}>★★★★★</Box>
-                  <Box component="span" sx={{ fontWeight: 600, color: '#0F172A' }}>4.9/5</Box>
-                  rated by 12,000+ early access testers
-                </Typography>
+                  {/* QR Code Quick Badge */}
+                  <Box
+                    sx={{
+                      display: { xs: 'none', sm: 'flex' },
+                      alignItems: 'center',
+                      gap: 1.2,
+                      p: '6px 12px 6px 8px',
+                      borderRadius: 2,
+                      background: '#FFFFFF',
+                      border: '1px solid rgba(0,0,0,0.08)',
+                      boxShadow: '0 4px 14px rgba(0,0,0,0.05)',
+                    }}
+                  >
+                    {/* SVG QR Code */}
+                    <Box
+                      component="svg"
+                      viewBox="0 0 24 24"
+                      sx={{ width: 34, height: 34, fill: '#0F172A' }}
+                    >
+                      <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14 0h4v2h-4v-2zm-4-2h2v4h-2v-4zm2 6h4v2h-4v-2zm2-4h2v2h-2v-2zm-4 4h2v2h-2v-2zm0-6h2v2h-2v-2zm-3-3h2v2h-2v-2zm0-4h2v2h-2V7zm-2 2h2v2h-2V9z" />
+                    </Box>
+                    <Box>
+                      <Typography sx={{ fontSize: '0.68rem', fontWeight: 700, color: '#0F172A', lineHeight: 1.2 }}>
+                        Scan to Install
+                      </Typography>
+                      <Typography sx={{ fontSize: '0.58rem', color: '#64748B' }}>
+                        iOS 17+ & Android 14+
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
               </Box>
 
-              {/* Right Column: Transparent Hand Holding Smartphone */}
+              {/* Right Column: Hand Holding Smartphone with exact SpendableAppScreen */}
               <Box
+                ref={handRef}
                 sx={{
                   flex: '0 0 auto',
-                  width: { xs: '100%', md: '45%', lg: '42%' },
-                  maxWidth: 500,
+                  width: { xs: '100%', md: '46%', lg: '42%' },
+                  maxWidth: 480,
                   height: { xs: '50vh', md: '88vh' },
                   position: 'relative',
                   display: 'flex',
                   alignItems: 'flex-end',
                   justifyContent: 'center',
-                  overflow: 'visible',
                 }}
               >
-                {/* Soft backdrop glow behind phone */}
+                {/* Ambient glow behind hand */}
                 <Box
                   sx={{
                     position: 'absolute',
@@ -947,27 +1130,45 @@ export default function MobileAppSection() {
                     height: 340,
                     borderRadius: '50%',
                     background: 'radial-gradient(circle, rgba(37,99,235,0.12) 0%, rgba(124,58,237,0.06) 50%, transparent 70%)',
-                    filter: 'blur(30px)',
+                    filter: 'blur(35px)',
                     zIndex: 0,
                   }}
                 />
 
-                {/* Hand Image (Transparent Alpha PNG) */}
-                <Box
-                  ref={handRef}
-                  component="img"
-                  src="/images/openledger_mobile_hand.png"
-                  alt="OpenLedger Mobile App in Hand"
-                  sx={{
-                    width: '100%',
-                    maxHeight: '86vh',
-                    objectFit: 'contain',
-                    objectPosition: 'bottom center',
-                    display: 'block',
-                    zIndex: 1,
-                    filter: 'drop-shadow(0 35px 70px rgba(15, 23, 42, 0.22))',
-                  }}
-                />
+                {/* Hand Image container */}
+                <Box sx={{ position: 'relative', width: '100%', maxHeight: '86vh' }}>
+                  <Box
+                    component="img"
+                    src="/images/openledger_mobile_hand.png"
+                    alt="OpenLedger Mobile App in Hand"
+                    sx={{
+                      width: '100%',
+                      maxHeight: '86vh',
+                      objectFit: 'contain',
+                      objectPosition: 'bottom center',
+                      display: 'block',
+                      zIndex: 1,
+                      filter: 'drop-shadow(0 35px 70px rgba(15, 23, 42, 0.22))',
+                    }}
+                  />
+
+                  {/* Overlay Exact App Screen onto Phone Display */}
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      left: '33.1%',
+                      top: '21.7%',
+                      width: '33.8%',
+                      height: '53.6%',
+                      borderRadius: '26px',
+                      overflow: 'hidden',
+                      zIndex: 2,
+                      boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.15)',
+                    }}
+                  >
+                    <SpendableAppScreen />
+                  </Box>
+                </Box>
               </Box>
             </Box>
           </Container>
