@@ -72,19 +72,28 @@ export default function Header() {
   React.useEffect(() => {
     const handleScroll = () => {
       const secondSection = document.getElementById('core-features');
+      const mobileSection = document.getElementById('mobile-app');
+      let isLightPhase = false;
+      if (mobileSection) {
+        const mRect = mobileSection.getBoundingClientRect();
+        if (mRect.top <= 80 && mRect.bottom >= 80) {
+          isLightPhase = mobileSection.getAttribute('data-light-phase') === 'true';
+        }
+      }
+
       if (secondSection) {
         const rect = secondSection.getBoundingClientRect();
         // Show nav components and switch dark contrast after hitting the second section
         const isPastHero = rect.top <= 80;
         setShowNavComponents(isPastHero);
-        setIsDarkSection(isPastHero);
+        setIsDarkSection(isPastHero && !isLightPhase);
         if (!isPastHero) {
           setMobileOpen(false);
         }
       } else {
         const isPastHero = window.scrollY > 600;
         setShowNavComponents(isPastHero);
-        setIsDarkSection(isPastHero);
+        setIsDarkSection(isPastHero && !isLightPhase);
         if (!isPastHero) {
           setMobileOpen(false);
         }

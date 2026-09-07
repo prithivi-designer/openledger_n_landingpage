@@ -7,6 +7,7 @@ import CoreFeaturesSection from '@/components/CoreFeaturesSection';
 import SupportedModelsSection from '@/components/SupportedModelsSection';
 import WhyAskMultipleModelsSection from '@/components/WhyAskMultipleModelsSection';
 import ProductMatrixSection from '@/components/ProductMatrixSection';
+import MobileAppSection from '@/components/MobileAppSection';
 
 export default function Home() {
   return (
@@ -28,7 +29,9 @@ export default function Home() {
         <SupportedModelsSection />
         <WhyAskMultipleModelsSection />
         <ProductMatrixSection />
+        <MobileAppSection />
       </Box>
     </>
   );
 }
+
