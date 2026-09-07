@@ -275,8 +275,8 @@ export default function SupportedModelsSection() {
       sx={{
         position: 'relative',
         minHeight: { xs: 'auto', md: '300vh' },
-        backgroundColor: '#0A0C10',
-        color: '#FFFFFF',
+        backgroundColor: 'var(--bg-section)',
+        color: 'var(--text-primary)',
       }}
     >
       {/* Pinned Viewport Container */}
@@ -307,8 +307,8 @@ export default function SupportedModelsSection() {
                 px: 1.6,
                 py: 0.5,
                 borderRadius: '9999px',
-                backgroundColor: 'rgba(255, 255, 255, 0.04)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                backgroundColor: 'var(--bg-pill)',
+                border: '1px solid var(--border-subtle)',
                 backdropFilter: 'blur(12px)',
               }}
             >
@@ -317,15 +317,15 @@ export default function SupportedModelsSection() {
                   width: 5,
                   height: 5,
                   borderRadius: '50%',
-                  backgroundColor: '#FFFFFF',
-                  boxShadow: '0 0 6px rgba(255, 255, 255, 0.8)',
+                  backgroundColor: 'var(--text-heading)',
+                  boxShadow: '0 0 6px rgba(255, 255, 255, 0.4)',
                 }}
               />
               <Typography
                 sx={{
                   fontSize: '0.74rem',
                   fontWeight: 600,
-                  color: 'rgba(255, 255, 255, 0.85)',
+                  color: 'var(--text-secondary)',
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
                 }}
@@ -343,7 +343,7 @@ export default function SupportedModelsSection() {
               fontSize: { xs: '1.9rem', sm: '2.5rem', md: '2.9rem' },
               lineHeight: 1.15,
               letterSpacing: '-0.03em',
-              color: '#FFFFFF',
+              color: 'var(--text-heading)',
               mb: 0.6,
             }}
           >
@@ -357,7 +357,7 @@ export default function SupportedModelsSection() {
               fontSize: { xs: '1.4rem', sm: '1.8rem', md: '2.1rem' },
               lineHeight: 1.2,
               letterSpacing: '-0.03em',
-              color: 'rgba(255, 255, 255, 0.55)',
+              color: 'var(--text-secondary)',
               mb: { xs: 2, md: 2.8 },
             }}
           >
@@ -373,8 +373,9 @@ export default function SupportedModelsSection() {
               px: 2.2,
               py: 0.8,
               borderRadius: '9999px',
-              backgroundColor: 'rgba(255, 255, 255, 0.03)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
+              backgroundColor: 'var(--bg-card)',
+              border: '1px solid var(--border-subtle)',
+              boxShadow: 'var(--shadow-card)',
               backdropFilter: 'blur(16px)',
               mb: { xs: 2, md: 2.5 },
               transition: 'all 0.3s ease',
@@ -384,26 +385,26 @@ export default function SupportedModelsSection() {
               sx={{
                 fontSize: { xs: '0.8rem', sm: '0.88rem' },
                 fontWeight: 600,
-                color: '#FFFFFF',
+                color: 'var(--text-heading)',
               }}
             >
               {currentModel.name}
             </Typography>
-            <Box sx={{ width: 3, height: 3, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.3)' }} />
+            <Box sx={{ width: 3, height: 3, borderRadius: '50%', backgroundColor: 'var(--border-normal)' }} />
             <Typography
               sx={{
                 fontSize: { xs: '0.75rem', sm: '0.82rem' },
                 fontWeight: 500,
-                color: 'rgba(255, 255, 255, 0.8)',
+                color: 'var(--text-secondary)',
               }}
             >
               {currentModel.badge}
             </Typography>
-            <Box sx={{ width: 3, height: 3, borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.3)' }} />
+            <Box sx={{ width: 3, height: 3, borderRadius: '50%', backgroundColor: 'var(--border-normal)' }} />
             <Typography
               sx={{
                 fontSize: { xs: '0.72rem', sm: '0.78rem' },
-                color: 'rgba(255, 255, 255, 0.5)',
+                color: 'var(--text-muted)',
               }}
             >
               {currentModel.context}
@@ -450,7 +451,7 @@ export default function SupportedModelsSection() {
                 ry={RY_OUTER}
                 transform={`rotate(${TILT_DEG} ${CX} ${CY})`}
                 fill="none"
-                stroke="rgba(255, 255, 255, 0.12)"
+                stroke="var(--svg-orbit-stroke)"
                 strokeWidth="1.2"
                 strokeDasharray="4 8"
                 strokeLinecap="round"
@@ -464,7 +465,7 @@ export default function SupportedModelsSection() {
                 ry={RY_INNER}
                 transform={`rotate(${TILT_DEG} ${CX} ${CY})`}
                 fill="none"
-                stroke="rgba(255, 255, 255, 0.08)"
+                stroke="var(--svg-orbit-inner-stroke)"
                 strokeWidth="1"
                 strokeDasharray="3 6"
                 strokeLinecap="round"
@@ -485,7 +486,7 @@ export default function SupportedModelsSection() {
                   cx={initialPt.x}
                   cy={initialPt.y}
                   r="7.5"
-                  fill="rgba(255, 255, 255, 0.55)"
+                  fill="var(--svg-bead-glow)"
                   filter="url(#dotGlowFilter)"
                 />
                 <circle
@@ -493,7 +494,7 @@ export default function SupportedModelsSection() {
                   cx={initialPt.x}
                   cy={initialPt.y}
                   r="4.5"
-                  fill="#FFFFFF"
+                  fill="var(--svg-bead-core)"
                 />
               </g>
             </svg>
@@ -521,22 +522,12 @@ export default function SupportedModelsSection() {
                   width: { xs: 58, sm: 72, md: 80 },
                   height: { xs: 58, sm: 72, md: 80 },
                   borderRadius: '50%',
-                  backgroundColor: isCenterHovered ? '#161A22' : '#11141A',
-                  backgroundImage: 'radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.18), transparent 70%)',
+                  backgroundColor: isCenterHovered ? 'var(--bg-card-hover)' : 'var(--hub-orb-bg)',
+                  backgroundImage: 'radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.15), transparent 70%)',
                   border: isCenterHovered
-                    ? '1.5px solid rgba(255, 255, 255, 0.45)'
-                    : '1.5px solid rgba(255, 255, 255, 0.18)',
-                  boxShadow: isCenterHovered
-                    ? `
-                      0 0 45px rgba(0, 0, 0, 0.95),
-                      0 0 35px rgba(255, 255, 255, 0.22),
-                      0 0 0 1px rgba(255, 255, 255, 0.15) inset
-                    `
-                    : `
-                      0 0 35px rgba(0, 0, 0, 0.9),
-                      0 0 30px rgba(255, 255, 255, 0.08),
-                      0 0 0 1px rgba(255, 255, 255, 0.06) inset
-                    `,
+                    ? '1.5px solid var(--border-strong)'
+                    : '1.5px solid var(--hub-orb-border)',
+                  boxShadow: 'var(--hub-orb-shadow)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -547,15 +538,13 @@ export default function SupportedModelsSection() {
               >
                 {/* User-specified center logo: Open Ledegr icon White.svg */}
                 <Box
+                  id="center-hub-logo"
                   component="img"
                   src="/Open%20Ledegr%20icon%20White.svg"
                   alt="OpenLedger Hub"
                   sx={{
                     width: { xs: 28, sm: 38, md: 44 },
                     height: { xs: 28, sm: 38, md: 44 },
-                    filter: isCenterHovered
-                      ? 'drop-shadow(0 2px 12px rgba(255, 255, 255, 0.4))'
-                      : 'drop-shadow(0 2px 8px rgba(255, 255, 255, 0.2))',
                     display: 'block',
                     transition: 'filter 0.3s ease',
                   }}
@@ -587,27 +576,18 @@ export default function SupportedModelsSection() {
                   px: { xs: 1.6, sm: 2 },
                   py: { xs: 0.55, sm: 0.7 },
                   borderRadius: '9999px',
-                  backgroundColor: 'rgba(20, 24, 32, 0.95)',
+                  backgroundColor: 'var(--bg-card)',
                   backdropFilter: 'blur(20px)',
                   WebkitBackdropFilter: 'blur(20px)',
-                  border: '1px solid rgba(255, 255, 255, 0.22)',
-                  boxShadow: `
-                    0 12px 32px rgba(0, 0, 0, 0.75),
-                    0 0 20px rgba(255, 255, 255, 0.12),
-                    0 0 0 1px rgba(255, 255, 255, 0.08) inset
-                  `,
+                  border: '1px solid var(--border-normal)',
+                  boxShadow: 'var(--shadow-popup)',
                   textDecoration: 'none',
                   whiteSpace: 'nowrap',
                   cursor: 'pointer',
                   userSelect: 'none',
                   '&:hover': {
-                    backgroundColor: '#222834',
-                    borderColor: 'rgba(255, 255, 255, 0.45)',
-                    boxShadow: `
-                      0 14px 36px rgba(0, 0, 0, 0.85),
-                      0 0 28px rgba(255, 255, 255, 0.25),
-                      0 0 0 1px rgba(255, 255, 255, 0.15) inset
-                    `,
+                    backgroundColor: 'var(--bg-card-hover)',
+                    borderColor: 'var(--border-strong)',
                     '& .arrow-icon': {
                       transform: 'translateX(3px)',
                     },
@@ -618,7 +598,7 @@ export default function SupportedModelsSection() {
                   sx={{
                     fontSize: { xs: '0.74rem', sm: '0.8rem' },
                     fontWeight: 600,
-                    color: '#FFFFFF',
+                    color: 'var(--text-heading)',
                     letterSpacing: '-0.01em',
                     fontFamily: '"Inter", -apple-system, sans-serif',
                   }}
@@ -637,7 +617,7 @@ export default function SupportedModelsSection() {
                     strokeWidth: 2.2,
                     strokeLinecap: 'round',
                     strokeLinejoin: 'round',
-                    color: 'rgba(255, 255, 255, 0.85)',
+                    color: 'var(--text-secondary)',
                     transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
                   }}
                 >
@@ -674,22 +654,12 @@ export default function SupportedModelsSection() {
                     cursor: isBorn ? 'pointer' : 'default',
                     userSelect: 'none',
                     zIndex: isActive ? 22 : 12,
-                    // Neutral dark translucent glass bubble - NO colored strokes
-                    backgroundColor: isActive ? '#181C24' : '#11141A',
+                    backgroundColor: isActive ? 'var(--node-bubble-bg-active)' : 'var(--node-bubble-bg)',
                     backgroundImage: 'radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.12), transparent 70%)',
                     border: isActive
-                      ? '1.5px solid rgba(255, 255, 255, 0.45)'
-                      : '1px solid rgba(255, 255, 255, 0.14)',
-                    boxShadow: isActive
-                      ? `
-                        0 0 24px rgba(255, 255, 255, 0.28),
-                        0 8px 24px rgba(0, 0, 0, 0.8),
-                        0 0 0 1px rgba(255, 255, 255, 0.12) inset
-                      `
-                      : `
-                        0 4px 16px rgba(0, 0, 0, 0.6),
-                        0 0 0 1px rgba(255, 255, 255, 0.04) inset
-                      `,
+                      ? '1.5px solid var(--node-bubble-border-active)'
+                      : '1px solid var(--node-bubble-border)',
+                    boxShadow: 'var(--node-bubble-shadow)',
                     backdropFilter: 'blur(12px)',
                     display: 'flex',
                     alignItems: 'center',
@@ -698,8 +668,7 @@ export default function SupportedModelsSection() {
                       'transform 0.45s cubic-bezier(0.34, 1.4, 0.64, 1), opacity 0.35s ease, border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease',
                     '&:hover': isBorn
                       ? {
-                          borderColor: 'rgba(255, 255, 255, 0.5)',
-                          boxShadow: '0 0 24px rgba(255, 255, 255, 0.3), 0 8px 24px rgba(0, 0, 0, 0.8)',
+                          borderColor: 'var(--border-strong)',
                           transform: 'translate(-50%, -50%) scale(1.14)',
                         }
                       : {},
@@ -708,6 +677,7 @@ export default function SupportedModelsSection() {
                   {/* Model Logo Centered in Bubble */}
                   <Box
                     component="img"
+                    className={model.invertIcon ? 'theme-invert-dark-only' : ''}
                     src={model.icon}
                     alt={model.name}
                     sx={{
@@ -715,8 +685,8 @@ export default function SupportedModelsSection() {
                       height: { xs: 20, sm: 24, md: 28 },
                       objectFit: 'contain',
                       filter: model.invertIcon
-                        ? 'brightness(0) invert(1) drop-shadow(0 1px 4px rgba(255, 255, 255, 0.15))'
-                        : 'drop-shadow(0 1px 4px rgba(0, 0, 0, 0.35))',
+                        ? 'brightness(0) invert(1)'
+                        : 'drop-shadow(0 1px 3px rgba(0, 0, 0, 0.25))',
                       transition: 'transform 0.2s ease',
                       transform: isActive ? 'scale(1.08)' : 'scale(1)',
                     }}

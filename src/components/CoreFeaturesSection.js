@@ -256,8 +256,8 @@ export default function CoreFeaturesSection() {
       sx={{
         position: 'relative',
         minHeight: { xs: 'auto', md: '330vh' },
-        backgroundColor: '#0A0C10',
-        color: '#FFFFFF',
+        backgroundColor: 'var(--bg-section)',
+        color: 'var(--text-primary)',
       }}
     >
       {/* Pinned Viewport Container - Perfectly fits within 100vh */}
@@ -287,8 +287,8 @@ export default function CoreFeaturesSection() {
                 px: 1.5,
                 py: 0.5,
                 borderRadius: '9999px',
-                backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                backgroundColor: 'var(--bg-pill)',
+                border: '1px solid var(--border-subtle)',
                 backdropFilter: 'blur(12px)',
               }}
             >
@@ -304,7 +304,7 @@ export default function CoreFeaturesSection() {
                 sx={{
                   fontSize: '0.76rem',
                   fontWeight: 600,
-                  color: 'rgba(255, 255, 255, 0.85)',
+                  color: 'var(--text-secondary)',
                   letterSpacing: '0.02em',
                 }}
               >
@@ -335,10 +335,10 @@ export default function CoreFeaturesSection() {
                 maxWidth: 620,
               }}
             >
-              <Box component="span" sx={{ color: '#FFFFFF', display: 'block' }}>
+              <Box component="span" sx={{ color: 'var(--text-heading)', display: 'block' }}>
                 One platform to run right
               </Box>
-              <Box component="span" sx={{ color: 'rgba(255, 255, 255, 0.65)', display: 'block' }}>
+              <Box component="span" sx={{ color: 'var(--text-secondary)', display: 'block' }}>
                 your entire AI workflow.
               </Box>
             </Typography>
@@ -346,7 +346,7 @@ export default function CoreFeaturesSection() {
             <Typography
               variant="body1"
               sx={{
-                color: 'rgba(255, 255, 255, 0.65)',
+                color: 'var(--text-secondary)',
                 fontSize: { xs: '0.92rem', md: '0.98rem' },
                 lineHeight: 1.6,
                 maxWidth: 420,
@@ -374,8 +374,8 @@ export default function CoreFeaturesSection() {
                 gridTemplateColumns: 'repeat(4, 1fr)',
                 p: '5px',
                 borderRadius: '9999px',
-                backgroundColor: 'rgba(255, 255, 255, 0.03)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
+                backgroundColor: 'var(--bg-pill)',
+                border: '1px solid var(--border-subtle)',
                 backdropFilter: 'blur(16px)',
                 boxSizing: 'border-box',
               }}
@@ -390,12 +390,9 @@ export default function CoreFeaturesSection() {
                   left: '5px',
                   width: 'calc((100% - 10px) / 4)',
                   borderRadius: '9999px',
-                  backgroundColor: '#1C1F26',
-                  border: '1px solid rgba(255, 255, 255, 0.18)',
-                  boxShadow: `
-                    0 4px 18px rgba(0, 0, 0, 0.45),
-                    0 0 0 1px rgba(255, 255, 255, 0.08) inset
-                  `,
+                  backgroundColor: 'var(--bg-card)',
+                  border: '1px solid var(--border-normal)',
+                  boxShadow: 'var(--shadow-card)',
                   willChange: 'transform',
                   pointerEvents: 'none',
                   zIndex: 1,
@@ -409,7 +406,7 @@ export default function CoreFeaturesSection() {
                     left: '20%',
                     right: '20%',
                     height: '1.5px',
-                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent)',
+                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent)',
                     borderRadius: '9999px',
                   }}
                 />
@@ -431,7 +428,7 @@ export default function CoreFeaturesSection() {
                       cursor: 'pointer',
                       userSelect: 'none',
                       textAlign: 'center',
-                      color: isActive ? '#FFFFFF' : 'rgba(255, 255, 255, 0.55)',
+                      color: isActive ? 'var(--text-heading)' : 'var(--text-secondary)',
                       fontWeight: isActive ? 600 : 500,
                       fontSize: { xs: '0.78rem', sm: '0.88rem', md: '0.94rem' },
                       whiteSpace: 'nowrap',
@@ -439,7 +436,7 @@ export default function CoreFeaturesSection() {
                       textOverflow: 'ellipsis',
                       transition: 'color 0.28s ease',
                       '&:hover': {
-                        color: '#FFFFFF',
+                        color: 'var(--text-heading)',
                       },
                     }}
                   >
@@ -460,7 +457,7 @@ export default function CoreFeaturesSection() {
               overflow: 'hidden',
               border: '1px solid rgba(255, 255, 255, 0.1)',
               boxShadow: '0 25px 80px -20px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.05)',
-              backgroundColor: '#0A0C10',
+              backgroundColor: 'var(--bg-section)',
               aspectRatio: '16 / 9',
               maxHeight: { xs: '350px', sm: '460px', md: '57.5vh' },
             }}

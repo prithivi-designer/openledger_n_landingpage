@@ -16,8 +16,8 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 
 // Consistent stroke color matching reference Image 1
-const STROKE_COLOR = 'rgba(255, 255, 255, 0.09)';
-const INNER_STROKE = 'rgba(255, 255, 255, 0.12)';
+const STROKE_COLOR = 'var(--border-subtle)';
+const INNER_STROKE = 'var(--border-normal)';
 
 // 3 Council Mode points with unique natural scenery backgrounds
 const COUNCIL_POINTS = [
@@ -80,8 +80,8 @@ export default function WhyAskMultipleModelsSection() {
       id="why-multiple-models"
       sx={{
         position: 'relative',
-        backgroundColor: '#0A0C10',
-        color: '#FFFFFF',
+        backgroundColor: 'var(--bg-section)',
+        color: 'var(--text-primary)',
         height: { xs: 'auto', md: '100vh' },
         maxHeight: { md: '100vh' },
         display: 'flex',
@@ -96,6 +96,7 @@ export default function WhyAskMultipleModelsSection() {
     >
       {/* Background ambient lighting */}
       <Box
+        data-ambient-blur="true"
         sx={{
           position: 'absolute',
           top: '15%',
@@ -135,7 +136,7 @@ export default function WhyAskMultipleModelsSection() {
                 px: 1.6,
                 py: 0.4,
                 borderRadius: '9999px',
-                backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                backgroundColor: 'var(--bg-pill)',
                 border: `1px solid ${STROKE_COLOR}`,
                 backdropFilter: 'blur(12px)',
               }}
@@ -145,15 +146,15 @@ export default function WhyAskMultipleModelsSection() {
                   width: 5,
                   height: 5,
                   borderRadius: '50%',
-                  backgroundColor: '#FFFFFF',
-                  boxShadow: '0 0 6px rgba(255, 255, 255, 0.8)',
+                  backgroundColor: 'var(--text-heading)',
+                  boxShadow: '0 0 6px rgba(255, 255, 255, 0.5)',
                 }}
               />
               <Typography
                 sx={{
                   fontSize: '0.72rem',
                   fontWeight: 600,
-                  color: 'rgba(255, 255, 255, 0.85)',
+                  color: 'var(--text-secondary)',
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
                   fontFamily: "'Inter', sans-serif",
@@ -173,7 +174,7 @@ export default function WhyAskMultipleModelsSection() {
               fontWeight: 700,
               lineHeight: 1.15,
               letterSpacing: '-0.03em',
-              color: '#FFFFFF',
+              color: 'var(--text-heading)',
               mb: 0.5,
             }}
           >
@@ -185,7 +186,7 @@ export default function WhyAskMultipleModelsSection() {
             sx={{
               fontFamily: "'Inter', sans-serif",
               fontSize: { xs: '0.84rem', md: '0.9rem' },
-              color: 'rgba(255, 255, 255, 0.6)',
+              color: 'var(--text-secondary)',
               lineHeight: 1.45,
               maxWidth: '620px',
               mx: 'auto',
@@ -210,9 +211,9 @@ export default function WhyAskMultipleModelsSection() {
           <Box
             sx={{
               borderRadius: '22px',
-              backgroundColor: '#12151B',
+              backgroundColor: 'var(--bg-card)',
               border: `1px solid ${STROKE_COLOR}`,
-              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
+              boxShadow: 'var(--shadow-card)',
               p: { xs: 1.8, sm: 2 },
               display: 'flex',
               flexDirection: 'column',
@@ -232,16 +233,14 @@ export default function WhyAskMultipleModelsSection() {
                   sx={{
                     borderRadius: '14px',
                     backgroundColor: isExpanded
-                      ? 'rgba(255, 255, 255, 0.05)'
-                      : 'rgba(255, 255, 255, 0.025)',
+                      ? 'var(--bg-card-hover)'
+                      : 'var(--bg-pill)',
                     border: `1px solid ${isExpanded ? INNER_STROKE : STROKE_COLOR}`,
                     transition: 'all 0.25s ease',
                     overflow: 'hidden',
                     '&:hover': {
                       borderColor: INNER_STROKE,
-                      backgroundColor: isExpanded
-                        ? 'rgba(255, 255, 255, 0.06)'
-                        : 'rgba(255, 255, 255, 0.04)',
+                      backgroundColor: 'var(--bg-card-hover)',
                     },
                   }}
                 >
@@ -258,7 +257,7 @@ export default function WhyAskMultipleModelsSection() {
                     }}
                   >
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
-                      {/* Pure White Fill Icon */}
+                      {/* Icon */}
                       <Box
                         sx={{
                           width: 30,
@@ -268,13 +267,13 @@ export default function WhyAskMultipleModelsSection() {
                           alignItems: 'center',
                           justifyContent: 'center',
                           backgroundColor: isExpanded
-                            ? 'rgba(255, 255, 255, 0.16)'
-                            : 'rgba(255, 255, 255, 0.06)',
+                            ? 'var(--bg-pill)'
+                            : 'transparent',
                           border: `1px solid ${isExpanded ? INNER_STROKE : STROKE_COLOR}`,
                           transition: 'all 0.2s ease',
                         }}
                       >
-                        <IconComp sx={{ fontSize: 17, color: '#FFFFFF' }} />
+                        <IconComp sx={{ fontSize: 17, color: 'var(--text-heading)' }} />
                       </Box>
 
                       {/* Title */}
@@ -282,7 +281,7 @@ export default function WhyAskMultipleModelsSection() {
                         sx={{
                           fontSize: { xs: '0.86rem', sm: '0.92rem' },
                           fontWeight: 600,
-                          color: '#FFFFFF',
+                          color: 'var(--text-heading)',
                           letterSpacing: '-0.01em',
                           fontFamily: "'Inter', sans-serif",
                         }}
@@ -300,11 +299,9 @@ export default function WhyAskMultipleModelsSection() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        backgroundColor: isExpanded
-                          ? 'rgba(255, 255, 255, 0.14)'
-                          : 'rgba(255, 255, 255, 0.05)',
+                        backgroundColor: 'var(--bg-pill)',
                         border: `1px solid ${STROKE_COLOR}`,
-                        color: '#FFFFFF',
+                        color: 'var(--text-heading)',
                         transition: 'all 0.2s ease',
                       }}
                     >
@@ -330,7 +327,7 @@ export default function WhyAskMultipleModelsSection() {
                         sx={{
                           fontSize: '0.78rem',
                           lineHeight: 1.45,
-                          color: 'rgba(255, 255, 255, 0.7)',
+                          color: 'var(--text-secondary)',
                           mb: 1.2,
                           fontFamily: "'Inter', sans-serif",
                         }}
@@ -338,7 +335,7 @@ export default function WhyAskMultipleModelsSection() {
                         {point.description}
                       </Typography>
 
-                      {/* Bullet Points with White Checkmarks */}
+                      {/* Bullet Points with Checkmarks */}
                       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.7, mb: 1.4 }}>
                         {point.bullets.map((bullet, bIdx) => (
                           <Box
@@ -357,18 +354,18 @@ export default function WhyAskMultipleModelsSection() {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                backgroundColor: 'var(--bg-pill)',
                                 border: `1px solid ${INNER_STROKE}`,
                                 flexShrink: 0,
                               }}
                             >
-                              <CheckIcon sx={{ fontSize: 11, color: '#FFFFFF' }} />
+                              <CheckIcon sx={{ fontSize: 11, color: 'var(--text-heading)' }} />
                             </Box>
                             <Typography
                               sx={{
                                 fontSize: '0.74rem',
                                 lineHeight: 1.35,
-                                color: 'rgba(255, 255, 255, 0.82)',
+                                color: 'var(--text-secondary)',
                                 fontWeight: 450,
                                 fontFamily: "'Inter', sans-serif",
                               }}
@@ -391,15 +388,15 @@ export default function WhyAskMultipleModelsSection() {
                           fontWeight: 600,
                           py: 0.4,
                           px: 1.8,
-                          color: '#FFFFFF',
+                          color: 'var(--text-heading)',
                           borderColor: INNER_STROKE,
-                          backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                          backgroundColor: 'var(--bg-pill)',
                           backdropFilter: 'blur(8px)',
                           fontFamily: "'Inter', sans-serif",
                           transition: 'all 0.2s ease',
                           '&:hover': {
-                            backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                            borderColor: 'rgba(255, 255, 255, 0.4)',
+                            backgroundColor: 'var(--bg-card-hover)',
+                            borderColor: 'var(--border-strong)',
                             transform: 'translateX(3px)',
                           },
                         }}
@@ -1314,11 +1311,11 @@ export default function WhyAskMultipleModelsSection() {
               sx={{
                 fontSize: '0.78rem',
                 lineHeight: 1.45,
-                color: 'rgba(255, 255, 255, 0.65)',
+                color: 'var(--text-secondary)',
                 fontFamily: "'Inter', sans-serif",
               }}
             >
-              <Box component="span" sx={{ fontWeight: 700, color: '#FFFFFF' }}>
+              <Box component="span" sx={{ fontWeight: 700, color: 'var(--text-heading)' }}>
                 Ideation & Creation.
               </Box>{' '}
               Generate ideas, explore concepts, and quickly expand early thoughts into clear,
@@ -1491,11 +1488,11 @@ export default function WhyAskMultipleModelsSection() {
               sx={{
                 fontSize: '0.78rem',
                 lineHeight: 1.45,
-                color: 'rgba(255, 255, 255, 0.65)',
+                color: 'var(--text-secondary)',
                 fontFamily: "'Inter', sans-serif",
               }}
             >
-              <Box component="span" sx={{ fontWeight: 700, color: '#FFFFFF' }}>
+              <Box component="span" sx={{ fontWeight: 700, color: 'var(--text-heading)' }}>
                 Workflow Enhancement.
               </Box>{' '}
               Refining inputs, organizing information, and removing repetitive steps from your

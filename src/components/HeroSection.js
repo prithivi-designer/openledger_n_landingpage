@@ -225,7 +225,7 @@ export default function HeroSection() {
             ref={curvePathRef}
             id="hero-curve-path"
             d="M 0,150 Q 720,150 1440,150 L 1440,155 L 0,155 Z"
-            fill="#0A0C10"
+            fill="var(--hero-curve-fill, #0A0C10)"
           />
         </svg>
       </Box>

@@ -16,9 +16,9 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 }
 
-const CARD_STROKE = 'rgba(255, 255, 255, 0.08)';
-const CARD_STROKE_HOVER = 'rgba(255, 255, 255, 0.28)';
-const CARD_BG = '#0E1015';
+const CARD_STROKE = 'var(--border-subtle)';
+const CARD_STROKE_HOVER = 'var(--border-strong)';
+const CARD_BG = 'var(--bg-card)';
 
 // Larger, cinematic card sizing matching DeepMind reference
 const CARD_WIDTH = { xs: '320px', sm: '370px', md: '410px', lg: '420px' };
@@ -209,8 +209,8 @@ export default function ProductMatrixSection() {
       sx={{
         position: 'relative',
         minHeight: { xs: 'auto', md: '340vh' },
-        backgroundColor: '#07080B',
-        color: '#FFFFFF',
+        backgroundColor: 'var(--bg-section)',
+        color: 'var(--text-primary)',
       }}
     >
       {/* Pinned Viewport Container - Centered within 100vh on desktop while scrolling */}
@@ -228,7 +228,7 @@ export default function ProductMatrixSection() {
           py: { xs: 6, md: 2 },
           overflow: 'hidden',
           boxSizing: 'border-box',
-          backgroundColor: '#07080B',
+          backgroundColor: 'var(--bg-section)',
         }}
       >
         {/* GSAP-Powered Film-Grain Noise Animation Layer */}
@@ -236,6 +236,7 @@ export default function ProductMatrixSection() {
 
         {/* Ambient background lighting */}
         <Box
+          data-ambient-blur="true"
           sx={{
             position: 'absolute',
             top: '20%',
@@ -268,7 +269,7 @@ export default function ProductMatrixSection() {
               fontSize: { xs: '1.75rem', sm: '2.25rem', md: '2.5rem' },
               fontWeight: 500,
               letterSpacing: '-0.025em',
-              color: '#FFFFFF',
+              color: 'var(--text-heading)',
               display: 'inline-block',
             }}
           >
@@ -345,7 +346,7 @@ export default function ProductMatrixSection() {
                 sx={{
                   fontSize: '1.25rem',
                   fontWeight: 500,
-                  color: '#FFFFFF',
+                  color: 'var(--text-heading)',
                   letterSpacing: '-0.015em',
                   mb: 0.6,
                 }}
@@ -355,7 +356,7 @@ export default function ProductMatrixSection() {
               <Typography
                 sx={{
                   fontSize: '0.845rem',
-                  color: 'rgba(255, 255, 255, 0.62)',
+                  color: 'var(--text-secondary)',
                   lineHeight: 1.45,
                 }}
               >
@@ -379,8 +380,8 @@ export default function ProductMatrixSection() {
                 <Box
                   sx={{
                     maxWidth: '85%',
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    backgroundColor: 'var(--chat-user-bg)',
+                    border: '1px solid var(--chat-user-border)',
                     borderRadius: '16px',
                     px: 1.8,
                     py: 1,
@@ -389,7 +390,7 @@ export default function ProductMatrixSection() {
                   <Typography
                     sx={{
                       fontSize: '0.78rem',
-                      color: 'rgba(255, 255, 255, 0.9)',
+                      color: 'var(--text-primary)',
                       lineHeight: 1.4,
                     }}
                   >
@@ -403,8 +404,8 @@ export default function ProductMatrixSection() {
                 <Box
                   sx={{
                     maxWidth: '92%',
-                    backgroundColor: 'rgba(255, 255, 255, 0.035)',
-                    border: '1px solid rgba(255, 255, 255, 0.05)',
+                    backgroundColor: 'var(--chat-bot-bg)',
+                    border: '1px solid var(--chat-bot-border)',
                     borderRadius: '16px',
                     px: 1.8,
                     py: 1.2,
@@ -413,7 +414,7 @@ export default function ProductMatrixSection() {
                   <Typography
                     sx={{
                       fontSize: '0.78rem',
-                      color: 'rgba(255, 255, 255, 0.6)',
+                      color: 'var(--text-secondary)',
                       lineHeight: 1.5,
                     }}
                   >
@@ -428,8 +429,8 @@ export default function ProductMatrixSection() {
                 <Box
                   sx={{
                     maxWidth: '80%',
-                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    backgroundColor: 'var(--chat-user-bg)',
+                    border: '1px solid var(--chat-user-border)',
                     borderRadius: '16px',
                     px: 1.8,
                     py: 1,
@@ -438,7 +439,7 @@ export default function ProductMatrixSection() {
                   <Typography
                     sx={{
                       fontSize: '0.78rem',
-                      color: 'rgba(255, 255, 255, 0.9)',
+                      color: 'var(--text-primary)',
                       lineHeight: 1.4,
                     }}
                   >
@@ -452,8 +453,8 @@ export default function ProductMatrixSection() {
                 <Box
                   sx={{
                     maxWidth: '92%',
-                    backgroundColor: 'rgba(255, 255, 255, 0.035)',
-                    border: '1px solid rgba(255, 255, 255, 0.05)',
+                    backgroundColor: 'var(--chat-bot-bg)',
+                    border: '1px solid var(--chat-bot-border)',
                     borderRadius: '16px',
                     px: 1.8,
                     py: 1.2,
@@ -462,7 +463,7 @@ export default function ProductMatrixSection() {
                   <Typography
                     sx={{
                       fontSize: '0.78rem',
-                      color: 'rgba(255, 255, 255, 0.6)',
+                      color: 'var(--text-secondary)',
                       lineHeight: 1.5,
                     }}
                   >
@@ -547,7 +548,7 @@ export default function ProductMatrixSection() {
                 sx={{
                   fontSize: '1.25rem',
                   fontWeight: 500,
-                  color: '#FFFFFF',
+                  color: 'var(--text-heading)',
                   letterSpacing: '-0.015em',
                   mb: 0.6,
                 }}
@@ -557,7 +558,7 @@ export default function ProductMatrixSection() {
               <Typography
                 sx={{
                   fontSize: '0.845rem',
-                  color: 'rgba(255, 255, 255, 0.62)',
+                  color: 'var(--text-secondary)',
                   lineHeight: 1.45,
                 }}
               >
@@ -746,7 +747,7 @@ export default function ProductMatrixSection() {
                 sx={{
                   fontSize: '1.25rem',
                   fontWeight: 500,
-                  color: '#FFFFFF',
+                  color: 'var(--text-heading)',
                   letterSpacing: '-0.015em',
                   mb: 0.6,
                 }}
@@ -756,7 +757,7 @@ export default function ProductMatrixSection() {
               <Typography
                 sx={{
                   fontSize: '0.845rem',
-                  color: 'rgba(255, 255, 255, 0.62)',
+                  color: 'var(--text-secondary)',
                   lineHeight: 1.45,
                 }}
               >
@@ -1098,7 +1099,7 @@ export default function ProductMatrixSection() {
                 sx={{
                   fontSize: '1.25rem',
                   fontWeight: 500,
-                  color: '#FFFFFF',
+                  color: 'var(--text-heading)',
                   letterSpacing: '-0.015em',
                   mb: 0.6,
                 }}
@@ -1108,7 +1109,7 @@ export default function ProductMatrixSection() {
               <Typography
                 sx={{
                   fontSize: '0.845rem',
-                  color: 'rgba(255, 255, 255, 0.62)',
+                  color: 'var(--text-secondary)',
                   lineHeight: 1.45,
                 }}
               >
@@ -1162,22 +1163,22 @@ export default function ProductMatrixSection() {
             </Box>
 
             {/* Bottom Learn More Pill Button */}
-            <Box sx={{ pt: 2, borderTop: '1px solid rgba(255, 255, 255, 0.05)' }}>
+            <Box sx={{ pt: 2, borderTop: '1px solid var(--border-subtle)' }}>
               <Button
                 variant="outlined"
                 sx={{
                   borderRadius: '9999px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.07)',
-                  border: '1px solid rgba(255, 255, 255, 0.12)',
-                  color: '#FFFFFF',
+                  backgroundColor: 'var(--bg-pill)',
+                  border: '1px solid var(--border-normal)',
+                  color: 'var(--text-heading)',
                   fontSize: '0.8125rem',
                   textTransform: 'none',
                   fontWeight: 500,
                   px: 2.5,
                   py: 0.7,
                   '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.14)',
-                    borderColor: 'rgba(255, 255, 255, 0.28)',
+                    backgroundColor: 'var(--bg-card-hover)',
+                    borderColor: 'var(--border-strong)',
                   },
                 }}
               >
@@ -1216,17 +1217,17 @@ export default function ProductMatrixSection() {
               width: 44,
               height: 44,
               borderRadius: '50%',
-              backgroundColor: 'rgba(255, 255, 255, 0.04)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              color: '#FFFFFF',
+              backgroundColor: 'var(--bg-pill)',
+              border: '1px solid var(--border-normal)',
+              color: 'var(--text-heading)',
               transition: 'all 0.2s ease',
               opacity: canScrollLeft ? 1 : 0.35,
               cursor: canScrollLeft ? 'pointer' : 'default',
               '&:hover': {
                 backgroundColor: canScrollLeft
-                  ? 'rgba(255, 255, 255, 0.12)'
-                  : 'rgba(255, 255, 255, 0.04)',
-                borderColor: canScrollLeft ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.12)',
+                  ? 'var(--bg-card-hover)'
+                  : 'var(--bg-pill)',
+                borderColor: canScrollLeft ? 'var(--border-strong)' : 'var(--border-normal)',
                 transform: canScrollLeft ? 'translateX(-2px)' : 'none',
               },
             }}
@@ -1243,17 +1244,17 @@ export default function ProductMatrixSection() {
               width: 44,
               height: 44,
               borderRadius: '50%',
-              backgroundColor: 'rgba(255, 255, 255, 0.04)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              color: '#FFFFFF',
+              backgroundColor: 'var(--bg-pill)',
+              border: '1px solid var(--border-normal)',
+              color: 'var(--text-heading)',
               transition: 'all 0.2s ease',
               opacity: canScrollRight ? 1 : 0.35,
               cursor: canScrollRight ? 'pointer' : 'default',
               '&:hover': {
                 backgroundColor: canScrollRight
-                  ? 'rgba(255, 255, 255, 0.12)'
-                  : 'rgba(255, 255, 255, 0.04)',
-                borderColor: canScrollRight ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.12)',
+                  ? 'var(--bg-card-hover)'
+                  : 'var(--bg-pill)',
+                borderColor: canScrollRight ? 'var(--border-strong)' : 'var(--border-normal)',
                 transform: canScrollRight ? 'translateX(2px)' : 'none',
               },
             }}

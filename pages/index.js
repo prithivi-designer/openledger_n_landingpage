@@ -7,7 +7,6 @@ import CoreFeaturesSection from '@/components/CoreFeaturesSection';
 import SupportedModelsSection from '@/components/SupportedModelsSection';
 import WhyAskMultipleModelsSection from '@/components/WhyAskMultipleModelsSection';
 import ProductMatrixSection from '@/components/ProductMatrixSection';
-import MobileAppSection from '@/components/MobileAppSection';
 
 export default function Home() {
   return (
@@ -23,13 +22,12 @@ export default function Home() {
 
       <Header />
 
-      <Box component="main" sx={{ backgroundColor: '#0A0C10', minHeight: '100vh' }}>
+      <Box component="main" sx={{ backgroundColor: 'var(--bg-page)', minHeight: '100vh', transition: 'background-color 0.35s ease' }}>
         <HeroSection />
         <CoreFeaturesSection />
         <SupportedModelsSection />
         <WhyAskMultipleModelsSection />
         <ProductMatrixSection />
-        <MobileAppSection />
       </Box>
     </>
   );

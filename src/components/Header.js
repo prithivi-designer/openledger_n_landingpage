@@ -10,6 +10,10 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import Tooltip from '@mui/material/Tooltip';
+import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
+import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
+import { useThemeMode } from '@/context/ThemeContext';
 
 const NAV_ITEMS = [
   {
@@ -60,6 +64,7 @@ const NAV_ITEMS = [
 ];
 
 export default function Header() {
+  const { isDark, toggleTheme } = useThemeMode();
   const [showNavComponents, setShowNavComponents] = React.useState(false);
   const [isDarkSection, setIsDarkSection] = React.useState(false);
   const [activeDropdown, setActiveDropdown] = React.useState(null);
@@ -68,6 +73,8 @@ export default function Header() {
   const [email, setEmail] = React.useState('');
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const dropdownTimeoutRef = React.useRef(null);
+
+  const effectiveIsDark = isDark && isDarkSection;
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -205,7 +212,7 @@ export default function Header() {
                   height: 28,
                   width: 'auto',
                   display: 'block',
-                  filter: isDarkSection ? 'brightness(0) invert(1)' : 'none',
+                  filter: effectiveIsDark ? 'brightness(0) invert(1)' : 'none',
                   transition: 'filter 0.3s ease',
                 }}
               />
@@ -247,7 +254,7 @@ export default function Header() {
                         sx={{
                           fontSize: '15px !important',
                           ml: -0.4,
-                          color: isDarkSection ? '#FFFFFF' : '#0F172A',
+                          color: effectiveIsDark ? '#FFFFFF' : '#0F172A',
                           transition: 'transform 0.2s ease, color 0.25s ease',
                           transform: activeDropdown === item.label ? 'rotate(180deg)' : 'none',
                         }}
@@ -255,8 +262,8 @@ export default function Header() {
                     ) : null
                   }
                   sx={{
-                    color: isDarkSection
-                      ? 'rgba(255, 255, 255, 0.8)'
+                    color: effectiveIsDark
+                      ? 'rgba(255, 255, 255, 0.85)'
                       : 'rgba(15, 23, 42, 0.85)',
                     fontSize: '0.92rem',
                     fontWeight: 500,
@@ -268,7 +275,7 @@ export default function Header() {
                     transition: 'color 0.2s ease',
                     '&:hover': {
                       backgroundColor: 'transparent',
-                      color: isDarkSection ? '#FFFFFF' : '#000000',
+                      color: effectiveIsDark ? '#FFFFFF' : '#000000',
                     },
                   }}
                 >
@@ -294,10 +301,10 @@ export default function Header() {
                         width: 280,
                         p: 1.2,
                         borderRadius: '16px',
-                        backgroundColor: isDarkSection ? 'rgba(18, 22, 30, 0.96)' : 'rgba(255, 255, 255, 0.98)',
+                        backgroundColor: effectiveIsDark ? 'rgba(18, 22, 30, 0.96)' : 'rgba(255, 255, 255, 0.98)',
                         backdropFilter: 'blur(24px)',
                         WebkitBackdropFilter: 'blur(24px)',
-                        border: isDarkSection ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(0, 0, 0, 0.09)',
+                        border: effectiveIsDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(0, 0, 0, 0.09)',
                         boxShadow: '0 20px 48px -10px rgba(0, 0, 0, 0.25)',
                         display: 'flex',
                         flexDirection: 'column',
@@ -323,7 +330,7 @@ export default function Header() {
                             cursor: 'pointer',
                             transition: 'all 0.15s ease',
                             '&:hover': {
-                              backgroundColor: isDarkSection ? 'rgba(255, 255, 255, 0.07)' : 'rgba(0, 0, 0, 0.05)',
+                              backgroundColor: effectiveIsDark ? 'rgba(255, 255, 255, 0.07)' : 'rgba(0, 0, 0, 0.05)',
                             },
                           }}
                         >
@@ -331,7 +338,7 @@ export default function Header() {
                             variant="body2"
                             sx={{
                               fontWeight: 600,
-                              color: isDarkSection ? '#FFFFFF' : '#0F172A',
+                              color: effectiveIsDark ? '#FFFFFF' : '#0F172A',
                               fontSize: '0.86rem',
                             }}
                           >
@@ -340,7 +347,7 @@ export default function Header() {
                           <Typography
                             variant="caption"
                             sx={{
-                              color: isDarkSection ? 'rgba(255, 255, 255, 0.6)' : '#64748B',
+                              color: effectiveIsDark ? 'rgba(255, 255, 255, 0.6)' : '#64748B',
                               fontSize: '0.74rem',
                               display: 'block',
                               lineHeight: 1.3,
@@ -358,89 +365,132 @@ export default function Header() {
             ))}
           </Box>
 
-          {/* Right: Actions (Try Openchat & Join the waitlist) */}
+          {/* Right: Actions & Theme Toggle */}
           <Box
             sx={{
               flex: { xs: 'none', md: 1 },
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-end',
-              gap: { xs: 1, sm: 1.5 },
-              opacity: showNavComponents ? 1 : 0,
-              pointerEvents: showNavComponents ? 'auto' : 'none',
-              transform: showNavComponents ? 'translateY(0)' : 'translateY(-6px)',
-              transition: 'opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+              gap: { xs: 0.8, sm: 1.2 },
             }}
           >
-            {/* Try Openchat Pill Button */}
-            <Button
-              onClick={handleTryClick}
+            {/* Try Openchat & Join the waitlist (Desktop / Tablet) - slide in when scrolled */}
+            <Box
               sx={{
-                borderRadius: '999px',
-                py: { xs: 0.6, sm: 0.75 },
-                px: { xs: 1.5, sm: 2.2 },
-                fontSize: { xs: '0.82rem', sm: '0.88rem' },
-                fontWeight: 600,
-                textTransform: 'none',
-                color: isDarkSection ? '#FFFFFF' : '#0F172A',
-                backgroundColor: isDarkSection
-                  ? 'rgba(255, 255, 255, 0.12)'
-                  : 'rgba(0, 0, 0, 0.06)',
-                border: isDarkSection
-                  ? '1px solid rgba(255, 255, 255, 0.16)'
-                  : '1px solid rgba(0, 0, 0, 0.08)',
-                transition: 'all 0.2s ease',
-                fontFamily: '"Inter", -apple-system, sans-serif',
-                whiteSpace: 'nowrap',
-                '&:hover': {
-                  backgroundColor: isDarkSection
-                    ? 'rgba(255, 255, 255, 0.2)'
-                    : 'rgba(0, 0, 0, 0.1)',
-                  transform: 'translateY(-1px)',
-                },
+                display: { xs: 'none', sm: 'flex' },
+                alignItems: 'center',
+                gap: { xs: 0.8, sm: 1.2 },
+                opacity: showNavComponents ? 1 : 0,
+                pointerEvents: showNavComponents ? 'auto' : 'none',
+                transform: showNavComponents ? 'translateY(0)' : 'translateY(-6px)',
+                transition: 'opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
               }}
             >
-              Try Openchat
-            </Button>
+              {/* Try Openchat Pill Button */}
+              <Button
+                onClick={handleTryClick}
+                sx={{
+                  borderRadius: '999px',
+                  py: { xs: 0.6, sm: 0.75 },
+                  px: { xs: 1.5, sm: 2.2 },
+                  fontSize: { xs: '0.82rem', sm: '0.88rem' },
+                  fontWeight: 600,
+                  textTransform: 'none',
+                  color: effectiveIsDark ? '#FFFFFF' : '#0F172A',
+                  backgroundColor: effectiveIsDark
+                    ? 'rgba(255, 255, 255, 0.12)'
+                    : 'rgba(0, 0, 0, 0.06)',
+                  border: effectiveIsDark
+                    ? '1px solid rgba(255, 255, 255, 0.16)'
+                    : '1px solid rgba(0, 0, 0, 0.08)',
+                  transition: 'all 0.2s ease',
+                  fontFamily: '"Inter", -apple-system, sans-serif',
+                  whiteSpace: 'nowrap',
+                  '&:hover': {
+                    backgroundColor: effectiveIsDark
+                      ? 'rgba(255, 255, 255, 0.2)'
+                      : 'rgba(0, 0, 0, 0.1)',
+                    transform: 'translateY(-1px)',
+                  },
+                }}
+              >
+                Try Openchat
+              </Button>
 
-            {/* Join the waitlist Pill Button */}
-            <Button
-              onClick={handleWaitlistOpen}
-              sx={{
-                borderRadius: '999px',
-                py: { xs: 0.6, sm: 0.75 },
-                px: { xs: 1.6, sm: 2.4 },
-                fontSize: { xs: '0.82rem', sm: '0.88rem' },
-                fontWeight: 600,
-                textTransform: 'none',
-                color: isDarkSection ? '#000000' : '#FFFFFF',
-                backgroundColor: isDarkSection ? '#FFFFFF' : '#0F172A',
-                boxShadow: isDarkSection
-                  ? '0 2px 10px rgba(255, 255, 255, 0.2)'
-                  : '0 2px 10px rgba(0, 0, 0, 0.2)',
-                transition: 'all 0.2s ease',
-                fontFamily: '"Inter", -apple-system, sans-serif',
-                whiteSpace: 'nowrap',
-                '&:hover': {
-                  backgroundColor: isDarkSection
-                    ? 'rgba(255, 255, 255, 0.9)'
-                    : '#1E293B',
-                  transform: 'translateY(-1px)',
-                  boxShadow: isDarkSection
-                    ? '0 4px 16px rgba(255, 255, 255, 0.3)'
-                    : '0 4px 16px rgba(0, 0, 0, 0.3)',
-                },
-              }}
-            >
-              Join the waitlist
-            </Button>
+              {/* Join the waitlist Pill Button */}
+              <Button
+                onClick={handleWaitlistOpen}
+                sx={{
+                  borderRadius: '999px',
+                  py: { xs: 0.6, sm: 0.75 },
+                  px: { xs: 1.6, sm: 2.4 },
+                  fontSize: { xs: '0.82rem', sm: '0.88rem' },
+                  fontWeight: 600,
+                  textTransform: 'none',
+                  color: effectiveIsDark ? '#000000' : '#FFFFFF',
+                  backgroundColor: effectiveIsDark ? '#FFFFFF' : '#0F172A',
+                  boxShadow: effectiveIsDark
+                    ? '0 2px 10px rgba(255, 255, 255, 0.2)'
+                    : '0 2px 10px rgba(0, 0, 0, 0.18)',
+                  transition: 'all 0.2s ease',
+                  fontFamily: '"Inter", -apple-system, sans-serif',
+                  whiteSpace: 'nowrap',
+                  '&:hover': {
+                    backgroundColor: effectiveIsDark
+                      ? 'rgba(255, 255, 255, 0.9)'
+                      : '#1E293B',
+                    transform: 'translateY(-1px)',
+                    boxShadow: effectiveIsDark
+                      ? '0 4px 16px rgba(255, 255, 255, 0.3)'
+                      : '0 4px 16px rgba(0, 0, 0, 0.25)',
+                  },
+                }}
+              >
+                Join the waitlist
+              </Button>
+            </Box>
+
+            {/* Theme Toggle Button - Always Accessible & Interactive */}
+            <Tooltip title={isDark ? 'Switch to light theme' : 'Switch to dark theme'} arrow>
+              <IconButton
+                onClick={toggleTheme}
+                aria-label="Toggle theme mode"
+                sx={{
+                  width: { xs: 36, sm: 40 },
+                  height: { xs: 36, sm: 40 },
+                  borderRadius: '50%',
+                  color: effectiveIsDark ? '#FFFFFF' : '#0F172A',
+                  backgroundColor: effectiveIsDark
+                    ? 'rgba(255, 255, 255, 0.1)'
+                    : 'rgba(0, 0, 0, 0.05)',
+                  border: effectiveIsDark
+                    ? '1px solid rgba(255, 255, 255, 0.18)'
+                    : '1px solid rgba(0, 0, 0, 0.09)',
+                  backdropFilter: 'blur(12px)',
+                  transition: 'all 0.22s ease',
+                  '&:hover': {
+                    backgroundColor: effectiveIsDark
+                      ? 'rgba(255, 255, 255, 0.2)'
+                      : 'rgba(0, 0, 0, 0.1)',
+                    transform: 'scale(1.08)',
+                  },
+                }}
+              >
+                {isDark ? (
+                  <LightModeOutlinedIcon sx={{ fontSize: { xs: 19, sm: 21 } }} />
+                ) : (
+                  <DarkModeOutlinedIcon sx={{ fontSize: { xs: 19, sm: 21 } }} />
+                )}
+              </IconButton>
+            </Tooltip>
 
             {/* Mobile Hamburger Toggle */}
             <IconButton
               onClick={() => setMobileOpen(!mobileOpen)}
               sx={{
                 display: { xs: 'flex', md: 'none' },
-                color: isDarkSection ? '#FFFFFF' : '#0F172A',
+                color: effectiveIsDark ? '#FFFFFF' : '#0F172A',
                 p: 0.6,
                 ml: 0.2,
                 transition: 'color 0.25s ease',
@@ -462,11 +512,11 @@ export default function Header() {
             top: 58,
             left: 0,
             right: 0,
-            backgroundColor: isDarkSection
+            backgroundColor: effectiveIsDark
               ? 'rgba(10, 12, 16, 0.98)'
               : 'rgba(255, 255, 255, 0.98)',
             backdropFilter: 'blur(28px)',
-            borderBottom: isDarkSection
+            borderBottom: effectiveIsDark
               ? '1px solid rgba(255, 255, 255, 0.1)'
               : '1px solid rgba(0, 0, 0, 0.1)',
             px: 3,
@@ -487,7 +537,7 @@ export default function Header() {
                   handleWaitlistOpen();
                 }}
                 sx={{
-                  color: isDarkSection ? 'rgba(255, 255, 255, 0.9)' : '#0F172A',
+                  color: effectiveIsDark ? 'rgba(255, 255, 255, 0.9)' : '#0F172A',
                   fontSize: '1rem',
                   fontWeight: 600,
                   textDecoration: 'none',
@@ -499,6 +549,7 @@ export default function Header() {
               </Box>
             ))}
 
+            {/* Try Openchat */}
             <Box
               component="a"
               onClick={() => {
@@ -506,13 +557,13 @@ export default function Header() {
                 handleTryClick();
               }}
               sx={{
-                color: isDarkSection ? '#FFFFFF' : '#0F172A',
+                color: effectiveIsDark ? '#FFFFFF' : '#0F172A',
                 fontSize: '1rem',
                 fontWeight: 600,
                 textDecoration: 'none',
                 py: 0.5,
                 cursor: 'pointer',
-                borderTop: isDarkSection
+                borderTop: effectiveIsDark
                   ? '1px solid rgba(255, 255, 255, 0.08)'
                   : '1px solid rgba(0, 0, 0, 0.08)',
                 pt: 1.5,
@@ -520,6 +571,36 @@ export default function Header() {
               }}
             >
               Try Openchat →
+            </Box>
+
+            {/* Theme Toggle in Mobile Drawer */}
+            <Box
+              onClick={toggleTheme}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                py: 0.5,
+                cursor: 'pointer',
+                borderTop: effectiveIsDark
+                  ? '1px solid rgba(255, 255, 255, 0.08)'
+                  : '1px solid rgba(0, 0, 0, 0.08)',
+                pt: 1.5,
+              }}
+            >
+              <Typography
+                sx={{
+                  color: effectiveIsDark ? '#FFFFFF' : '#0F172A',
+                  fontSize: '0.96rem',
+                  fontWeight: 600,
+                  fontFamily: '"Inter", -apple-system, sans-serif',
+                }}
+              >
+                Theme ({isDark ? 'Dark Mode' : 'Light Mode'})
+              </Typography>
+              <IconButton size="small" sx={{ color: effectiveIsDark ? '#FFFFFF' : '#0F172A' }}>
+                {isDark ? <LightModeOutlinedIcon fontSize="small" /> : <DarkModeOutlinedIcon fontSize="small" />}
+              </IconButton>
             </Box>
           </Box>
         </Box>

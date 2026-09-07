@@ -1,11 +1,13 @@
 import * as React from 'react';
 import Head from 'next/head';
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider } from '@emotion/react';
 import theme from '@/theme/theme';
 import createEmotionCache from '@/utils/createEmotionCache';
 import SmoothScroll from '@/components/SmoothScroll';
+import { ThemeProvider } from '@/context/ThemeContext';
+import '@/styles/globals.css';
 import 'lenis/dist/lenis.css';
 
 // Client-side cache, shared for the whole session of the user in the browser.
@@ -61,12 +63,14 @@ export default function MyApp(props) {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <title>OpenLedger | AI-Powered Infrastructure</title>
       </Head>
-      <ThemeProvider theme={theme}>
+      <MuiThemeProvider theme={theme}>
         <CssBaseline />
-        <SmoothScroll>
-          <Component {...pageProps} />
-        </SmoothScroll>
-      </ThemeProvider>
+        <ThemeProvider>
+          <SmoothScroll>
+            <Component {...pageProps} />
+          </SmoothScroll>
+        </ThemeProvider>
+      </MuiThemeProvider>
     </CacheProvider>
   );
 }
