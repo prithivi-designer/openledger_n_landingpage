@@ -7,6 +7,9 @@ import CoreFeaturesSection from '@/components/CoreFeaturesSection';
 import SupportedModelsSection from '@/components/SupportedModelsSection';
 import WhyAskMultipleModelsSection from '@/components/WhyAskMultipleModelsSection';
 import ProductMatrixSection from '@/components/ProductMatrixSection';
+import PricingSection from '@/components/PricingSection';
+import TokenOptimizationSection from '@/components/TokenOptimizationSection';
+import ApiSection from '@/components/ApiSection';
 
 export default function Home() {
   return (
@@ -28,6 +31,9 @@ export default function Home() {
         <SupportedModelsSection />
         <WhyAskMultipleModelsSection />
         <ProductMatrixSection />
+        <PricingSection />
+        <TokenOptimizationSection />
+        <ApiSection />
       </Box>
     </>
   );

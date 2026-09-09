@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography';
 import HeroChatBox from './HeroChatBox';
 import SuggestionChips from './SuggestionChips';
 import TrustBadges from './TrustBadges';
-import ScrambledText from './ui/ScrambledText';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 
@@ -140,57 +139,31 @@ export default function HeroSection() {
           py: { xs: 1.5, md: 3 },
         }}
       >
-        {/* Headline with ScrambledText effect */}
-        <Box id="hero-headline" sx={{ mb: 1.8, opacity: 1 }}>
+        {/* Headline with Icon */}
+        <Box id="hero-headline" sx={{ mb: { xs: 3, sm: 4 }, opacity: 1 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+            <Box 
+              component="img"
+              src="/Icons/Frosted logo OPL.png" 
+              alt="OpenLedger"
+              sx={{ width: { xs: 60, md: 80 }, height: { xs: 60, md: 80 }, objectFit: 'contain' }}
+            />
+          </Box>
           <Typography
             component="h1"
             sx={{
               fontFamily: '"Inter", -apple-system, sans-serif',
               fontWeight: 700,
-              fontSize: { xs: '2.5rem', sm: '3.4rem', md: '4.2rem' },
-              lineHeight: 1.1,
+              fontSize: { xs: '1.75rem', sm: '2.25rem', md: '2.75rem' },
+              lineHeight: 1.2,
               letterSpacing: '-0.035em',
-              color: '#0F172A',
+              color: 'rgb(71, 85, 105)',
               display: 'block',
             }}
           >
-            <ScrambledText text="Ask anything." />
-          </Typography>
-          <Typography
-            component="span"
-            sx={{
-              fontFamily: '"Inter", -apple-system, sans-serif',
-              fontWeight: 700,
-              fontSize: { xs: '2.5rem', sm: '3.4rem', md: '4.2rem' },
-              lineHeight: 1.15,
-              letterSpacing: '-0.035em',
-              color: '#64748B',
-              display: 'block',
-            }}
-          >
-            Think in the open.
+            Think Freely...
           </Typography>
         </Box>
-
-        {/* Subtitle */}
-        <Typography
-          id="hero-subtitle"
-          variant="body1"
-          sx={{
-            maxWidth: 520,
-            mx: 'auto',
-            mb: { xs: 3, sm: 4 },
-            fontSize: { xs: '0.98rem', sm: '1.1rem' },
-            lineHeight: 1.6,
-            color: '#475569',
-            fontWeight: 450,
-            opacity: 1,
-          }}
-        >
-          A private, multi-model AI experience
-          <br />
-          with no account required to start.
-        </Typography>
 
         {/* Interactive Chat Box matching openledger_chat */}
         <HeroChatBox

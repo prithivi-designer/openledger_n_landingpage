@@ -128,7 +128,12 @@ html[data-theme="light"] {
 }
 
 /* ---- Global resets reading from CSS vars ---- */
+html {
+  scroll-behavior: smooth;
+}
+
 html, body {
+  display: block !important;
   background-color: var(--bg-page) !important;
   color: var(--text-primary) !important;
   transition: background-color 0.35s ease, color 0.35s ease;

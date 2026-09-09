@@ -8,6 +8,7 @@ import createEmotionCache from '@/utils/createEmotionCache';
 import SmoothScroll from '@/components/SmoothScroll';
 import { ThemeProvider } from '@/context/ThemeContext';
 import '@/styles/globals.css';
+import '@/components/GlassSurface.css';
 import 'lenis/dist/lenis.css';
 
 // Client-side cache, shared for the whole session of the user in the browser.

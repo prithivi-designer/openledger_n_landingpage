@@ -2,701 +2,980 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
+import SearchIcon from '@mui/icons-material/Search';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { useThemeMode } from '@/context/ThemeContext';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
-
-// 10 Premier AI models supported in OpenLedger
-const MODELS = [
+// Complete catalog of premier models based on reference
+const ALL_MODELS = [
   {
-    id: 'chatgpt',
-    name: 'ChatGPT (GPT-4o)',
+    id: 'gpt-4o',
+    name: 'GPT-4o',
     provider: 'OpenAI',
-    badge: 'Flagship Multimodal',
-    context: '128K Context',
-    description: 'Advanced reasoning, multimodal understanding, and high-precision code.',
-    icon: '/Models/Chatgpt.svg',
-    invertIcon: true,
+    providerKey: 'openai',
+    context: '128K',
+    contextNum: 128,
+    bestFor: 'Everyday reasoning and vision',
+    categories: ['All', 'Reasoning', 'Vision', 'Coding'],
+    modelType: 'openai',
   },
   {
-    id: 'claude',
-    name: 'Claude 3.5 Sonnet',
+    id: 'o3',
+    name: 'o3',
+    provider: 'OpenAI',
+    providerKey: 'openai',
+    context: '200K',
+    contextNum: 200,
+    bestFor: 'Hard maths, proofs, planning',
+    categories: ['All', 'Reasoning', 'Coding'],
+    modelType: 'openai',
+  },
+  {
+    id: 'claude-opus-4',
+    name: 'Claude Opus 4',
     provider: 'Anthropic',
-    badge: 'State of the Art',
-    context: '200K Context',
-    description: 'Nuanced reasoning, frontier coding capability, and complex problem solving.',
-    icon: '/Models/Claude.svg',
-    invertIcon: false,
+    providerKey: 'anthropic',
+    context: '200K',
+    contextNum: 200,
+    bestFor: 'Long documents and drafting',
+    categories: ['All', 'Reasoning', 'Long Context'],
+    modelType: 'anthropic',
   },
   {
-    id: 'gemini',
-    name: 'Gemini 1.5 Pro',
+    id: 'claude-sonnet-4',
+    name: 'Claude Sonnet 4',
+    provider: 'Anthropic',
+    providerKey: 'anthropic',
+    context: '200K',
+    contextNum: 200,
+    bestFor: 'Code review and refactors',
+    categories: ['All', 'Coding', 'Reasoning', 'Long Context'],
+    modelType: 'anthropic',
+  },
+  {
+    id: 'gemini-2-5-pro',
+    name: 'Gemini 2.5 Pro',
     provider: 'Google',
-    badge: '2M Long Context',
-    context: '2M Tokens',
-    description: 'Massive long-document analysis, video reasoning, and multimodal synthesis.',
-    icon: '/Models/Gemini.svg',
-    invertIcon: false,
+    providerKey: 'google',
+    context: '1M',
+    contextNum: 1000,
+    bestFor: 'Whole repositories and video',
+    categories: ['All', 'Long Context', 'Vision', 'Coding'],
+    modelType: 'google',
   },
   {
-    id: 'llama',
-    name: 'Llama 3.1 405B',
+    id: 'grok-4',
+    name: 'Grok 4',
+    provider: 'xAI',
+    providerKey: 'xai',
+    context: '256K',
+    contextNum: 256,
+    bestFor: 'Live search and conversation',
+    categories: ['All', 'Live Search', 'Reasoning', 'Long Context'],
+    modelType: 'xai',
+  },
+  // Extended catalog revealed on "See every model →"
+  {
+    id: 'llama-3-3-70b',
+    name: 'Llama 3.3 70B',
     provider: 'Meta',
-    badge: 'Open Weights Titan',
-    context: '128K Context',
-    description: 'Frontier open-source intelligence rivaling leading proprietary systems.',
-    icon: '/Models/Llama.svg',
-    invertIcon: false,
+    providerKey: 'meta',
+    context: '128K',
+    contextNum: 128,
+    bestFor: 'Open-weights agent workflows',
+    categories: ['All', 'Reasoning', 'Coding'],
+    modelType: 'meta',
   },
   {
-    id: 'mistral',
+    id: 'deepseek-r1',
+    name: 'DeepSeek R1',
+    provider: 'DeepSeek',
+    providerKey: 'deepseek',
+    context: '64K',
+    contextNum: 64,
+    bestFor: 'Chain-of-thought mathematical proof',
+    categories: ['All', 'Reasoning', 'Coding'],
+    modelType: 'deepseek',
+  },
+  {
+    id: 'mistral-large-2',
     name: 'Mistral Large 2',
     provider: 'Mistral AI',
-    badge: 'European Frontier',
-    context: '128K Context',
-    description: 'High-speed multilingual reasoning, code generation, and mathematical reasoning.',
-    icon: '/Models/Mistral.svg',
-    invertIcon: false,
+    providerKey: 'mistral',
+    context: '128K',
+    contextNum: 128,
+    bestFor: 'European multilingual reasoning',
+    categories: ['All', 'Reasoning', 'Coding'],
+    modelType: 'mistral',
   },
   {
-    id: 'deepseek',
-    name: 'DeepSeek V3 / R1',
-    provider: 'DeepSeek',
-    badge: 'Reasoning Breakthrough',
-    context: '64K Context',
-    description: 'Open-weights reasoning model with chain-of-thought verification proofs.',
-    icon: '/Models/DeepSeek.svg',
-    invertIcon: false,
-  },
-  {
-    id: 'grok',
-    name: 'Grok 2',
-    provider: 'xAI',
-    badge: 'Real-Time Insights',
-    context: '128K Context',
-    description: 'Real-time knowledge integration and unfiltered analytical problem solving.',
-    icon: '/Models/Grok.svg',
-    invertIcon: true,
-  },
-  {
-    id: 'qwen',
-    name: 'Qwen 2.5 72B',
-    provider: 'Alibaba Cloud',
-    badge: 'Multilingual Leader',
-    context: '128K Context',
-    description: 'Exceptional multilingual mastery, math processing, and dense coding acumen.',
-    icon: '/Models/Qwen.svg',
-    invertIcon: false,
-  },
-  {
-    id: 'perplexity',
-    name: 'Perplexity Sonar',
+    id: 'perplexity-sonar-pro',
+    name: 'Perplexity Sonar Pro',
     provider: 'Perplexity',
-    badge: 'Live Web Grounding',
-    context: '128K Context',
-    description: 'Real-time citation-backed web queries and live intelligence synthesis.',
-    icon: '/Models/Perplexcity.svg',
-    invertIcon: true,
+    providerKey: 'perplexity',
+    context: '128K',
+    contextNum: 128,
+    bestFor: 'Real-time citation grounded web search',
+    categories: ['All', 'Live Search'],
+    modelType: 'perplexity',
   },
   {
-    id: 'cohere',
-    name: 'Command R+',
+    id: 'cohere-command-r-plus',
+    name: 'Cohere Command R+',
     provider: 'Cohere',
-    badge: 'Enterprise RAG',
-    context: '128K Context',
-    description: 'Engineered for high-reliability Retrieval-Augmented Generation workflows.',
-    icon: '/Models/Cohere.svg',
-    invertIcon: false,
+    providerKey: 'cohere',
+    context: '128K',
+    contextNum: 128,
+    bestFor: 'Enterprise RAG and tool usage',
+    categories: ['All', 'Long Context', 'Reasoning'],
+    modelType: 'cohere',
+  },
+  {
+    id: 'qwen-2-5-coder-32b',
+    name: 'Qwen 2.5 Coder',
+    provider: 'Alibaba',
+    providerKey: 'alibaba',
+    context: '128K',
+    contextNum: 128,
+    bestFor: 'Polyglot code completion & bug fixing',
+    categories: ['All', 'Coding'],
+    modelType: 'qwen',
   },
 ];
 
-// Orbital geometry matching lazy.so reference:
-// Tilted by -34.353 degrees with concentric dashed orbits
-const TILT_DEG = -34.353;
-const TILT_RAD = (TILT_DEG * Math.PI) / 180;
-const VIEW_W = 800;
-const VIEW_H = 480;
-const CX = VIEW_W / 2; // 400
-const CY = VIEW_H / 2; // 240
-const RX_OUTER = 290;
-const RY_OUTER = 160;
-const RX_INNER = 145;
-const RY_INNER = 80;
-const THETA_START = -Math.PI / 2;
+const CATEGORIES = ['All', 'Reasoning', 'Coding', 'Vision', 'Long Context', 'Live Search'];
 
-// Exact parametric coordinates on tilted ellipse
-function getOrbitPoint(theta, rx = RX_OUTER, ry = RY_OUTER) {
-  const xPrime = rx * Math.cos(theta);
-  const yPrime = ry * Math.sin(theta);
-  const x = CX + xPrime * Math.cos(TILT_RAD) - yPrime * Math.sin(TILT_RAD);
-  const y = CY + xPrime * Math.sin(TILT_RAD) + yPrime * Math.cos(TILT_RAD);
+// Monochrome Provider Icon rendering
+function renderProviderLogo(providerKey, isDark, size = 15) {
+  const monoFilter = isDark ? 'brightness(0) invert(1)' : 'brightness(0)';
+  const monoOpacity = isDark ? 0.92 : 0.85;
+
+  if (providerKey === 'openai') {
+    return (
+      <Box
+        component="img"
+        src="/Models/Chatgpt.svg"
+        alt="OpenAI"
+        sx={{
+          width: size,
+          height: size,
+          filter: monoFilter,
+          opacity: monoOpacity,
+        }}
+      />
+    );
+  }
+  if (providerKey === 'anthropic') {
+    return (
+      <Box
+        component="img"
+        src="/Models/Claude.svg"
+        alt="Anthropic"
+        sx={{
+          width: size,
+          height: size,
+          filter: monoFilter,
+          opacity: monoOpacity,
+        }}
+      />
+    );
+  }
+  if (providerKey === 'google') {
+    return (
+      <Box
+        component="svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        sx={{ width: size, height: size, color: isDark ? '#FFFFFF' : '#0F172A', opacity: monoOpacity }}
+      >
+        <path d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
+        <path d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.15C3.26 21.36 7.33 24 12 24z" />
+        <path d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.14-1.55.38-2.27V6.58H1.26C.46 8.16 0 9.97 0 12s.46 3.84 1.26 5.42l4.02-3.15z" />
+        <path d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.26 6.58l4.02 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
+      </Box>
+    );
+  }
+  if (providerKey === 'xai') {
+    return (
+      <Box
+        sx={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontWeight: 900,
+          fontFamily: 'monospace',
+          fontSize: `${size * 0.85}px`,
+          lineHeight: 1,
+          color: isDark ? '#FFFFFF' : '#0F172A',
+          opacity: monoOpacity,
+        }}
+      >
+        𝕏I
+      </Box>
+    );
+  }
+  if (providerKey === 'meta') {
+    return (
+      <Box
+        component="img"
+        src="/Models/Llama.svg"
+        alt="Meta"
+        sx={{ width: size, height: size, filter: monoFilter, opacity: monoOpacity }}
+      />
+    );
+  }
+  if (providerKey === 'deepseek') {
+    return (
+      <Box
+        component="img"
+        src="/Models/DeepSeek.svg"
+        alt="DeepSeek"
+        sx={{ width: size, height: size, filter: monoFilter, opacity: monoOpacity }}
+      />
+    );
+  }
+  if (providerKey === 'mistral') {
+    return (
+      <Box
+        component="img"
+        src="/Models/Mistral.svg"
+        alt="Mistral"
+        sx={{ width: size, height: size, filter: monoFilter, opacity: monoOpacity }}
+      />
+    );
+  }
+  if (providerKey === 'perplexity') {
+    return (
+      <Box
+        component="img"
+        src="/Models/Perplexcity.svg"
+        alt="Perplexity"
+        sx={{ width: size, height: size, filter: monoFilter, opacity: monoOpacity }}
+      />
+    );
+  }
+  if (providerKey === 'cohere') {
+    return (
+      <Box
+        component="img"
+        src="/Models/Cohere.svg"
+        alt="Cohere"
+        sx={{ width: size, height: size, filter: monoFilter, opacity: monoOpacity }}
+      />
+    );
+  }
+  if (providerKey === 'alibaba') {
+    return (
+      <Box
+        component="img"
+        src="/Models/Qwen.svg"
+        alt="Alibaba"
+        sx={{ width: size, height: size, filter: monoFilter, opacity: monoOpacity }}
+      />
+    );
+  }
+  return null;
+}
+
+// Model leading icon badge (Square with rounded corners) - Pure Monochrome
+function renderModelSquareIcon(modelType, isDark) {
+  const containerStyle = {
+    width: 36,
+    height: 36,
+    borderRadius: '10px',
+    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.035)',
+    border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  };
+
+  const monoFilter = isDark ? 'brightness(0) invert(1)' : 'brightness(0)';
+  const monoOpacity = isDark ? 0.92 : 0.85;
+
+  if (modelType === 'openai') {
+    return (
+      <Box sx={containerStyle}>
+        <Box
+          component="img"
+          src="/Models/Chatgpt.svg"
+          alt="OpenAI"
+          sx={{
+            width: 19,
+            height: 19,
+            filter: monoFilter,
+            opacity: monoOpacity,
+          }}
+        />
+      </Box>
+    );
+  }
+  if (modelType === 'anthropic') {
+    return (
+      <Box sx={containerStyle}>
+        <Typography
+          sx={{
+            fontWeight: 800,
+            fontSize: '0.86rem',
+            color: isDark ? '#FFFFFF' : '#0F172A',
+            lineHeight: 1,
+            letterSpacing: '-0.02em',
+          }}
+        >
+          AI
+        </Typography>
+      </Box>
+    );
+  }
+  if (modelType === 'google') {
+    return (
+      <Box sx={containerStyle}>
+        <Box
+          component="svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          sx={{ width: 19, height: 19, color: isDark ? '#FFFFFF' : '#0F172A', opacity: monoOpacity }}
+        >
+          <path d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
+          <path d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.15C3.26 21.36 7.33 24 12 24z" />
+          <path d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.14-1.55.38-2.27V6.58H1.26C.46 8.16 0 9.97 0 12s.46 3.84 1.26 5.42l4.02-3.15z" />
+          <path d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.26 6.58l4.02 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
+        </Box>
+      </Box>
+    );
+  }
+  if (modelType === 'xai') {
+    return (
+      <Box sx={containerStyle}>
+        <Typography
+          sx={{
+            fontWeight: 900,
+            fontFamily: 'monospace',
+            fontSize: '0.96rem',
+            color: isDark ? '#FFFFFF' : '#0F172A',
+            lineHeight: 1,
+          }}
+        >
+          𝕏I
+        </Typography>
+      </Box>
+    );
+  }
+  if (modelType === 'meta') {
+    return (
+      <Box sx={containerStyle}>
+        <Box component="img" src="/Models/Llama.svg" alt="Meta" sx={{ width: 19, height: 19, filter: monoFilter, opacity: monoOpacity }} />
+      </Box>
+    );
+  }
+  if (modelType === 'deepseek') {
+    return (
+      <Box sx={containerStyle}>
+        <Box component="img" src="/Models/DeepSeek.svg" alt="DeepSeek" sx={{ width: 19, height: 19, filter: monoFilter, opacity: monoOpacity }} />
+      </Box>
+    );
+  }
+  if (modelType === 'mistral') {
+    return (
+      <Box sx={containerStyle}>
+        <Box component="img" src="/Models/Mistral.svg" alt="Mistral" sx={{ width: 19, height: 19, filter: monoFilter, opacity: monoOpacity }} />
+      </Box>
+    );
+  }
+  if (modelType === 'perplexity') {
+    return (
+      <Box sx={containerStyle}>
+        <Box component="img" src="/Models/Perplexcity.svg" alt="Perplexity" sx={{ width: 19, height: 19, filter: monoFilter, opacity: monoOpacity }} />
+      </Box>
+    );
+  }
+  if (modelType === 'cohere') {
+    return (
+      <Box sx={containerStyle}>
+        <Box component="img" src="/Models/Cohere.svg" alt="Cohere" sx={{ width: 19, height: 19, filter: monoFilter, opacity: monoOpacity }} />
+      </Box>
+    );
+  }
+  if (modelType === 'qwen' || modelType === 'alibaba') {
+    return (
+      <Box sx={containerStyle}>
+        <Box component="img" src="/Models/Qwen.svg" alt="Alibaba" sx={{ width: 19, height: 19, filter: monoFilter, opacity: monoOpacity }} />
+      </Box>
+    );
+  }
+  return (
+    <Box sx={containerStyle}>
+      <Typography sx={{ fontWeight: 800, fontSize: '0.82rem', color: isDark ? '#FFFFFF' : '#0F172A' }}>
+        AI
+      </Typography>
+    </Box>
+  );
+}
+
+// Provider badge styling - Pure Monochrome
+function getProviderStyle(providerKey, isDark) {
   return {
-    x,
-    y,
-    leftPercent: (x / VIEW_W) * 100,
-    topPercent: (y / VIEW_H) * 100,
+    bg: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.035)',
+    border: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.07)',
+    color: isDark ? '#F1F5F9' : '#0F172A',
   };
 }
 
 export default function SupportedModelsSection() {
-  const [activeModelIndex, setActiveModelIndex] = React.useState(0);
-  const [maxReachedIndex, setMaxReachedIndex] = React.useState(0);
-  const [hoveredIndex, setHoveredIndex] = React.useState(null);
-  const [isCenterHovered, setIsCenterHovered] = React.useState(false);
-  const sectionRef = React.useRef(null);
-  const pinContainerRef = React.useRef(null);
-  const scrollTriggerRef = React.useRef(null);
-  const lastActiveIndexRef = React.useRef(0);
-  const lastReachedIndexRef = React.useRef(0);
+  const { isDark } = useThemeMode();
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [selectedCategory, setSelectedCategory] = React.useState('All');
+  const [sortOption, setSortOption] = React.useState('Most Relevant');
+  const [sortMenuOpen, setSortMenuOpen] = React.useState(false);
+  const [showAll, setShowAll] = React.useState(false);
 
-  // Direct DOM refs for the SVG light bead to achieve silky 60fps/120fps motion with zero CSS transition lag
-  const dotCoreRef = React.useRef(null);
-  const dotMidRef = React.useRef(null);
-  const dotGlowRef = React.useRef(null);
-
-  // Pre-calculate fixed positions for the 10 models evenly spaced along the outer ellipse
-  const nodePositions = React.useMemo(() => {
-    return MODELS.map((_, i) => {
-      const theta = THETA_START + ((2 * Math.PI) / MODELS.length) * i;
-      return {
-        ...getOrbitPoint(theta, RX_OUTER, RY_OUTER),
-        theta,
-        threshold: i / MODELS.length,
-      };
-    });
-  }, []);
-
-  // Initial starting point on outer ellipse
-  const initialPt = React.useMemo(() => getOrbitPoint(THETA_START, RX_OUTER, RY_OUTER), []);
-
-  React.useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    let mm = gsap.matchMedia();
-
-    mm.add('(min-width: 900px)', () => {
-      const orbitProxy = { progress: 0 };
-
-      const tween = gsap.to(orbitProxy, {
-        progress: 1,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: 'bottom bottom',
-          pin: pinContainerRef.current,
-          scrub: 1.2, // Velvety, smooth easing and natural momentum!
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          onUpdate: () => {
-            const p = orbitProxy.progress;
-            const theta = THETA_START + p * (2 * Math.PI);
-            const pt = getOrbitPoint(theta, RX_OUTER, RY_OUTER);
-
-            if (dotCoreRef.current) {
-              dotCoreRef.current.setAttribute('cx', pt.x.toFixed(2));
-              dotCoreRef.current.setAttribute('cy', pt.y.toFixed(2));
-            }
-            if (dotMidRef.current) {
-              dotMidRef.current.setAttribute('cx', pt.x.toFixed(2));
-              dotMidRef.current.setAttribute('cy', pt.y.toFixed(2));
-            }
-            if (dotGlowRef.current) {
-              dotGlowRef.current.setAttribute('cx', pt.x.toFixed(2));
-              dotGlowRef.current.setAttribute('cy', pt.y.toFixed(2));
-            }
-
-            // Active model station closest to dot (only updates state on index change!)
-            const currentIdx = Math.min(
-              MODELS.length - 1,
-              Math.floor(p * MODELS.length)
-            );
-            if (currentIdx !== lastActiveIndexRef.current) {
-              lastActiveIndexRef.current = currentIdx;
-              setActiveModelIndex(currentIdx);
-            }
-
-            // Max reached model along the orbit
-            const reached = Math.min(
-              MODELS.length - 1,
-              Math.floor(p * MODELS.length)
-            );
-            if (reached !== lastReachedIndexRef.current) {
-              lastReachedIndexRef.current = reached;
-              setMaxReachedIndex(reached);
-            }
-          },
-        },
-      });
-
-      scrollTriggerRef.current = tween.scrollTrigger;
-
-      return () => {
-        if (tween.scrollTrigger) tween.scrollTrigger.kill();
-        tween.kill();
-        scrollTriggerRef.current = null;
-      };
+  // Filter and sort logic
+  const filteredModels = React.useMemo(() => {
+    let result = ALL_MODELS.filter((m) => {
+      // Category filter
+      if (selectedCategory !== 'All' && !m.categories.includes(selectedCategory)) {
+        return false;
+      }
+      // Search query filter
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        return (
+          m.name.toLowerCase().includes(q) ||
+          m.provider.toLowerCase().includes(q) ||
+          m.bestFor.toLowerCase().includes(q)
+        );
+      }
+      return true;
     });
 
-    return () => mm.revert();
-  }, []);
-
-  const handleModelClick = (idx) => {
-    setActiveModelIndex(idx);
-    if (!scrollTriggerRef.current) return;
-    const trigger = scrollTriggerRef.current;
-    const targetProgress = idx / (MODELS.length - 1);
-    const targetScroll = trigger.start + targetProgress * (trigger.end - trigger.start);
-
-    if (window.lenis) {
-      window.lenis.scrollTo(targetScroll, {
-        duration: 0.85,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      });
-    } else {
-      gsap.to(window, {
-        scrollTo: { y: targetScroll, autoKill: false },
-        duration: 0.85,
-        ease: 'power2.out',
-      });
+    // Sort
+    if (sortOption === 'Context (Highest)') {
+      result = [...result].sort((a, b) => b.contextNum - a.contextNum);
+    } else if (sortOption === 'Name (A-Z)') {
+      result = [...result].sort((a, b) => a.name.localeCompare(b.name));
     }
-  };
 
-  const displayedIndex = hoveredIndex !== null ? hoveredIndex : activeModelIndex;
-  const currentModel = MODELS[displayedIndex] || MODELS[0];
+    // Limit to 6 by default unless showAll is true or query/category is active
+    if (!showAll && !searchQuery.trim() && selectedCategory === 'All') {
+      return result.slice(0, 6);
+    }
+    return result;
+  }, [searchQuery, selectedCategory, sortOption, showAll]);
 
   return (
     <Box
-      ref={sectionRef}
-      id="supported-models"
+      id="models"
       sx={{
         position: 'relative',
-        minHeight: { xs: 'auto', md: '300vh' },
+        py: { xs: 8, md: 12 },
         backgroundColor: 'var(--bg-section)',
         color: 'var(--text-primary)',
+        overflow: 'hidden',
+        transition: 'background-color 0.35s ease',
       }}
     >
-      {/* Pinned Viewport Container */}
-      <Box
-        ref={pinContainerRef}
-        sx={{
-          position: { xs: 'relative', md: 'sticky' },
-          top: 0,
-          height: { xs: 'auto', md: '100vh' },
-          maxHeight: { md: '100vh' },
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          py: { xs: 5, md: 3 },
-          overflow: 'hidden',
-          boxSizing: 'border-box',
-        }}
-      >
-        <Container maxWidth="lg" sx={{ textAlign: 'center', px: { xs: 2, sm: 3 } }}>
-          {/* Section Pill Badge */}
-          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1.5 }}>
-            <Box
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, px: { xs: 2.5, sm: 3, md: 4 } }}>
+        {/* Header: Badge + Big Title + Subtitle */}
+        <Box sx={{ mb: { xs: 4, md: 5 }, maxWidth: { xs: '100%', md: 680 } }}>
+          {/* Pill Badge: • MODELS */}
+          <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.85, mb: 1.8 }}>
+            {/* Removed dot */}
+            <Typography
               sx={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 0.9,
-                px: 1.6,
-                py: 0.5,
-                borderRadius: '9999px',
-                backgroundColor: 'var(--bg-pill)',
-                border: '1px solid var(--border-subtle)',
-                backdropFilter: 'blur(12px)',
+                fontSize: '0.74rem',
+                fontWeight: 700,
+                letterSpacing: '0.12em',
+                color: 'var(--text-secondary)',
+                textTransform: 'uppercase',
               }}
             >
-              <Box
-                sx={{
-                  width: 5,
-                  height: 5,
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--text-heading)',
-                  boxShadow: '0 0 6px rgba(255, 255, 255, 0.4)',
-                }}
-              />
-              <Typography
-                sx={{
-                  fontSize: '0.74rem',
-                  fontWeight: 600,
-                  color: 'var(--text-secondary)',
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                }}
-              >
-                Supported Models
-              </Typography>
-            </Box>
+              Models
+            </Typography>
           </Box>
 
-          {/* Heading - Clean Typography matching lazy.so */}
+          {/* Headline: Every model you already pay for. */}
           <Typography
             variant="h2"
             sx={{
-              fontWeight: 700,
-              fontSize: { xs: '1.9rem', sm: '2.5rem', md: '2.9rem' },
-              lineHeight: 1.15,
-              letterSpacing: '-0.03em',
+              fontWeight: 800,
+              fontSize: { xs: '2.2rem', sm: '2.85rem', md: '3.3rem' },
+              lineHeight: 1.08,
+              letterSpacing: '-0.035em',
               color: 'var(--text-heading)',
-              mb: 0.6,
+              mb: 1.8,
             }}
           >
-            Access all leading models.
+            Every model you<br />already pay for.
           </Typography>
 
+          {/* Subtitle */}
           <Typography
             sx={{
-              fontFamily: '"Inter", -apple-system, sans-serif',
-              fontWeight: 600,
-              fontSize: { xs: '1.4rem', sm: '1.8rem', md: '2.1rem' },
-              lineHeight: 1.2,
-              letterSpacing: '-0.03em',
               color: 'var(--text-secondary)',
-              mb: { xs: 2, md: 2.8 },
+              fontSize: { xs: '0.96rem', md: '1.02rem' },
+              lineHeight: 1.55,
+              maxWidth: 540,
             }}
           >
-            Unified context, zero switching.
+            Reason with one model, draft with another, and hand the routine work to the cheapest.
           </Typography>
+        </Box>
 
-          {/* Active Model Live HUD / Specs Pill */}
+        {/* Search & Filter Bar Controls */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', lg: 'row' },
+            alignItems: { xs: 'stretch', lg: 'center' },
+            justifyContent: 'space-between',
+            gap: 1.8,
+            mb: 3,
+          }}
+        >
+          {/* Search Pill Input */}
           <Box
             sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: { xs: 1, sm: 1.5 },
-              px: 2.2,
-              py: 0.8,
-              borderRadius: '9999px',
-              backgroundColor: 'var(--bg-card)',
-              border: '1px solid var(--border-subtle)',
-              boxShadow: 'var(--shadow-card)',
-              backdropFilter: 'blur(16px)',
-              mb: { xs: 2, md: 2.5 },
-              transition: 'all 0.3s ease',
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: { xs: '0.8rem', sm: '0.88rem' },
-                fontWeight: 600,
-                color: 'var(--text-heading)',
-              }}
-            >
-              {currentModel.name}
-            </Typography>
-            <Box sx={{ width: 3, height: 3, borderRadius: '50%', backgroundColor: 'var(--border-normal)' }} />
-            <Typography
-              sx={{
-                fontSize: { xs: '0.75rem', sm: '0.82rem' },
-                fontWeight: 500,
-                color: 'var(--text-secondary)',
-              }}
-            >
-              {currentModel.badge}
-            </Typography>
-            <Box sx={{ width: 3, height: 3, borderRadius: '50%', backgroundColor: 'var(--border-normal)' }} />
-            <Typography
-              sx={{
-                fontSize: { xs: '0.72rem', sm: '0.78rem' },
-                color: 'var(--text-muted)',
-              }}
-            >
-              {currentModel.context}
-            </Typography>
-          </Box>
-
-          {/* Orbit Canvas Showcase Area: Exactly matches 800/480 SVG Aspect Ratio */}
-          <Box
-            sx={{
-              position: 'relative',
-              width: '100%',
-              maxWidth: 960,
-              mx: 'auto',
-              aspectRatio: '800 / 480',
-              maxHeight: { xs: '320px', sm: '420px', md: '54vh' },
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
+              gap: 1.2,
+              px: 2.2,
+              py: 1,
+              borderRadius: '9999px',
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(255, 255, 255, 0.75)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.85)',
+              boxShadow: isDark ? '0 4px 16px rgba(0,0,0,0.25)' : '0 4px 16px rgba(15,23,42,0.04)',
+              width: { xs: '100%', lg: 390 },
+              transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+              '&:focus-within': {
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.3)' : '#0F172A',
+                boxShadow: isDark ? '0 6px 20px rgba(0,0,0,0.4)' : '0 6px 20px rgba(15,23,42,0.08)',
+              },
             }}
           >
-            {/* SVG Background Orbits & Rotating Light Bead */}
-            <svg
-              viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
-              style={{
-                position: 'absolute',
-                inset: 0,
-                width: '100%',
-                height: '100%',
-                pointerEvents: 'none',
-                overflow: 'visible',
-              }}
-            >
-              <defs>
-                <filter id="dotGlowFilter" x="-100%" y="-100%" width="300%" height="300%">
-                  <feGaussianBlur stdDeviation="3.5" result="blur" />
-                </filter>
-              </defs>
-
-              {/* Outer Tilted Dashed Ellipse */}
-              <ellipse
-                cx={CX}
-                cy={CY}
-                rx={RX_OUTER}
-                ry={RY_OUTER}
-                transform={`rotate(${TILT_DEG} ${CX} ${CY})`}
-                fill="none"
-                stroke="var(--svg-orbit-stroke)"
-                strokeWidth="1.2"
-                strokeDasharray="4 8"
-                strokeLinecap="round"
-              />
-
-              {/* Inner Tilted Dashed Ellipse */}
-              <ellipse
-                cx={CX}
-                cy={CY}
-                rx={RX_INNER}
-                ry={RY_INNER}
-                transform={`rotate(${TILT_DEG} ${CX} ${CY})`}
-                fill="none"
-                stroke="var(--svg-orbit-inner-stroke)"
-                strokeWidth="1"
-                strokeDasharray="3 6"
-                strokeLinecap="round"
-              />
-
-              {/* Rotating Light Dot: Rendered natively inside SVG, 100% glued to outer dashed line */}
-              <g>
-                <circle
-                  ref={dotGlowRef}
-                  cx={initialPt.x}
-                  cy={initialPt.y}
-                  r="15"
-                  fill="rgba(255, 255, 255, 0.14)"
-                  filter="url(#dotGlowFilter)"
-                />
-                <circle
-                  ref={dotMidRef}
-                  cx={initialPt.x}
-                  cy={initialPt.y}
-                  r="7.5"
-                  fill="var(--svg-bead-glow)"
-                  filter="url(#dotGlowFilter)"
-                />
-                <circle
-                  ref={dotCoreRef}
-                  cx={initialPt.x}
-                  cy={initialPt.y}
-                  r="4.5"
-                  fill="var(--svg-bead-core)"
-                />
-              </g>
-            </svg>
-
-            {/* Central Hub Orb with OpenLedger White Icon & Hover Pill */}
+            <SearchIcon sx={{ fontSize: '1.2rem', color: 'var(--text-secondary)' }} />
             <Box
-              onMouseEnter={() => setIsCenterHovered(true)}
-              onMouseLeave={() => setIsCenterHovered(false)}
+              component="input"
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search models, providers, or use cases..."
               sx={{
-                position: 'absolute',
-                top: `${(CY / VIEW_H) * 100}%`,
-                left: `${(CX / VIEW_W) * 100}%`,
-                transform: 'translate(-50%, -50%)',
-                zIndex: 35,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
+                width: '100%',
+                border: 'none',
+                outline: 'none',
+                background: 'transparent',
+                fontFamily: 'inherit',
+                fontSize: '0.86rem',
+                color: 'var(--text-heading)',
+                '&::placeholder': {
+                  color: 'var(--text-secondary)',
+                  opacity: 0.8,
+                },
               }}
-            >
-              {/* Central Orb */}
-              <Box
-                id="center-hub-orb"
-                onClick={() => setIsCenterHovered((prev) => !prev)}
-                sx={{
-                  width: { xs: 58, sm: 72, md: 80 },
-                  height: { xs: 58, sm: 72, md: 80 },
-                  borderRadius: '50%',
-                  backgroundColor: isCenterHovered ? 'var(--bg-card-hover)' : 'var(--hub-orb-bg)',
-                  backgroundImage: 'radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.15), transparent 70%)',
-                  border: isCenterHovered
-                    ? '1.5px solid var(--border-strong)'
-                    : '1.5px solid var(--hub-orb-border)',
-                  boxShadow: 'var(--hub-orb-shadow)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  transform: isCenterHovered ? 'scale(1.05)' : 'scale(1)',
-                  transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
-                }}
-              >
-                {/* User-specified center logo: Open Ledegr icon White.svg */}
-                <Box
-                  id="center-hub-logo"
-                  component="img"
-                  src="/Open%20Ledegr%20icon%20White.svg"
-                  alt="OpenLedger Hub"
-                  sx={{
-                    width: { xs: 28, sm: 38, md: 44 },
-                    height: { xs: 28, sm: 38, md: 44 },
-                    display: 'block',
-                    transition: 'filter 0.3s ease',
-                  }}
-                />
-              </Box>
+            />
+          </Box>
 
-              {/* View All Models Pill Revealed on Hover */}
-              <Box
-                id="view-all-models-pill"
-                component="a"
-                href="#models"
-                onClick={(e) => {
-                  // Ready for future navigation to all models page
-                  console.log('Navigate to all models page');
-                }}
-                sx={{
-                  position: 'absolute',
-                  top: 'calc(100% + 10px)',
-                  left: '50%',
-                  transform: isCenterHovered
-                    ? 'translateX(-50%) translateY(0) scale(1)'
-                    : 'translateX(-50%) translateY(-8px) scale(0.92)',
-                  opacity: isCenterHovered ? 1 : 0,
-                  pointerEvents: isCenterHovered ? 'auto' : 'none',
-                  transition: 'all 0.28s cubic-bezier(0.16, 1, 0.3, 1)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 0.8,
-                  px: { xs: 1.6, sm: 2 },
-                  py: { xs: 0.55, sm: 0.7 },
-                  borderRadius: '9999px',
-                  backgroundColor: 'var(--bg-card)',
-                  backdropFilter: 'blur(20px)',
-                  WebkitBackdropFilter: 'blur(20px)',
-                  border: '1px solid var(--border-normal)',
-                  boxShadow: 'var(--shadow-popup)',
-                  textDecoration: 'none',
-                  whiteSpace: 'nowrap',
-                  cursor: 'pointer',
-                  userSelect: 'none',
-                  '&:hover': {
-                    backgroundColor: 'var(--bg-card-hover)',
-                    borderColor: 'var(--border-strong)',
-                    '& .arrow-icon': {
-                      transform: 'translateX(3px)',
-                    },
-                  },
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: { xs: '0.74rem', sm: '0.8rem' },
-                    fontWeight: 600,
-                    color: 'var(--text-heading)',
-                    letterSpacing: '-0.01em',
-                    fontFamily: '"Inter", -apple-system, sans-serif',
-                  }}
-                >
-                  View all models
-                </Typography>
-                <Box
-                  className="arrow-icon"
-                  component="svg"
-                  viewBox="0 0 24 24"
-                  sx={{
-                    width: 13,
-                    height: 13,
-                    fill: 'none',
-                    stroke: 'currentColor',
-                    strokeWidth: 2.2,
-                    strokeLinecap: 'round',
-                    strokeLinejoin: 'round',
-                    color: 'var(--text-secondary)',
-                    transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-                  }}
-                >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </Box>
-              </Box>
-            </Box>
-
-            {/* 10 Model Nodes: Bloom smoothly with spring easing as rotating dot reaches each station */}
-            {MODELS.map((model, idx) => {
-              const pos = nodePositions[idx];
-              const isBorn = idx <= maxReachedIndex;
-              const isActive = (activeModelIndex === idx || hoveredIndex === idx) && isBorn;
-
+          {/* Center Category Filter Pills */}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+              overflowX: 'auto',
+              py: 0.4,
+              px: { xs: 0.2, lg: 0 },
+              scrollbarWidth: 'none',
+              '&::-webkit-scrollbar': { display: 'none' },
+            }}
+          >
+            {CATEGORIES.map((cat) => {
+              const isSelected = selectedCategory === cat;
               return (
                 <Box
-                  key={model.id}
-                  id={`model-node-${model.id}`}
-                  onClick={() => handleModelClick(idx)}
-                  onMouseEnter={() => setHoveredIndex(idx)}
-                  onMouseLeave={() => setHoveredIndex(null)}
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
                   sx={{
-                    position: 'absolute',
-                    left: `${pos.leftPercent}%`,
-                    top: `${pos.topPercent}%`,
-                    transform: isBorn
-                      ? (isActive ? 'translate(-50%, -50%) scale(1.08)' : 'translate(-50%, -50%) scale(1)')
-                      : 'translate(-50%, -50%) scale(0)',
-                    opacity: isBorn ? 1 : 0,
-                    pointerEvents: isBorn ? 'auto' : 'none',
-                    width: { xs: 38, sm: 46, md: 52 },
-                    height: { xs: 38, sm: 46, md: 52 },
-                    borderRadius: '50%',
-                    cursor: isBorn ? 'pointer' : 'default',
+                    px: { xs: 1.6, sm: 2 },
+                    py: 0.75,
+                    borderRadius: '9999px',
+                    fontSize: '0.82rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
                     userSelect: 'none',
-                    zIndex: isActive ? 22 : 12,
-                    backgroundColor: isActive ? 'var(--node-bubble-bg-active)' : 'var(--node-bubble-bg)',
-                    backgroundImage: 'radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.12), transparent 70%)',
-                    border: isActive
-                      ? '1.5px solid var(--node-bubble-border-active)'
-                      : '1px solid var(--node-bubble-border)',
-                    boxShadow: 'var(--node-bubble-shadow)',
+                    whiteSpace: 'nowrap',
+                    transition: 'all 0.22s ease',
+                    backgroundColor: isSelected
+                      ? isDark
+                        ? '#FFFFFF'
+                        : '#0F172A'
+                      : isDark
+                      ? 'rgba(255, 255, 255, 0.04)'
+                      : 'rgba(255, 255, 255, 0.65)',
+                    color: isSelected
+                      ? isDark
+                        ? '#0F172A'
+                        : '#FFFFFF'
+                      : 'var(--text-secondary)',
+                    border: isSelected
+                      ? '1px solid transparent'
+                      : isDark
+                      ? '1px solid rgba(255, 255, 255, 0.08)'
+                      : '1px solid rgba(255, 255, 255, 0.75)',
                     backdropFilter: 'blur(12px)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition:
-                      'transform 0.45s cubic-bezier(0.34, 1.4, 0.64, 1), opacity 0.35s ease, border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease',
-                    '&:hover': isBorn
-                      ? {
-                          borderColor: 'var(--border-strong)',
-                          transform: 'translate(-50%, -50%) scale(1.14)',
-                        }
-                      : {},
+                    boxShadow: isSelected
+                      ? '0 4px 14px rgba(0,0,0,0.15)'
+                      : 'none',
+                    '&:hover': {
+                      backgroundColor: isSelected
+                        ? undefined
+                        : isDark
+                        ? 'rgba(255, 255, 255, 0.08)'
+                        : 'rgba(255, 255, 255, 0.95)',
+                      color: isSelected ? undefined : 'var(--text-heading)',
+                    },
                   }}
                 >
-                  {/* Model Logo Centered in Bubble */}
-                  <Box
-                    component="img"
-                    className={model.invertIcon ? 'theme-invert-dark-only' : ''}
-                    src={model.icon}
-                    alt={model.name}
-                    sx={{
-                      width: { xs: 20, sm: 24, md: 28 },
-                      height: { xs: 20, sm: 24, md: 28 },
-                      objectFit: 'contain',
-                      filter: model.invertIcon
-                        ? 'brightness(0) invert(1)'
-                        : 'drop-shadow(0 1px 3px rgba(0, 0, 0, 0.25))',
-                      transition: 'transform 0.2s ease',
-                      transform: isActive ? 'scale(1.08)' : 'scale(1)',
-                    }}
-                  />
+                  {cat}
                 </Box>
               );
             })}
           </Box>
-        </Container>
-      </Box>
+
+          {/* Right Sort Dropdown Pill */}
+          <Box sx={{ position: 'relative', flexShrink: 0, alignSelf: { xs: 'flex-start', lg: 'auto' } }}>
+            <Box
+              onClick={() => setSortMenuOpen(!sortMenuOpen)}
+              sx={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 0.8,
+                px: 2.2,
+                py: 0.85,
+                borderRadius: '9999px',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(255, 255, 255, 0.75)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.85)',
+                cursor: 'pointer',
+                userSelect: 'none',
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.2)',
+                },
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: '0.82rem',
+                  fontWeight: 600,
+                  color: 'var(--text-heading)',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {sortOption}
+              </Typography>
+              <KeyboardArrowDownIcon sx={{ fontSize: '1.1rem', color: 'var(--text-secondary)', flexShrink: 0 }} />
+            </Box>
+
+            {/* Dropdown Menu */}
+            {sortMenuOpen && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: 'calc(100% + 8px)',
+                  right: 0,
+                  minWidth: 170,
+                  p: 0.8,
+                  borderRadius: '16px',
+                  backgroundColor: 'var(--bg-card)',
+                  backdropFilter: 'blur(24px)',
+                  border: '1px solid var(--border-normal)',
+                  boxShadow: isDark ? '0 16px 40px rgba(0,0,0,0.5)' : '0 16px 36px rgba(15,23,42,0.12)',
+                  zIndex: 20,
+                }}
+              >
+                {['Most Relevant', 'Context (Highest)', 'Name (A-Z)'].map((opt) => (
+                  <Box
+                    key={opt}
+                    onClick={() => {
+                      setSortOption(opt);
+                      setSortMenuOpen(false);
+                    }}
+                    sx={{
+                      px: 1.6,
+                      py: 0.8,
+                      borderRadius: '10px',
+                      fontSize: '0.82rem',
+                      fontWeight: sortOption === opt ? 700 : 500,
+                      color: sortOption === opt ? 'var(--text-heading)' : 'var(--text-secondary)',
+                      backgroundColor: sortOption === opt ? (isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)') : 'transparent',
+                      cursor: 'pointer',
+                      transition: 'background-color 0.15s',
+                      '&:hover': {
+                        backgroundColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.03)',
+                      },
+                    }}
+                  >
+                    {opt}
+                  </Box>
+                ))}
+              </Box>
+            )}
+          </Box>
+        </Box>
+
+        {/* Main Models Table Container (The Big Apple Liquid Glass Surface Card) */}
+        <Box
+          sx={{
+            width: '100%',
+            borderRadius: { xs: '20px', md: '26px' },
+            backgroundColor: isDark ? 'rgba(255, 255, 255, 0.025)' : 'rgba(255, 255, 255, 0.72)',
+            backdropFilter: 'blur(28px) saturate(1.8)',
+            WebkitBackdropFilter: 'blur(28px) saturate(1.8)',
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.09)' : '1px solid rgba(255, 255, 255, 0.85)',
+            boxShadow: isDark
+              ? '0 24px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+              : '0 20px 50px rgba(15, 23, 42, 0.05), inset 0 1px 0 #FFFFFF',
+            overflow: 'hidden',
+          }}
+        >
+          {/* Table Header Row */}
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: {
+                xs: '1.8fr 1.3fr 0.9fr 44px',
+                md: '2fr 1.4fr 1fr 2.4fr 48px',
+              },
+              alignItems: 'center',
+              px: { xs: 2.5, sm: 3.5, md: 4 },
+              py: 2,
+              borderBottom: '1px solid var(--border-subtle)',
+            }}
+          >
+            <Typography sx={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
+              Model
+            </Typography>
+            <Typography sx={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
+              Provider
+            </Typography>
+            <Typography sx={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
+              Context
+            </Typography>
+            <Typography sx={{ display: { xs: 'none', md: 'block' }, fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
+              Best For
+            </Typography>
+            <Box />
+          </Box>
+
+          {/* Model Rows */}
+          {filteredModels.length > 0 ? (
+            filteredModels.map((m, idx) => {
+              const provStyle = getProviderStyle(m.providerKey, isDark);
+              const isLast = idx === filteredModels.length - 1;
+
+              return (
+                <Box
+                  key={m.id}
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: {
+                      xs: '1.8fr 1.3fr 0.9fr 44px',
+                      md: '2fr 1.4fr 1fr 2.4fr 48px',
+                    },
+                    alignItems: 'center',
+                    px: { xs: 2.5, sm: 3.5, md: 4 },
+                    py: { xs: 1.8, md: 2.2 },
+                    borderBottom: isLast ? 'none' : '1px solid var(--border-subtle)',
+                    transition: 'background-color 0.2s ease',
+                    cursor: 'pointer',
+                    '&:hover': {
+                      backgroundColor: isDark ? 'rgba(255, 255, 255, 0.035)' : 'rgba(0, 0, 0, 0.02)',
+                      '& .action-circle-btn': {
+                        backgroundColor: isDark ? 'rgba(255, 255, 255, 0.15)' : '#0F172A',
+                        color: isDark ? '#FFFFFF' : '#FFFFFF',
+                        transform: 'translateX(2px)',
+                      },
+                    },
+                  }}
+                >
+                  {/* Model Column: Square Icon + Name */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.2, sm: 1.8 }, pr: 1 }}>
+                    {renderModelSquareIcon(m.modelType, isDark)}
+                    <Typography
+                      sx={{
+                        fontWeight: 700,
+                        fontSize: { xs: '0.88rem', sm: '0.96rem' },
+                        color: 'var(--text-heading)',
+                        lineHeight: 1.2,
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}
+                    >
+                      {m.name}
+                    </Typography>
+                  </Box>
+
+                  {/* Provider Column: Frosted Brand Pill */}
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Box
+                      sx={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 0.8,
+                        px: { xs: 1.2, sm: 1.4 },
+                        py: 0.5,
+                        borderRadius: '9999px',
+                        backgroundColor: provStyle.bg,
+                        border: `1px solid ${provStyle.border}`,
+                        backdropFilter: 'blur(8px)',
+                      }}
+                    >
+                      {renderProviderLogo(m.providerKey, isDark, 15)}
+                      <Typography
+                        sx={{
+                          fontSize: '0.78rem',
+                          fontWeight: 600,
+                          color: provStyle.color,
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {m.provider}
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  {/* Context Column */}
+                  <Box>
+                    <Typography
+                      sx={{
+                        fontSize: '0.88rem',
+                        fontWeight: 700,
+                        color: 'var(--text-heading)',
+                        fontFamily: 'inherit',
+                      }}
+                    >
+                      {m.context}
+                    </Typography>
+                  </Box>
+
+                  {/* Best For Column (Hidden on mobile) */}
+                  <Box sx={{ display: { xs: 'none', md: 'block' }, pr: 2 }}>
+                    <Typography
+                      sx={{
+                        fontSize: '0.86rem',
+                        color: 'var(--text-secondary)',
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      {m.bestFor}
+                    </Typography>
+                  </Box>
+
+                  {/* Action Column: Round Button with Arrow */}
+                  <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Box
+                      className="action-circle-btn"
+                      sx={{
+                        width: 32,
+                        height: 32,
+                        borderRadius: '50%',
+                        backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.04)',
+                        border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'var(--text-heading)',
+                        transition: 'all 0.22s ease',
+                      }}
+                    >
+                      <ArrowForwardIcon sx={{ fontSize: '0.95rem' }} />
+                    </Box>
+                  </Box>
+                </Box>
+              );
+            })
+          ) : (
+            <Box sx={{ py: 6, textAlign: 'center' }}>
+              <Typography sx={{ color: 'var(--text-secondary)', fontSize: '0.95rem', mb: 1.5 }}>
+                No models found matching your search.
+              </Typography>
+              <Box
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedCategory('All');
+                }}
+                sx={{
+                  display: 'inline-block',
+                  px: 2,
+                  py: 0.6,
+                  borderRadius: '9999px',
+                  backgroundColor: 'var(--bg-section)',
+                  border: '1px solid var(--border-normal)',
+                  fontSize: '0.82rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                Reset filter
+              </Box>
+            </Box>
+          )}
+
+          {/* Table Footer: "34+ more, added as they ship" & "See every model →" */}
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', sm: 'row' },
+              alignItems: { xs: 'flex-start', sm: 'center' },
+              justifyContent: 'space-between',
+              gap: 1.5,
+              px: { xs: 2.5, sm: 3.5, md: 4 },
+              py: 2.2,
+              backgroundColor: isDark ? 'rgba(0, 0, 0, 0.15)' : 'rgba(0, 0, 0, 0.015)',
+              borderTop: '1px solid var(--border-subtle)',
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: '0.82rem',
+                color: 'var(--text-secondary)',
+                fontWeight: 500,
+              }}
+            >
+              34+ more, added as they ship
+            </Typography>
+
+            <Box
+              onClick={() => setShowAll(!showAll)}
+              sx={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 0.6,
+                cursor: 'pointer',
+                userSelect: 'none',
+                color: 'var(--text-heading)',
+                fontSize: '0.84rem',
+                fontWeight: 700,
+                transition: 'opacity 0.2s, transform 0.2s',
+                '&:hover': {
+                  opacity: 0.75,
+                  transform: 'translateX(2px)',
+                },
+              }}
+            >
+              {showAll ? 'Show fewer models ↑' : 'See every model →'}
+            </Box>
+          </Box>
+        </Box>
+      </Container>
     </Box>
   );
 }

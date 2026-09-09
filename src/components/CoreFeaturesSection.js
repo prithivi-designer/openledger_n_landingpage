@@ -2,9 +2,15 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import StorageIcon from '@mui/icons-material/Storage';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/dist/ScrollToPlugin';
+import { useThemeMode } from '@/context/ThemeContext';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
@@ -14,27 +20,45 @@ if (typeof window !== 'undefined') {
 const TABS = [
   {
     id: 'private',
-    label: 'Private access',
-    imageSrc: '/images/Privacy.jpg',
+    label: 'Private AI',
+    shortLabel: 'Private AI',
+    tagline: 'Private and uncensored, from the start.',
+    description: 'Ask freely without your prompts being stored or used for training.',
+    hasExplore: true,
+    tagLeft: 'ZERO RETENTION',
+    tagRight: 'UNCENSORED',
   },
   {
     id: 'multimodel',
-    label: 'Multi models Access',
-    imageSrc: '/images/multimodel.jpg',
+    label: 'Multi-Model & Token Optimization',
+    shortLabel: 'Multi-Model',
+    tagline: 'More models. Fewer wasted tokens.',
+    description: 'Access leading AI models from one place, with optimized token usage to reduce costs and keep every request efficient.',
+    tagLeft: 'MULTI-MODEL',
+    tagRight: 'TOKEN OPTIMIZED',
   },
   {
     id: 'memory',
-    label: 'Portable Memory',
-    imageSrc: '/images/Portable%20memory.jpg',
+    label: 'Unified Memory',
+    shortLabel: 'Unified Memory',
+    tagline: 'Say it once. Every model knows.',
+    description: 'Your context stays consistent across models, so you never have to start over.',
+    tagLeft: 'ONE MEMORY',
+    tagRight: 'SHARED CONTEXT',
   },
   {
     id: 'agents',
-    label: 'Build for agents',
-    imageSrc: '/images/Build%20for%20agents.jpg',
+    label: 'Built for Agents',
+    shortLabel: 'Built for Agents',
+    tagline: 'Connect once. Access any model.',
+    description: 'Give agents direct access to leading AI models with x402, enabling seamless interactions across models without complex integrations.',
+    tagLeft: 'X402 ENABLED',
+    tagRight: 'AGENT READY',
   },
 ];
 
 export default function CoreFeaturesSection() {
+  const { isDark } = useThemeMode();
   const [activeTab, setActiveTab] = React.useState(0);
   const sectionRef = React.useRef(null);
   const pinContainerRef = React.useRef(null);
@@ -73,7 +97,6 @@ export default function CoreFeaturesSection() {
     let mm = gsap.matchMedia();
 
     mm.add('(min-width: 900px)', () => {
-      // Ensure pill width perfectly matches the first tab button
       const b0 = document.getElementById('tab-btn-0');
       if (b0 && pillRef.current) {
         pillRef.current.style.width = `${b0.offsetWidth}px`;
@@ -85,14 +108,13 @@ export default function CoreFeaturesSection() {
           start: 'top top',
           end: 'bottom bottom',
           pin: pinContainerRef.current,
-          scrub: 0.85, // Smooth responsive scrub with gentle momentum
+          scrub: 0.85,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
         onUpdate: function () {
           if (isClickingRef.current) return;
           const p = this.progress();
-          // Update active tab label highlight based on transition midpoints
           let idx = 0;
           if (p >= 0.789) {
             idx = 3;
@@ -117,9 +139,7 @@ export default function CoreFeaturesSection() {
       if (imgs[3]) gsap.set(imgs[3], { opacity: 0, scale: 0.98 });
       if (pillRef.current) gsap.set(pillRef.current, { x: 0 });
 
-      // Staged Timeline with Resting Dwell Plateaus & Ease-In-Out Traveling:
-      // Tab 0 Dwell: t = 0.00 -> 0.50 (Pill stopped at Tab 0)
-      // Step 0 -> Step 1 Travel: t = 0.50 -> 1.10 (power2.inOut ease)
+      // Tab 0 -> Tab 1
       tl.fromTo(
         pillRef.current,
         { x: () => getTabPositions()[0] },
@@ -132,12 +152,11 @@ export default function CoreFeaturesSection() {
         0.5
       );
       if (imgs[0] && imgs[1]) {
-        tl.to(imgs[0], { opacity: 0, scale: 1.025, ease: 'power2.inOut', duration: 0.6 }, 0.5);
+        tl.to(imgs[0], { opacity: 0, scale: 1.02, ease: 'power2.inOut', duration: 0.6 }, 0.5);
         tl.to(imgs[1], { opacity: 1, scale: 1, ease: 'power2.inOut', duration: 0.6 }, 0.5);
       }
 
-      // Tab 1 Dwell: t = 1.10 -> 1.60 (Pill stopped at Tab 1)
-      // Step 1 -> Step 2 Travel: t = 1.60 -> 2.20 (power2.inOut ease)
+      // Tab 1 -> Tab 2
       tl.fromTo(
         pillRef.current,
         { x: () => getTabPositions()[1] },
@@ -150,12 +169,11 @@ export default function CoreFeaturesSection() {
         1.6
       );
       if (imgs[1] && imgs[2]) {
-        tl.to(imgs[1], { opacity: 0, scale: 1.025, ease: 'power2.inOut', duration: 0.6 }, 1.6);
+        tl.to(imgs[1], { opacity: 0, scale: 1.02, ease: 'power2.inOut', duration: 0.6 }, 1.6);
         tl.to(imgs[2], { opacity: 1, scale: 1, ease: 'power2.inOut', duration: 0.6 }, 1.6);
       }
 
-      // Tab 2 Dwell: t = 2.20 -> 2.70 (Pill stopped at Tab 2)
-      // Step 2 -> Step 3 Travel: t = 2.70 -> 3.30 (power2.inOut ease)
+      // Tab 2 -> Tab 3
       tl.fromTo(
         pillRef.current,
         { x: () => getTabPositions()[2] },
@@ -168,11 +186,10 @@ export default function CoreFeaturesSection() {
         2.7
       );
       if (imgs[2] && imgs[3]) {
-        tl.to(imgs[2], { opacity: 0, scale: 1.025, ease: 'power2.inOut', duration: 0.6 }, 2.7);
+        tl.to(imgs[2], { opacity: 0, scale: 1.02, ease: 'power2.inOut', duration: 0.6 }, 2.7);
         tl.to(imgs[3], { opacity: 1, scale: 1, ease: 'power2.inOut', duration: 0.6 }, 2.7);
       }
 
-      // Tab 3 Dwell: t = 3.30 -> 3.80 (Pill stopped at Tab 3)
       tl.set({}, {}, 3.8);
 
       scrollTriggerRef.current = tl.scrollTrigger;
@@ -220,12 +237,11 @@ export default function CoreFeaturesSection() {
     const trigger = scrollTriggerRef.current;
     const scrollDistance = trigger.end - trigger.start;
 
-    // Target the center of each tab's dwell plateau
     const TAB_DWELL_PROGRESS = [
       0.0,
-      1.35 / 3.8, // 0.3553 (center of Tab 1 dwell)
-      2.45 / 3.8, // 0.6447 (center of Tab 2 dwell)
-      1.0,        // 1.0000 (Tab 3 dwell)
+      1.35 / 3.8,
+      2.45 / 3.8,
+      1.0,
     ];
     const targetScroll = trigger.start + TAB_DWELL_PROGRESS[index] * scrollDistance;
 
@@ -247,6 +263,401 @@ export default function CoreFeaturesSection() {
         },
       });
     }
+  };
+
+  // Render the high-fidelity UI mockup inside the center preview area of each tab
+  const renderVisualPreview = (tabId) => {
+    if (tabId === 'private') {
+      return (
+        <Box sx={{ position: 'relative', width: '100%', maxWidth: 440, display: 'flex', alignItems: 'center', justifyContent: 'center', py: { xs: 2, sm: 3 } }}>
+          {/* Floating purge chip top right */}
+          <Box
+            sx={{
+              position: 'absolute',
+              top: { xs: -6, sm: 0 },
+              right: { xs: 8, sm: 24 },
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 0.8,
+              px: 1.2,
+              py: 0.5,
+              borderRadius: '8px',
+              backgroundColor: 'var(--bg-card)',
+              border: '1px solid var(--border-subtle)',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
+            }}
+          >
+            <DeleteOutlineIcon sx={{ fontSize: '0.95rem', color: isDark ? 'rgba(255,255,255,0.45)' : '#94A3B8' }} />
+            <Box sx={{ width: 22, height: 4, borderRadius: 2, backgroundColor: isDark ? 'rgba(255,255,255,0.2)' : '#CBD5E1' }} />
+          </Box>
+
+          {/* Center Floating Privacy Controls Card */}
+          <Box
+            sx={{
+              width: '100%',
+              maxWidth: 320,
+              backgroundColor: 'var(--bg-card)',
+              borderRadius: '16px',
+              border: '1px solid var(--border-normal)',
+              boxShadow: isDark ? '0 12px 36px rgba(0,0,0,0.4)' : '0 12px 32px rgba(15,23,42,0.08)',
+              p: { xs: 2, sm: 2.6 },
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 1.5,
+              zIndex: 2,
+            }}
+          >
+            {/* Header with blue lock */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.9 }}>
+              <LockOutlinedIcon sx={{ fontSize: '1rem', color: '#0284C7' }} />
+              <Typography sx={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-heading)' }}>
+                Privacy Controls
+              </Typography>
+            </Box>
+
+            {/* Zero Retention Toggle Row */}
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
+              <Box>
+                <Typography sx={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-heading)', lineHeight: 1.2 }}>
+                  Zero Retention
+                </Typography>
+                <Typography sx={{ fontSize: '0.78rem', color: 'var(--text-secondary)', mt: 0.3 }}>
+                  Prompts are never stored
+                </Typography>
+              </Box>
+
+              {/* iOS Style Toggle Switch ON */}
+              <Box
+                sx={{
+                  width: 44,
+                  height: 24,
+                  borderRadius: 12,
+                  backgroundColor: '#22C55E',
+                  position: 'relative',
+                  display: 'flex',
+                  alignItems: 'center',
+                  px: '2px',
+                  boxShadow: '0 2px 8px rgba(34, 197, 94, 0.4)',
+                  flexShrink: 0,
+                }}
+              >
+                <Box
+                  sx={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: '50%',
+                    backgroundColor: '#FFFFFF',
+                    transform: 'translateX(20px)',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.25)',
+                  }}
+                />
+              </Box>
+            </Box>
+          </Box>
+
+          {/* Floating purge chip bottom left */}
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: { xs: -6, sm: 0 },
+              left: { xs: 8, sm: 20 },
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 0.8,
+              px: 1.2,
+              py: 0.5,
+              borderRadius: '8px',
+              backgroundColor: 'var(--bg-card)',
+              border: '1px solid var(--border-subtle)',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
+            }}
+          >
+            <DeleteOutlineIcon sx={{ fontSize: '0.95rem', color: isDark ? 'rgba(255,255,255,0.45)' : '#94A3B8' }} />
+            <Box sx={{ width: 26, height: 4, borderRadius: 2, backgroundColor: isDark ? 'rgba(255,255,255,0.2)' : '#CBD5E1' }} />
+          </Box>
+        </Box>
+      );
+    }
+
+    if (tabId === 'multimodel') {
+      return (
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: { xs: 1.5, sm: 2 }, py: { xs: 2, sm: 3 } }}>
+          {/* Select Model Dropdown Pill */}
+          <Box
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 1.2,
+              px: 2.2,
+              py: 0.9,
+              borderRadius: '12px',
+              backgroundColor: 'var(--bg-card)',
+              border: '1px solid var(--border-normal)',
+              boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.4)' : '0 6px 20px rgba(15,23,42,0.06)',
+            }}
+          >
+            <AutoAwesomeIcon sx={{ fontSize: '1.05rem', color: '#A855F7' }} />
+            <Typography sx={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-heading)' }}>
+              Select Model...
+            </Typography>
+            <UnfoldMoreIcon sx={{ fontSize: '1.15rem', color: 'var(--text-secondary)', ml: 1 }} />
+          </Box>
+
+          {/* Model Badges Pill */}
+          <Box
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: { xs: 0.8, sm: 1.2 },
+              px: { xs: 1.4, sm: 1.8 },
+              py: 0.85,
+              borderRadius: '9999px',
+              backgroundColor: 'var(--bg-card)',
+              border: '1px solid var(--border-normal)',
+              boxShadow: isDark ? '0 8px 30px rgba(0,0,0,0.4)' : '0 8px 28px rgba(15,23,42,0.08)',
+            }}
+          >
+            {/* ChatGPT */}
+            <Box
+              sx={{
+                width: 32,
+                height: 32,
+                borderRadius: '50%',
+                backgroundColor: '#0F172A',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Box component="img" src="/Models/Chatgpt.svg" alt="ChatGPT" sx={{ width: 18, height: 18, filter: 'invert(1)' }} />
+            </Box>
+
+            {/* Claude */}
+            <Box
+              sx={{
+                width: 32,
+                height: 32,
+                borderRadius: '50%',
+                backgroundColor: 'var(--bg-card)',
+                border: '1px solid var(--border-normal)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Box component="img" src="/Models/Claude.svg" alt="Claude" sx={{ width: 18, height: 18 }} />
+            </Box>
+
+            {/* Gemini */}
+            <Box
+              sx={{
+                width: 32,
+                height: 32,
+                borderRadius: '50%',
+                backgroundColor: '#1E40AF',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Box component="img" src="/Models/Gemini.svg" alt="Gemini" sx={{ width: 18, height: 18 }} />
+            </Box>
+
+            {/* Meta Llama */}
+            <Box
+              sx={{
+                width: 32,
+                height: 32,
+                borderRadius: '50%',
+                backgroundColor: '#0284C7',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Box component="img" src="/Models/Llama.svg" alt="Llama" sx={{ width: 18, height: 18, filter: 'invert(1)' }} />
+            </Box>
+
+            {/* +8 Count Tag */}
+            <Box
+              sx={{
+                px: 1.1,
+                py: 0.35,
+                borderRadius: '9999px',
+                backgroundColor: 'var(--bg-section)',
+                border: '1px solid var(--border-subtle)',
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                color: 'var(--text-secondary)',
+              }}
+            >
+              +8
+            </Box>
+          </Box>
+        </Box>
+      );
+    }
+
+    if (tabId === 'memory') {
+      return (
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', py: { xs: 2, sm: 3 } }}>
+          {/* Shared Context Pill */}
+          <Box
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 1,
+              px: 2,
+              py: 0.85,
+              borderRadius: '12px',
+              backgroundColor: 'var(--bg-card)',
+              border: '1px solid var(--border-normal)',
+              boxShadow: isDark ? '0 6px 24px rgba(0,0,0,0.35)' : '0 6px 20px rgba(15,23,42,0.06)',
+              zIndex: 2,
+            }}
+          >
+            <StorageIcon sx={{ fontSize: '1.15rem', color: 'var(--text-heading)' }} />
+            <Typography sx={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-heading)' }}>
+              Shared Context
+            </Typography>
+          </Box>
+
+          {/* Dotted Branching Circuit SVG */}
+          <Box
+            component="svg"
+            viewBox="0 0 160 38"
+            sx={{ width: 160, height: 38, my: 0.5, overflow: 'visible' }}
+          >
+            <path
+              d="M80 0 L80 18 M80 18 L25 18 L25 38 M80 18 L80 38 M80 18 L135 18 L135 38"
+              fill="none"
+              stroke={isDark ? 'rgba(255, 255, 255, 0.35)' : 'rgba(0, 0, 0, 0.22)'}
+              strokeWidth="1.5"
+              strokeDasharray="3 3"
+            />
+          </Box>
+
+          {/* 3 Model Connected Square Badges */}
+          <Box sx={{ display: 'flex', gap: { xs: 2.2, sm: 2.8 }, alignItems: 'center', zIndex: 2 }}>
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: '12px',
+                backgroundColor: 'var(--bg-card)',
+                border: '1px solid var(--border-normal)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: isDark ? '0 4px 16px rgba(0,0,0,0.3)' : '0 4px 12px rgba(15,23,42,0.06)',
+              }}
+            >
+              <Box component="img" src="/Models/Chatgpt.svg" alt="ChatGPT" sx={{ width: 22, height: 22, filter: isDark ? 'invert(1)' : 'none' }} />
+            </Box>
+
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: '12px',
+                backgroundColor: 'var(--bg-card)',
+                border: '1px solid var(--border-normal)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: isDark ? '0 4px 16px rgba(0,0,0,0.3)' : '0 4px 12px rgba(15,23,42,0.06)',
+              }}
+            >
+              <Box component="img" src="/Models/Claude.svg" alt="Claude" sx={{ width: 22, height: 22 }} />
+            </Box>
+
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: '12px',
+                backgroundColor: 'var(--bg-card)',
+                border: '1px solid var(--border-normal)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: isDark ? '0 4px 16px rgba(0,0,0,0.3)' : '0 4px 12px rgba(15,23,42,0.06)',
+              }}
+            >
+              <Box component="img" src="/Models/Gemini.svg" alt="Gemini" sx={{ width: 22, height: 22 }} />
+            </Box>
+          </Box>
+        </Box>
+      );
+    }
+
+    if (tabId === 'agents') {
+      return (
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: { xs: 1.5, sm: 3.5 }, width: '100%', maxWidth: 440, py: { xs: 2, sm: 3 } }}>
+          {/* Left: 3 Stacked Agent Chips */}
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+            {['Research Agent', 'Support Agent', 'Ops Agent'].map((agent) => (
+              <Box
+                key={agent}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 0.8,
+                  px: { xs: 1.2, sm: 1.5 },
+                  py: 0.6,
+                  borderRadius: '8px',
+                  backgroundColor: 'var(--bg-card)',
+                  border: '1px solid var(--border-normal)',
+                  boxShadow: isDark ? '0 2px 10px rgba(0,0,0,0.3)' : '0 2px 8px rgba(15,23,42,0.06)',
+                }}
+              >
+                <Box sx={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#22C55E', boxShadow: '0 0 6px rgba(34,197,94,0.6)' }} />
+                <Typography sx={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-heading)' }}>
+                  {agent}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+
+          {/* Center Green Connecting Circuit Lines */}
+          <Box
+            component="svg"
+            viewBox="0 0 46 80"
+            sx={{ width: { xs: 32, sm: 46 }, height: 74, overflow: 'visible', flexShrink: 0 }}
+          >
+            <path
+              d="M0 14 L24 14 L38 40 M0 40 L38 40 M0 66 L24 66 L38 40 L46 40"
+              fill="none"
+              stroke="#22C55E"
+              strokeWidth="1.6"
+            />
+          </Box>
+
+          {/* Right: Dark Endpoint Card */}
+          <Box
+            sx={{
+              backgroundColor: '#0F172A',
+              color: '#FFFFFF',
+              borderRadius: '12px',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              p: { xs: 1.4, sm: 1.8 },
+              boxShadow: '0 10px 30px rgba(0,0,0,0.45)',
+              minWidth: { xs: 120, sm: 140 },
+            }}
+          >
+            <Typography sx={{ fontSize: '0.65rem', fontWeight: 700, color: '#94A3B8', letterSpacing: '0.08em', textTransform: 'uppercase', mb: 0.4 }}>
+              ENDPOINT
+            </Typography>
+            <Typography sx={{ fontFamily: 'monospace', fontSize: { xs: '0.78rem', sm: '0.86rem' }, fontWeight: 600 }}>
+              <Box component="span" sx={{ color: '#22C55E', fontWeight: 800 }}>POST </Box>
+              <Box component="span" sx={{ color: '#F1F5F9' }}>/v1/chat</Box>
+            </Typography>
+          </Box>
+        </Box>
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -277,8 +688,8 @@ export default function CoreFeaturesSection() {
         }}
       >
         <Container maxWidth="lg" sx={{ px: { xs: 2.5, sm: 3, md: 4 } }}>
-          {/* Top Pill Badge */}
-          <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 1.8 }}>
+          {/* Top Pill Badge: • WHY OPENLEDGER */}
+          <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 1.6 }}>
             <Box
               sx={{
                 display: 'inline-flex',
@@ -292,28 +703,22 @@ export default function CoreFeaturesSection() {
                 backdropFilter: 'blur(12px)',
               }}
             >
-              <Box
-                sx={{
-                  width: 5,
-                  height: 5,
-                  borderRadius: '50%',
-                  backgroundColor: '#9CA3AF',
-                }}
-              />
+              {/* Removed dot */}
               <Typography
                 sx={{
-                  fontSize: '0.76rem',
-                  fontWeight: 600,
+                  fontSize: '0.74rem',
+                  fontWeight: 700,
                   color: 'var(--text-secondary)',
-                  letterSpacing: '0.02em',
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
                 }}
               >
-                Core Features
+                Why OpenLedger
               </Typography>
             </Box>
           </Box>
 
-          {/* Two-Column Header */}
+          {/* Two-Column Header matching content from design */}
           <Box
             sx={{
               display: 'flex',
@@ -321,10 +726,10 @@ export default function CoreFeaturesSection() {
               alignItems: { xs: 'flex-start', md: 'flex-start' },
               justifyContent: 'space-between',
               gap: { xs: 2, md: 4 },
-              mb: { xs: 2.5, md: 3.5 },
+              mb: { xs: 2.5, md: 3.2 },
             }}
           >
-            {/* Headline with two-tone line break matching reference */}
+            {/* Headline: Private by default. Uncensored by design. */}
             <Typography
               variant="h2"
               sx={{
@@ -332,29 +737,29 @@ export default function CoreFeaturesSection() {
                 fontSize: { xs: '1.9rem', sm: '2.5rem', md: '2.85rem' },
                 lineHeight: 1.15,
                 letterSpacing: '-0.03em',
-                maxWidth: 620,
+                maxWidth: 640,
               }}
             >
               <Box component="span" sx={{ color: 'var(--text-heading)', display: 'block' }}>
-                One platform to run right
+                Private by default.
               </Box>
               <Box component="span" sx={{ color: 'var(--text-secondary)', display: 'block' }}>
-                your entire AI workflow.
+                Uncensored by design.
               </Box>
             </Typography>
 
+            {/* Subtitle from design */}
             <Typography
               variant="body1"
               sx={{
                 color: 'var(--text-secondary)',
-                fontSize: { xs: '0.92rem', md: '0.98rem' },
+                fontSize: { xs: '0.92rem', md: '1rem' },
                 lineHeight: 1.6,
-                maxWidth: 420,
+                maxWidth: 440,
                 pt: { md: 0.8 },
               }}
             >
-              OpenLedger unifies private compute, multi-model routing, portable vector memory,
-              and autonomous agents into one space, so you stop switching between tools and start building.
+              Private access to leading AI models, shared memory, and agents without the usual switching or setup.
             </Typography>
           </Box>
 
@@ -362,7 +767,7 @@ export default function CoreFeaturesSection() {
           <Box
             sx={{
               width: '100%',
-              mb: { xs: 2.5, md: 3 },
+              mb: { xs: 2.2, md: 2.8 },
             }}
           >
             <Box
@@ -406,7 +811,9 @@ export default function CoreFeaturesSection() {
                     left: '20%',
                     right: '20%',
                     height: '1.5px',
-                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent)',
+                    background: isDark
+                      ? 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent)'
+                      : 'linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.1), transparent)',
                     borderRadius: '9999px',
                   }}
                 />
@@ -430,7 +837,7 @@ export default function CoreFeaturesSection() {
                       textAlign: 'center',
                       color: isActive ? 'var(--text-heading)' : 'var(--text-secondary)',
                       fontWeight: isActive ? 600 : 500,
-                      fontSize: { xs: '0.78rem', sm: '0.88rem', md: '0.94rem' },
+                      fontSize: { xs: '0.74rem', sm: '0.84rem', md: '0.9rem' },
                       whiteSpace: 'nowrap',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
@@ -440,14 +847,19 @@ export default function CoreFeaturesSection() {
                       },
                     }}
                   >
-                    {tab.label}
+                    <Box component="span" sx={{ display: { xs: 'none', lg: 'inline' } }}>
+                      {tab.label}
+                    </Box>
+                    <Box component="span" sx={{ display: { xs: 'inline', lg: 'none' } }}>
+                      {tab.shortLabel || tab.label}
+                    </Box>
                   </Box>
                 );
               })}
             </Box>
           </Box>
 
-          {/* User Artwork Display Area - Fluid, Silky Crossfading */}
+          {/* Feature Display Container - Fluid, Silky Crossfading Panels */}
           <Box
             ref={imageContainerRef}
             sx={{
@@ -455,34 +867,154 @@ export default function CoreFeaturesSection() {
               width: '100%',
               borderRadius: { xs: '16px', md: '22px' },
               overflow: 'hidden',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              boxShadow: '0 25px 80px -20px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.05)',
-              backgroundColor: 'var(--bg-section)',
-              aspectRatio: '16 / 9',
-              maxHeight: { xs: '350px', sm: '460px', md: '57.5vh' },
+              border: '1px solid var(--border-subtle)',
+              boxShadow: 'var(--shadow-card)',
+              backgroundColor: 'var(--bg-card)',
+              height: { xs: '440px', sm: '460px', md: '500px' },
+              maxHeight: { md: '56vh' },
             }}
           >
             {TABS.map((tab, idx) => (
               <Box
                 key={tab.id}
                 ref={(el) => (imageRefs.current[idx] = el)}
-                component="img"
-                src={tab.imageSrc}
-                alt={tab.label}
                 sx={{
                   position: 'absolute',
                   inset: 0,
                   width: '100%',
                   height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: 'center',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  p: { xs: 2.2, sm: 3.2, md: 3.8 },
+                  boxSizing: 'border-box',
                   opacity: idx === 0 ? 1 : 0,
                   transform: idx === 0 ? 'scale(1)' : 'scale(0.98)',
                   willChange: 'opacity, transform',
                   pointerEvents: activeTab === idx ? 'auto' : 'none',
-                  display: 'block',
                 }}
-              />
+              >
+                {/* Corner Brackets matching reference aesthetic */}
+                <Box sx={{ position: 'absolute', top: 10, left: 10, color: 'var(--text-secondary)', opacity: 0.35, fontSize: '0.78rem', fontFamily: 'monospace', pointerEvents: 'none' }}>┌</Box>
+                <Box sx={{ position: 'absolute', top: 10, right: 10, color: 'var(--text-secondary)', opacity: 0.35, fontSize: '0.78rem', fontFamily: 'monospace', pointerEvents: 'none' }}>┐</Box>
+                <Box sx={{ position: 'absolute', bottom: 10, left: 10, color: 'var(--text-secondary)', opacity: 0.35, fontSize: '0.78rem', fontFamily: 'monospace', pointerEvents: 'none' }}>└</Box>
+                <Box sx={{ position: 'absolute', bottom: 10, right: 10, color: 'var(--text-secondary)', opacity: 0.35, fontSize: '0.78rem', fontFamily: 'monospace', pointerEvents: 'none' }}>┘</Box>
+
+                {/* Top Section: Title, Copper Subtitle, and Description */}
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 2, mb: 1.5 }}>
+                  <Box sx={{ maxWidth: 680 }}>
+                    <Typography
+                      sx={{
+                        fontSize: { xs: '1.25rem', sm: '1.45rem', md: '1.6rem' },
+                        fontWeight: 700,
+                        color: 'var(--text-heading)',
+                        letterSpacing: '-0.02em',
+                        lineHeight: 1.2,
+                        mb: 0.4,
+                      }}
+                    >
+                      {tab.label}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: { xs: '0.88rem', sm: '0.98rem' },
+                        fontWeight: 600,
+                        color: 'var(--text-secondary)',
+                        lineHeight: 1.3,
+                        mb: 0.4,
+                      }}
+                    >
+                      {tab.tagline}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: { xs: '0.82rem', sm: '0.9rem' },
+                        color: 'var(--text-secondary)',
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      {tab.description}
+                    </Typography>
+                  </Box>
+
+                  {tab.hasExplore && (
+                    <Box
+                      component="a"
+                      href="#explore"
+                      sx={{
+                        display: { xs: 'none', sm: 'inline-flex' },
+                        alignItems: 'center',
+                        gap: 0.6,
+                        color: 'var(--text-heading)',
+                        fontWeight: 700,
+                        fontSize: '0.78rem',
+                        letterSpacing: '0.08em',
+                        textTransform: 'uppercase',
+                        textDecoration: 'none',
+                        pt: 0.5,
+                        whiteSpace: 'nowrap',
+                        transition: 'opacity 0.2s',
+                        '&:hover': { opacity: 0.75 },
+                      }}
+                    >
+                      EXPLORE &rarr;
+                    </Box>
+                  )}
+                </Box>
+
+                {/* Center Section: High-Fidelity UI Graphic Preview */}
+                <Box
+                  sx={{
+                    flex: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.025)' : '#F5EFEB',
+                    borderRadius: '16px',
+                    border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.06)',
+                    p: { xs: 1.5, sm: 2.5 },
+                    my: 1,
+                    position: 'relative',
+                    overflow: 'hidden',
+                  }}
+                >
+                  {renderVisualPreview(tab.id)}
+                </Box>
+
+                {/* Bottom Section: Footer Tags Row */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    pt: 1.2,
+                    borderTop: '1px solid var(--border-subtle)',
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: '0.72rem',
+                      fontWeight: 700,
+                      letterSpacing: '0.12em',
+                      color: 'var(--text-secondary)',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {tab.tagLeft}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: '0.72rem',
+                      fontWeight: 700,
+                      letterSpacing: '0.12em',
+                      color: 'var(--text-secondary)',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {tab.tagRight}
+                  </Typography>
+                </Box>
+              </Box>
             ))}
           </Box>
         </Container>
