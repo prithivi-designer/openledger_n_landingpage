@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { useThemeMode } from '@/context/ThemeContext';
-import GlassSurface from './GlassSurface';
+
 
 const MODEL_CARDS = [
   {
@@ -40,45 +40,7 @@ const MODEL_CARDS = [
   },
 ];
 
-const TABS = [
-  {
-    id: 0,
-    title: 'Multi-Model Query',
-    desc: 'Broadcast prompt simultaneously to 4 frontier LLMs',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 18 }}>
-        <polygon points="12 2 2 7 12 12 22 7 12 2" />
-        <polyline points="2 17 12 22 22 17" />
-        <polyline points="2 12 12 17 22 12" />
-      </svg>
-    ),
-  },
-  {
-    id: 1,
-    title: 'Parallel Execution',
-    desc: 'Stream live tokens and evaluate latency in real time',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 18 }}>
-        <circle cx="12" cy="12" r="10" />
-        <polyline points="12 6 12 12 16 14" />
-      </svg>
-    ),
-  },
-  {
-    id: 2,
-    title: 'Final Pick Consensus',
-    desc: 'Extract optimal consensus and nominate verified winner',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 18, height: 18 }}>
-        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
-        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
-        <path d="M4 22h16" />
-        <path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34" />
-        <path d="M6 4h12v6a6 6 0 0 1-12 0V4z" />
-      </svg>
-    ),
-  },
-];
+
 
 export default function WhyAskMultipleModelsSection() {
   const { isDark } = useThemeMode();
@@ -88,22 +50,43 @@ export default function WhyAskMultipleModelsSection() {
   const [isPlaying, setIsPlaying] = React.useState(true);
   const [progress, setProgress] = React.useState(0); // 0 to 100 per tab
   const [inputValue, setInputValue] = React.useState(''); // For chat input
-  
+  const sectionRef = React.useRef(null);
+  const [isInView, setIsInView] = React.useState(false);
+
   const monoIconColor = isDark ? '#FFFFFF' : '#0F172A';
   const monoBadgeBg = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.04)';
   const monoBadgeBorder = isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(0, 0, 0, 0.08)';
 
-  // Animation Loop Effect
+  // Viewport intersection observer to avoid running animation when section is off-screen
   React.useEffect(() => {
+    if (!sectionRef.current || typeof IntersectionObserver === 'undefined') {
+      setIsInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.05 }
+    );
+
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Animation Loop Effect - runs ONLY when playing AND section is visible in viewport
+  React.useEffect(() => {
+    if (!isPlaying || !isInView) return;
+
     let animationFrame;
     let lastTime = performance.now();
-    
-    // Each tab lasts 4 seconds (4000ms)
     const durationPerTab = 4000;
-    
+
     const animate = (time) => {
-      if (isPlaying) {
-        const deltaTime = time - lastTime;
+      const deltaTime = time - lastTime;
+      // Throttle updates to ~35ms intervals to keep CPU/GPU completely free for 60fps scrolling
+      if (deltaTime >= 35) {
         setProgress((prev) => {
           let newProgress = prev + (deltaTime / durationPerTab) * 100;
           if (newProgress >= 100) {
@@ -112,17 +95,18 @@ export default function WhyAskMultipleModelsSection() {
           }
           return newProgress;
         });
+        lastTime = time;
       }
-      lastTime = time;
       animationFrame = requestAnimationFrame(animate);
     };
-    
+
     animationFrame = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animationFrame);
-  }, [isPlaying]);
+  }, [isPlaying, isInView]);
 
   return (
     <Box
+      ref={sectionRef}
       component="section"
       id="consensus-mode"
       sx={{
@@ -155,49 +139,9 @@ export default function WhyAskMultipleModelsSection() {
           </Typography>
         </Box>
 
-        {/* 3-COLUMN TABS */}
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: { xs: 2, md: 0 }, mb: 2.5, position: 'relative' }}>
-          {/* Top rule */}
-          <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', backgroundColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)', display: { xs: 'none', md: 'block' } }} />
-          
-          {TABS.map((tab, idx) => {
-            const isActive = activeTab === tab.id;
-            const isPast = activeTab > tab.id;
-            const tabProgress = isActive ? progress : (isPast ? 100 : 0);
-            
-            return (
-              <Box
-                key={tab.id}
-                onClick={() => { setActiveTab(tab.id); setProgress(0); }}
-                sx={{
-                  flex: 1,
-                  position: 'relative',
-                  p: { xs: 2, md: 3 },
-                  cursor: 'pointer',
-                  borderLeft: { md: idx > 0 ? (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.08)') : 'none' },
-                  opacity: isActive ? 1 : 0.5,
-                  transition: 'opacity 0.3s ease',
-                  '&:hover': { opacity: 1 }
-                }}
-              >
-                {/* Active Progress Bar */}
-                <Box sx={{ position: 'absolute', top: 0, left: 0, height: '2px', width: '100%', backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)', display: { xs: 'none', md: 'block' } }}>
-                  <Box sx={{ height: '100%', width: `${tabProgress}%`, backgroundColor: 'var(--text-heading)', transition: isActive ? 'width 0.1s linear' : 'width 0.3s ease' }} />
-                </Box>
-                
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1, mt: { md: 1 } }}>
-                  <Box sx={{ color: 'var(--text-heading)' }}>{tab.icon}</Box>
-                  <Typography sx={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-heading)' }}>{tab.id + 1}. {tab.title}</Typography>
-                </Box>
-                <Typography sx={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>{tab.desc}</Typography>
-              </Box>
-            );
-          })}
-        </Box>
-
         {/* BROWSER WINDOW FRAME */}
         <Box sx={{
-          maxWidth: 1040, mx: 'auto', borderRadius: '24px',
+          maxWidth: { xs: '100%', lg: 1100 }, mx: 'auto', borderRadius: '24px', width: '100%',
           backgroundColor: isDark ? 'var(--bg-card)' : '#FFFFFF',
           border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
           boxShadow: isDark ? '0 32px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.1)' : '0 24px 60px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255,255,255,1)',
@@ -220,7 +164,7 @@ export default function WhyAskMultipleModelsSection() {
             <Box sx={{
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1,
               backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
-              borderRadius: '6px', px: 8, py: 0.6, fontSize: '0.8rem', color: 'var(--text-secondary)'
+              borderRadius: '6px', px: { xs: 3, sm: 8 }, py: 0.6, fontSize: '0.8rem', color: 'var(--text-secondary)'
             }}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 12, height: 12 }}><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
               <span>openledger.ai/consensus</span>
@@ -238,13 +182,13 @@ export default function WhyAskMultipleModelsSection() {
             </Box>
           </Box>
 
-          {/* INNER APP CONTENT - The Canvas */}
-          <Box sx={{ p: { xs: 2, sm: 2.5 }, minHeight: { xs: 350, md: 400 }, position: 'relative', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          {/* INNER APP CONTENT - The Canvas (Increased Height) */}
+          <Box sx={{ p: { xs: 2.5, sm: 3, md: 3.5 }, minHeight: { xs: 540, sm: 620, md: 680 }, position: 'relative', display: 'flex', flexDirection: 'column', overflow: 'hidden', pb: { xs: 12, md: 14 } }}>
             
             <Box sx={{ 
-              transform: activeTab === 2 ? { xs: 'translateY(-180px)', md: 'translateY(-140px)' } : (activeTab === 1 ? 'translateY(-10px)' : 'translateY(0)'),
-              opacity: activeTab === 2 ? 0.15 : 1,
-              transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
+              transform: activeTab === 2 ? { xs: 'translateY(-18px)', md: 'translateY(-10px)' } : 'translateY(0)',
+              opacity: 1,
+              transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
               display: 'flex',
               flexDirection: 'column',
               flexGrow: 1
@@ -300,12 +244,21 @@ export default function WhyAskMultipleModelsSection() {
                   // Staggered reveal for models based on progress
                   const isRevealed = activeTab > 1 || (activeTab === 1 && progress > (25 + idx * 12));
                   return (
-                    <GlassSurface key={card.id} width="auto" height="100%" borderRadius={16} borderWidth={0.07} brightness={isDark ? 32 : 72} opacity={0.94} blur={10} displace={0.4} backgroundOpacity={isDark ? 0.03 : 0.85} saturation={1} distortionScale={-18} redOffset={0} greenOffset={0} blueOffset={0}
-                      style={{
-                        borderRadius: '16px', border: isDark ? '1px solid rgba(255, 255, 255, 0.09)' : '1px solid rgba(0, 0, 0, 0.07)',
+                    <Box
+                      key={card.id}
+                      sx={{
+                        height: '100%',
+                        borderRadius: '16px',
+                        backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(255, 255, 255, 0.85)',
+                        backdropFilter: 'blur(16px) saturate(180%)',
+                        WebkitBackdropFilter: 'blur(16px) saturate(180%)',
+                        border: isDark ? '1px solid rgba(255, 255, 255, 0.09)' : '1px solid rgba(0, 0, 0, 0.07)',
                         boxShadow: isDark ? '0 4px 16px rgba(0, 0, 0, 0.25)' : '0 4px 16px rgba(15, 23, 42, 0.04)',
-                        opacity: isRevealed ? 1 : 0.4, transform: isRevealed ? 'scale(1)' : 'scale(0.97)', transition: 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
-                      }}>
+                        opacity: isRevealed ? 1 : 0.4,
+                        transform: isRevealed ? 'scale(1)' : 'scale(0.97)',
+                        transition: 'opacity 0.4s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                      }}
+                    >
                       <Box sx={{ p: { xs: 1.8, sm: 2.2 }, display: 'flex', flexDirection: 'column', height: '100%' }}>
                         
                         {/* Card Header: Official Monochrome Logo + Name + Run Time */}
@@ -358,7 +311,7 @@ export default function WhyAskMultipleModelsSection() {
                           </Box>
                         )}
                       </Box>
-                    </GlassSurface>
+                    </Box>
                   );
                 })}
               </Box>
@@ -367,7 +320,7 @@ export default function WhyAskMultipleModelsSection() {
 
             {/* PHASE 3: Consensus & Final Pick */}
             <Box sx={{ 
-              position: 'absolute', bottom: { xs: 56, md: 64 }, left: { xs: 12, sm: 16, md: 20 }, right: { xs: 12, sm: 16, md: 20 },
+              position: 'absolute', bottom: { xs: 72, md: 80 }, left: { xs: 14, sm: 20, md: 24 }, right: { xs: 14, sm: 20, md: 24 },
               opacity: activeTab === 2 ? (progress > 10 ? 1 : 0) : 0, 
               transform: activeTab === 2 && progress > 10 ? 'translateY(0)' : 'translateY(15px)',
               transition: 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)' 
@@ -396,9 +349,9 @@ export default function WhyAskMultipleModelsSection() {
             <Box
               sx={{
                 position: 'absolute',
-                bottom: { xs: 12, md: 16 },
-                left: { xs: 12, sm: 16, md: 20 },
-                right: { xs: 12, sm: 16, md: 20 },
+                bottom: { xs: 14, md: 18 },
+                left: { xs: 14, sm: 20, md: 24 },
+                right: { xs: 14, sm: 20, md: 24 },
                 zIndex: 10,
               }}
             >
@@ -478,18 +431,24 @@ export default function WhyAskMultipleModelsSection() {
                     width: 34,
                     height: 34,
                     borderRadius: '50%',
-                    backgroundColor: isDark ? '#FFFFFF' : '#0F172A',
-                    border: 'none',
+                    backdropFilter: 'blur(12px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+                    background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 243, 235, 0.85) 100%)',
+                    border: '1px solid rgba(255, 102, 0, 0.22)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: isDark ? '#0F172A' : '#FFFFFF',
+                    color: '#ff6600',
+                    boxShadow: '0 2px 6px rgba(15, 23, 42, 0.06), inset 0 1.5px 1.5px rgba(255, 255, 255, 1)',
                     cursor: 'pointer',
                     flexShrink: 0,
-                    transition: 'all 0.18s ease',
+                    transition: 'all 0.18s cubic-bezier(0.2, 0, 0, 1)',
                     '&:hover': {
-                      opacity: 0.88,
-                      transform: 'translateY(-1px)',
+                      transform: 'scale(1.05)',
+                      boxShadow: '0 3px 8px rgba(15, 23, 42, 0.09), inset 0 1.5px 1.5px rgba(255, 255, 255, 1)',
+                    },
+                    '&:active': {
+                      transform: 'scale(0.95)',
                     },
                   }}
                 >
@@ -532,18 +491,35 @@ export default function WhyAskMultipleModelsSection() {
               gap: 1.2,
               px: { xs: 3.5, md: 4 },
               py: { xs: 1.2, md: 1.4 },
-              borderRadius: '999px',
-              backgroundColor: 'var(--text-heading)',
-              color: 'var(--bg-section)',
+              borderRadius: '9999px',
+              backdropFilter: 'blur(12px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+              background: isDark
+                ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.16) 0%, rgba(255, 255, 255, 0.06) 100%)'
+                : 'linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 243, 235, 0.85) 100%)',
+              border: isDark ? '1px solid rgba(255, 102, 0, 0.3)' : '1px solid rgba(255, 102, 0, 0.22)',
+              color: '#ff6600',
               fontSize: { xs: '0.95rem', md: '1rem' },
               fontWeight: 700,
-              border: 'none',
+              boxShadow: isDark
+                ? '0 2px 10px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.25), inset 0 -1px 1px rgba(0, 0, 0, 0.3)'
+                : '0 2px 8px rgba(15, 23, 42, 0.06), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.95), inset 0 -1px 1px rgba(0, 0, 0, 0.04)',
               cursor: 'pointer',
-              transition: 'transform 0.2s ease, opacity 0.2s ease',
-              boxShadow: isDark ? '0 8px 24px rgba(255,255,255,0.1)' : '0 8px 24px rgba(0,0,0,0.1)',
+              transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
               '&:hover': {
-                transform: 'translateY(-2px)',
-                opacity: 0.9,
+                transform: 'translateY(-1px)',
+                background: isDark
+                  ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.24) 0%, rgba(255, 255, 255, 0.1) 100%)'
+                  : 'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 238, 226, 0.95) 100%)',
+                borderColor: isDark ? 'rgba(255, 102, 0, 0.45)' : 'rgba(255, 102, 0, 0.35)',
+                backdropFilter: 'blur(16px) saturate(200%)',
+                WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                boxShadow: isDark
+                  ? '0 4px 14px rgba(0, 0, 0, 0.45), inset 0 1.5px 2px rgba(255, 255, 255, 0.45), inset 0 0 0 0.5px rgba(255, 102, 0, 0.35)'
+                  : '0 4px 12px rgba(15, 23, 42, 0.1), inset 0 1.5px 2px rgba(255, 255, 255, 1), inset 0 0 0 0.5px rgba(255, 102, 0, 0.25)',
+              },
+              '&:active': {
+                transform: 'scale(0.95)',
               },
             }}
           >

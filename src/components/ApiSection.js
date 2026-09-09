@@ -9,6 +9,33 @@ import { useThemeMode } from '@/context/ThemeContext';
 export default function ApiSection() {
   const { isDark } = useThemeMode();
   const [activeTab, setActiveTab] = React.useState('curl');
+  const [copied, setCopied] = React.useState(false);
+
+  const handleCopy = () => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(codeSnippets[activeTab]);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const highlightCode = (line) => {
+    const escaped = line
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    return escaped.replace(
+      /("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')|(\b(?:curl|import|from|const|await|new|return|print|async)\b)|(-[Hd]\b)|(\/\/[^\n]*|#[^\n]*)/g,
+      (match, str, kw, flag, comment) => {
+        if (str) return `<span style="color: #A78BFA">${str}</span>`;
+        if (kw) return `<span style="color: #F87171">${kw}</span>`;
+        if (flag) return `<span style="color: #60A5FA">${flag}</span>`;
+        if (comment) return `<span style="color: #6B7280; font-style: italic;">${comment}</span>`;
+        return match;
+      }
+    );
+  };
 
   const codeSnippets = {
     curl: `curl https://api.openledger.xyz/v1/chat/completions \\
@@ -89,20 +116,73 @@ const response = await client.chat.completions.create({
             {/* Buttons */}
             <Box sx={{ display: 'flex', gap: 2, mb: 8 }}>
               <Button sx={{ 
-                backgroundColor: isDark ? '#fff' : '#0F172A', 
-                color: isDark ? '#000' : '#fff', 
-                py: 1.2, px: 3, borderRadius: '99px', 
-                fontWeight: 600, fontSize: '0.95rem', textTransform: 'none',
-                '&:hover': { opacity: 0.9, backgroundColor: isDark ? '#fff' : '#0F172A' }
+                borderRadius: '9999px',
+                py: 1.2,
+                px: 3.5,
+                fontWeight: 700,
+                fontSize: '0.95rem',
+                textTransform: 'none',
+                backdropFilter: 'blur(12px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+                background: isDark
+                  ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.16) 0%, rgba(255, 255, 255, 0.06) 100%)'
+                  : 'linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 243, 235, 0.85) 100%)',
+                border: isDark ? '1px solid rgba(255, 102, 0, 0.3)' : '1px solid rgba(255, 102, 0, 0.22)',
+                color: '#ff6600',
+                boxShadow: isDark
+                  ? '0 2px 10px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.25), inset 0 -1px 1px rgba(0, 0, 0, 0.3)'
+                  : '0 2px 8px rgba(15, 23, 42, 0.06), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.95), inset 0 -1px 1px rgba(0, 0, 0, 0.04)',
+                transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
+                '&:hover': {
+                  background: isDark
+                    ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.24) 0%, rgba(255, 255, 255, 0.1) 100%)'
+                    : 'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 238, 226, 0.95) 100%)',
+                  borderColor: isDark ? 'rgba(255, 102, 0, 0.45)' : 'rgba(255, 102, 0, 0.35)',
+                  backdropFilter: 'blur(16px) saturate(200%)',
+                  WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                  boxShadow: isDark
+                    ? '0 4px 14px rgba(0, 0, 0, 0.45), inset 0 1.5px 2px rgba(255, 255, 255, 0.45), inset 0 0 0 0.5px rgba(255, 102, 0, 0.35)'
+                    : '0 4px 12px rgba(15, 23, 42, 0.1), inset 0 1.5px 2px rgba(255, 255, 255, 1), inset 0 0 0 0.5px rgba(255, 102, 0, 0.25)',
+                  transform: 'translateY(-1px)',
+                },
+                '&:active': {
+                  transform: 'scale(0.95)',
+                },
               }}>
                 Get API Key
               </Button>
               <Button sx={{ 
-                border: `1px solid ${isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'}`, 
-                backgroundColor: 'transparent',
-                color: 'var(--text-primary)', py: 1.2, px: 3, borderRadius: '99px', 
-                fontWeight: 600, fontSize: '0.95rem', textTransform: 'none',
-                '&:hover': { backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }
+                borderRadius: '9999px',
+                py: 1.2,
+                px: 3.5,
+                fontWeight: 600,
+                fontSize: '0.95rem',
+                textTransform: 'none',
+                backdropFilter: 'blur(12px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+                backgroundColor: isDark ? 'rgba(20, 24, 30, 0.45)' : 'rgba(255, 255, 255, 0.55)',
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(255, 255, 255, 0.72)',
+                color: 'var(--text-primary)',
+                boxShadow: isDark
+                  ? '0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15)'
+                  : '0 2px 6px rgba(15, 23, 42, 0.04), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.9)',
+                transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
+                '&:hover': {
+                  background: isDark
+                    ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%)'
+                    : 'linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.8) 100%)',
+                  borderColor: isDark ? 'rgba(255, 102, 0, 0.35)' : 'rgba(255, 102, 0, 0.3)',
+                  color: '#ff6600',
+                  backdropFilter: 'blur(16px) saturate(200%)',
+                  WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                  boxShadow: isDark
+                    ? '0 4px 14px rgba(0, 0, 0, 0.35), inset 0 1.5px 2px rgba(255, 255, 255, 0.3)'
+                    : '0 4px 12px rgba(15, 23, 42, 0.08), inset 0 1.5px 2px rgba(255, 255, 255, 1)',
+                  transform: 'translateY(-1px)',
+                },
+                '&:active': {
+                  transform: 'scale(0.95)',
+                },
               }}>
                 Read Docs
               </Button>
@@ -136,21 +216,22 @@ const response = await client.chat.completions.create({
                 filter: 'blur(40px)', zIndex: 0, display: isDark ? 'block' : 'none'
               }} />
 
-              {/* Terminal Window */}
+              {/* Terminal Window - Inner Canvas Black */}
               <Box sx={{ 
                 position: 'relative', zIndex: 1,
-                backgroundColor: isDark ? '#0A0A0A' : '#F9FAFB',
-                border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)',
+                backgroundColor: '#0A0A0A',
+                border: isDark ? '1px solid rgba(255,255,255,0.12)' : '1px solid rgba(0,0,0,0.18)',
                 borderRadius: '16px', overflow: 'hidden',
-                boxShadow: isDark ? '0 32px 80px rgba(0,0,0,0.8)' : '0 24px 60px rgba(0,0,0,0.1)',
+                boxShadow: isDark ? '0 32px 80px rgba(0,0,0,0.8)' : '0 24px 60px rgba(15, 23, 42, 0.22)',
                 mb: 3
               }}>
                 
                 {/* Top Bar */}
                 <Box sx={{ 
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  px: 2.5, py: 1.5, backgroundColor: isDark ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.02)',
-                  borderBottom: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(0,0,0,0.05)'
+                  px: 2.5, py: 1.5,
+                  backgroundColor: '#121214',
+                  borderBottom: '1px solid rgba(255,255,255,0.08)'
                 }}>
                   {/* Mac Window Dots */}
                   <Box sx={{ display: 'flex', gap: 1 }}>
@@ -160,61 +241,108 @@ const response = await client.chat.completions.create({
                   </Box>
                   
                   {/* Copy Button */}
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, cursor: 'pointer', color: isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)', '&:hover': { color: isDark ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.9)' } }}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 14, height: 14 }}>
-                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                    </svg>
-                    <Typography sx={{ fontSize: '0.75rem', fontWeight: 600 }}>Copy</Typography>
+                  <Box 
+                    onClick={handleCopy}
+                    sx={{ 
+                      display: 'flex', alignItems: 'center', gap: 0.6, cursor: 'pointer',
+                      color: copied ? '#34D399' : 'rgba(255,255,255,0.6)',
+                      transition: 'color 0.2s ease',
+                      '&:hover': { color: copied ? '#34D399' : '#FFFFFF' }
+                    }}
+                  >
+                    {copied ? (
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: 14, height: 14 }}>
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    ) : (
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: 14, height: 14 }}>
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                      </svg>
+                    )}
+                    <Typography sx={{ fontSize: '0.75rem', fontWeight: 600 }}>{copied ? 'Copied!' : 'Copy'}</Typography>
                   </Box>
                 </Box>
 
                 {/* Code Area */}
-                <Box sx={{ p: 4, pt: 3, overflowX: 'auto', minHeight: 280 }}>
-                  <pre style={{ margin: 0, fontFamily: '"JetBrains Mono", "Fira Code", monospace', fontSize: '0.85rem', lineHeight: 1.7, color: isDark ? '#E5E7EB' : '#111827' }}>
+                <Box sx={{ p: 4, pt: 3, overflowX: 'auto', minHeight: 280, backgroundColor: '#0A0A0A' }}>
+                  <pre style={{ margin: 0, fontFamily: '"JetBrains Mono", "Fira Code", monospace', fontSize: '0.86rem', lineHeight: 1.7, color: '#E5E7EB' }}>
                     <code>
-                      {codeSnippets[activeTab].split('\\n').map((line, i) => {
-                        let highlightedLine = line
-                          .replace(/curl /g, `<span style="color: ${isDark ? '#F87171' : '#E11D48'}">curl </span>`)
-                          .replace(/import /g, `<span style="color: ${isDark ? '#F87171' : '#E11D48'}">import </span>`)
-                          .replace(/const /g, `<span style="color: ${isDark ? '#F87171' : '#E11D48'}">const </span>`)
-                          .replace(/from /g, `<span style="color: ${isDark ? '#F87171' : '#E11D48'}">from </span>`)
-                          .replace(/"(.*?)"/g, `<span style="color: ${isDark ? '#A78BFA' : '#6D28D9'}">"$1"</span>`)
-                          .replace(/'(.*?)'/g, `<span style="color: ${isDark ? '#A78BFA' : '#6D28D9'}">'$1'</span>`)
-                          .replace(/-H /g, `<span style="color: ${isDark ? '#60A5FA' : '#2563EB'}">-H </span>`)
-                          .replace(/-d /g, `<span style="color: ${isDark ? '#60A5FA' : '#2563EB'}">-d </span>`);
-                          
-                        return (
-                          <div key={i} dangerouslySetInnerHTML={{ __html: highlightedLine || ' ' }} />
-                        );
-                      })}
+                      {codeSnippets[activeTab].split('\n').map((line, i) => (
+                        <div key={i} dangerouslySetInnerHTML={{ __html: highlightCode(line) || '&nbsp;' }} />
+                      ))}
                     </code>
                   </pre>
                 </Box>
               </Box>
 
               {/* Tabs Below the Window */}
-              <Box sx={{ display: 'flex', gap: { xs: 1, sm: 2 }, flexWrap: 'wrap', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', gap: { xs: 1, sm: 1.5 }, flexWrap: 'wrap', alignItems: 'center' }}>
                 {[
                   { id: 'python', label: 'Python' },
                   { id: 'typescript', label: 'TypeScript' },
                   { id: 'openai', label: 'TypeScript (OpenAI SDK)' },
                   { id: 'curl', label: 'cURL' }
-                ].map(tab => (
-                  <Box 
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    sx={{ 
-                      px: { xs: 1.5, sm: 2 }, py: 0.8, borderRadius: '99px', cursor: 'pointer',
-                      border: activeTab === tab.id ? `1px solid ${isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)'}` : '1px solid transparent',
-                      color: activeTab === tab.id ? 'var(--text-primary)' : 'var(--text-muted)',
-                      transition: 'all 0.2s ease',
-                      '&:hover': { color: 'var(--text-primary)' }
-                    }}
-                  >
-                    <Typography sx={{ fontSize: '0.85rem', fontWeight: 500 }}>{tab.label}</Typography>
-                  </Box>
-                ))}
+                ].map(tab => {
+                  const isActive = activeTab === tab.id;
+                  return (
+                    <Box 
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      sx={{ 
+                        px: { xs: 1.8, sm: 2.2 },
+                        py: 0.8,
+                        borderRadius: '9999px',
+                        cursor: 'pointer',
+                        userSelect: 'none',
+                        backdropFilter: 'blur(8px) saturate(180%)',
+                        WebkitBackdropFilter: 'blur(8px) saturate(180%)',
+                        backgroundColor: isActive
+                          ? (isDark ? 'rgba(255, 102, 0, 0.12)' : 'rgba(255, 255, 255, 0.88)')
+                          : (isDark ? 'rgba(20, 24, 30, 0.45)' : 'rgba(255, 255, 255, 0.45)'),
+                        background: isActive
+                          ? (isDark
+                              ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%)'
+                              : 'linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 243, 235, 0.84) 100%)')
+                          : (isDark ? 'rgba(20, 24, 30, 0.45)' : 'rgba(255, 255, 255, 0.45)'),
+                        color: isActive
+                          ? '#ff6600'
+                          : (isDark ? 'rgba(255, 255, 255, 0.65)' : '#64748B'),
+                        border: isActive
+                          ? (isDark ? '1px solid rgba(255, 102, 0, 0.32)' : '1px solid rgba(255, 102, 0, 0.22)')
+                          : (isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(255, 255, 255, 0.72)'),
+                        boxShadow: isActive
+                          ? (isDark
+                              ? '0 2px 8px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.25), inset 0 -0.5px 1px rgba(0, 0, 0, 0.2)'
+                              : '0 2px 6px rgba(15, 23, 42, 0.06), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.95), inset 0 -0.5px 1px rgba(0, 0, 0, 0.04)')
+                          : (isDark
+                              ? '0 2px 6px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.08)'
+                              : '0 2px 6px rgba(15, 23, 42, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.8)'),
+                        transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
+                        '&:hover': {
+                          color: '#ff6600',
+                          borderColor: isDark ? 'rgba(255, 102, 0, 0.4)' : 'rgba(255, 102, 0, 0.35)',
+                          background: isActive
+                            ? undefined
+                            : (isDark
+                                ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%)'
+                                : 'linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.8) 100%)'),
+                          backdropFilter: 'blur(16px) saturate(200%)',
+                          WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                          boxShadow: isDark
+                            ? '0 3px 10px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.3)'
+                            : '0 3px 10px rgba(15, 23, 42, 0.08), inset 0 1.5px 1.5px rgba(255, 255, 255, 1)',
+                          transform: 'translateY(-1px)',
+                        },
+                        '&:active': {
+                          transform: 'scale(0.95)',
+                        },
+                      }}
+                    >
+                      <Typography sx={{ fontSize: '0.85rem', fontWeight: isActive ? 600 : 500 }}>{tab.label}</Typography>
+                    </Box>
+                  );
+                })}
               </Box>
 
             </Box>

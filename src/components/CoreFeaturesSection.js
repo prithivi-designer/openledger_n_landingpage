@@ -2,9 +2,12 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import LockIcon from '@mui/icons-material/Lock';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import MemoryIcon from '@mui/icons-material/Memory';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import StorageIcon from '@mui/icons-material/Storage';
 import { gsap } from 'gsap';
@@ -21,7 +24,9 @@ const TABS = [
   {
     id: 'private',
     label: 'Private AI',
+    fullLabel: 'Private AI',
     shortLabel: 'Private AI',
+    icon: LockIcon,
     tagline: 'Private and uncensored, from the start.',
     description: 'Ask freely without your prompts being stored or used for training.',
     hasExplore: true,
@@ -30,8 +35,10 @@ const TABS = [
   },
   {
     id: 'multimodel',
-    label: 'Multi-Model & Token Optimization',
+    label: 'Multi-Model',
+    fullLabel: 'Multi-Model & Tokens',
     shortLabel: 'Multi-Model',
+    icon: AutoAwesomeIcon,
     tagline: 'More models. Fewer wasted tokens.',
     description: 'Access leading AI models from one place, with optimized token usage to reduce costs and keep every request efficient.',
     tagLeft: 'MULTI-MODEL',
@@ -40,7 +47,9 @@ const TABS = [
   {
     id: 'memory',
     label: 'Unified Memory',
-    shortLabel: 'Unified Memory',
+    fullLabel: 'Unified Memory',
+    shortLabel: 'Memory',
+    icon: MemoryIcon,
     tagline: 'Say it once. Every model knows.',
     description: 'Your context stays consistent across models, so you never have to start over.',
     tagLeft: 'ONE MEMORY',
@@ -49,7 +58,9 @@ const TABS = [
   {
     id: 'agents',
     label: 'Built for Agents',
-    shortLabel: 'Built for Agents',
+    fullLabel: 'Built for Agents',
+    shortLabel: 'Agents',
+    icon: SmartToyIcon,
     tagline: 'Connect once. Access any model.',
     description: 'Give agents direct access to leading AI models with x402, enabling seamless interactions across models without complex integrations.',
     tagLeft: 'X402 ENABLED',
@@ -60,6 +71,9 @@ const TABS = [
 export default function CoreFeaturesSection() {
   const { isDark } = useThemeMode();
   const [activeTab, setActiveTab] = React.useState(0);
+  const [pressedIndex, setPressedIndex] = React.useState(null);
+  const [isPressing, setIsPressing] = React.useState(false);
+  const pressTargetRef = React.useRef(null);
   const sectionRef = React.useRef(null);
   const pinContainerRef = React.useRef(null);
   const imageContainerRef = React.useRef(null);
@@ -78,7 +92,7 @@ export default function CoreFeaturesSection() {
     const b2 = document.getElementById('tab-btn-2');
     const b3 = document.getElementById('tab-btn-3');
     if (!b0 || !b1 || !b2 || !b3) {
-      const w = tabBarRef.current ? (tabBarRef.current.offsetWidth - 10) / 4 : 0;
+      const w = tabBarRef.current ? (tabBarRef.current.offsetWidth - 12) / 4 : 0;
       return [0, w, w * 2, w * 3];
     }
     const x0 = b0.offsetLeft;
@@ -90,37 +104,55 @@ export default function CoreFeaturesSection() {
     ];
   }, []);
 
-  // Initialize GSAP ScrollTrigger with ease-in-out transitions and resting dwell plateaus
+  // Liquid Glass pointer press handler: swells pill, thins fill, sinks item contents, opens refraction
+  const handlePointerDown = (idx) => {
+    setPressedIndex(idx);
+    setIsPressing(true);
+    pressTargetRef.current = idx;
+
+    // Immediately place the pill under the finger before activation
+    if (pillRef.current) {
+      const positions = getTabPositions();
+      gsap.to(pillRef.current, {
+        x: positions[idx] || 0,
+        duration: 0.18,
+        ease: 'power2.out',
+      });
+    }
+
+    const release = () => {
+      setIsPressing(false);
+      setPressedIndex(null);
+      window.removeEventListener('pointerup', release);
+      window.removeEventListener('pointercancel', release);
+    };
+    window.addEventListener('pointerup', release);
+    window.addEventListener('pointercancel', release);
+  };
+
+  // Initialize GSAP ScrollTrigger for pinning and scroll-based tab navigation
   React.useEffect(() => {
     if (typeof window === 'undefined') return;
 
     let mm = gsap.matchMedia();
 
     mm.add('(min-width: 900px)', () => {
-      const b0 = document.getElementById('tab-btn-0');
-      if (b0 && pillRef.current) {
-        pillRef.current.style.width = `${b0.offsetWidth}px`;
-      }
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: 'bottom bottom',
-          pin: pinContainerRef.current,
-          scrub: 0.85,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
-        onUpdate: function () {
+      const st = ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: 'top top',
+        end: 'bottom bottom',
+        pin: pinContainerRef.current,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: function (self) {
           if (isClickingRef.current) return;
-          const p = this.progress();
+          const p = self.progress;
           let idx = 0;
-          if (p >= 0.789) {
+          if (p >= 0.75) {
             idx = 3;
-          } else if (p >= 0.500) {
+          } else if (p >= 0.50) {
             idx = 2;
-          } else if (p >= 0.210) {
+          } else if (p >= 0.25) {
             idx = 1;
           } else {
             idx = 0;
@@ -132,105 +164,65 @@ export default function CoreFeaturesSection() {
         },
       });
 
-      const imgs = imageRefs.current;
-      if (imgs[0]) gsap.set(imgs[0], { opacity: 1, scale: 1 });
-      if (imgs[1]) gsap.set(imgs[1], { opacity: 0, scale: 0.98 });
-      if (imgs[2]) gsap.set(imgs[2], { opacity: 0, scale: 0.98 });
-      if (imgs[3]) gsap.set(imgs[3], { opacity: 0, scale: 0.98 });
-      if (pillRef.current) gsap.set(pillRef.current, { x: 0 });
-
-      // Tab 0 -> Tab 1
-      tl.fromTo(
-        pillRef.current,
-        { x: () => getTabPositions()[0] },
-        {
-          x: () => getTabPositions()[1],
-          ease: 'power2.inOut',
-          duration: 0.6,
-          immediateRender: false,
-        },
-        0.5
-      );
-      if (imgs[0] && imgs[1]) {
-        tl.to(imgs[0], { opacity: 0, scale: 1.02, ease: 'power2.inOut', duration: 0.6 }, 0.5);
-        tl.to(imgs[1], { opacity: 1, scale: 1, ease: 'power2.inOut', duration: 0.6 }, 0.5);
-      }
-
-      // Tab 1 -> Tab 2
-      tl.fromTo(
-        pillRef.current,
-        { x: () => getTabPositions()[1] },
-        {
-          x: () => getTabPositions()[2],
-          ease: 'power2.inOut',
-          duration: 0.6,
-          immediateRender: false,
-        },
-        1.6
-      );
-      if (imgs[1] && imgs[2]) {
-        tl.to(imgs[1], { opacity: 0, scale: 1.02, ease: 'power2.inOut', duration: 0.6 }, 1.6);
-        tl.to(imgs[2], { opacity: 1, scale: 1, ease: 'power2.inOut', duration: 0.6 }, 1.6);
-      }
-
-      // Tab 2 -> Tab 3
-      tl.fromTo(
-        pillRef.current,
-        { x: () => getTabPositions()[2] },
-        {
-          x: () => getTabPositions()[3],
-          ease: 'power2.inOut',
-          duration: 0.6,
-          immediateRender: false,
-        },
-        2.7
-      );
-      if (imgs[2] && imgs[3]) {
-        tl.to(imgs[2], { opacity: 0, scale: 1.02, ease: 'power2.inOut', duration: 0.6 }, 2.7);
-        tl.to(imgs[3], { opacity: 1, scale: 1, ease: 'power2.inOut', duration: 0.6 }, 2.7);
-      }
-
-      tl.set({}, {}, 3.8);
-
-      scrollTriggerRef.current = tl.scrollTrigger;
+      scrollTriggerRef.current = st;
 
       return () => {
-        if (tl.scrollTrigger) tl.scrollTrigger.kill();
-        tl.kill();
+        st.kill();
         scrollTriggerRef.current = null;
-        if (pillRef.current) gsap.set(pillRef.current, { clearProps: 'transform,x' });
       };
     });
 
     return () => mm.revert();
   }, [getTabPositions]);
 
-  // Mobile smooth fallback for pill and images
+  // Synchronize pill position and feature cards smoothly whenever activeTab changes
   React.useEffect(() => {
-    if (typeof window !== 'undefined' && window.innerWidth < 900) {
-      if (pillRef.current && tabBarRef.current) {
-        const positions = getTabPositions();
-        gsap.to(pillRef.current, {
-          x: positions[activeTab] || 0,
-          duration: 0.35,
+    if (typeof window === 'undefined') return;
+
+    // 1. Move pill with organic spring & stretch to the active tab
+    if (pillRef.current && tabBarRef.current) {
+      const positions = getTabPositions();
+      const targetX = positions[activeTab] || 0;
+      gsap.to(pillRef.current, {
+        x: targetX,
+        duration: 0.42,
+        ease: 'power3.out',
+        overwrite: 'auto',
+      });
+      gsap.fromTo(
+        pillRef.current,
+        { scaleX: 1.14, scaleY: 0.92 },
+        { scaleX: 1, scaleY: 1, duration: 0.38, ease: 'back.out(1.8)' }
+      );
+    }
+
+    // 2. Crossfade feature card panels so activeTab is always 100% visible
+    imageRefs.current.forEach((panel, i) => {
+      if (!panel) return;
+      if (i === activeTab) {
+        gsap.to(panel, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.42,
           ease: 'power2.out',
+          overwrite: 'auto',
+        });
+      } else {
+        gsap.to(panel, {
+          opacity: 0,
+          scale: 0.98,
+          duration: 0.32,
+          ease: 'power2.out',
+          overwrite: 'auto',
         });
       }
-      imageRefs.current.forEach((img, i) => {
-        if (!img) return;
-        gsap.to(img, {
-          opacity: i === activeTab ? 1 : 0,
-          scale: i === activeTab ? 1 : 0.98,
-          duration: 0.45,
-          ease: 'power2.out',
-        });
-      });
-    }
+    });
   }, [activeTab, getTabPositions]);
 
   const handleTabClick = (index) => {
     setActiveTab(index);
     lastActiveTabRef.current = index;
+
     if (!scrollTriggerRef.current) return;
 
     isClickingRef.current = true;
@@ -238,30 +230,25 @@ export default function CoreFeaturesSection() {
     const scrollDistance = trigger.end - trigger.start;
 
     const TAB_DWELL_PROGRESS = [
-      0.0,
-      1.35 / 3.8,
-      2.45 / 3.8,
-      1.0,
+      0.05,
+      0.35,
+      0.65,
+      0.92,
     ];
     const targetScroll = trigger.start + TAB_DWELL_PROGRESS[index] * scrollDistance;
 
     if (window.lenis) {
       window.lenis.scrollTo(targetScroll, {
-        duration: 0.9,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        duration: 0.8,
         onComplete: () => {
           isClickingRef.current = false;
         },
       });
     } else {
-      gsap.to(window, {
-        scrollTo: { y: targetScroll, autoKill: false },
-        duration: 0.9,
-        ease: 'power2.out',
-        onComplete: () => {
-          isClickingRef.current = false;
-        },
-      });
+      window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+      setTimeout(() => {
+        isClickingRef.current = false;
+      }, 800);
     }
   };
 
@@ -763,11 +750,13 @@ export default function CoreFeaturesSection() {
             </Typography>
           </Box>
 
-          {/* Full-Width Tab Bar with Smooth Sliding Active Pill Indicator */}
+          {/* Apple Liquid Glass Floating Tab Bar with Lens Optics & Stretching Pill */}
           <Box
             sx={{
               width: '100%',
-              mb: { xs: 2.2, md: 2.8 },
+              maxWidth: { xs: '100%', md: 840 },
+              mx: 'auto',
+              mb: { xs: 2.2, md: 3 },
             }}
           >
             <Box
@@ -775,83 +764,159 @@ export default function CoreFeaturesSection() {
               sx={{
                 position: 'relative',
                 width: '100%',
+                height: 58,
                 display: 'grid',
                 gridTemplateColumns: 'repeat(4, 1fr)',
-                p: '5px',
+                p: '6px',
                 borderRadius: '9999px',
-                backgroundColor: 'var(--bg-pill)',
-                border: '1px solid var(--border-subtle)',
-                backdropFilter: 'blur(16px)',
+                backgroundColor: isDark ? 'rgba(20, 24, 30, 0.48)' : 'rgba(255, 255, 255, 0.45)',
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(255, 255, 255, 0.72)',
+                backdropFilter: 'blur(8px) saturate(180%)',
+                boxShadow: isDark
+                  ? '0 20px 45px -12px rgba(0, 0, 0, 0.5), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.22), inset 0 -1px 2px rgba(0, 0, 0, 0.4)'
+                  : '0 20px 45px -12px rgba(15, 23, 42, 0.09), 0 2px 8px rgba(0, 0, 0, 0.02), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.95), inset 0 -1px 2px rgba(0, 0, 0, 0.03)',
                 boxSizing: 'border-box',
+                userSelect: 'none',
               }}
             >
-              {/* Smooth Gliding Active Pill with Continuous Easing */}
+              {/* Apple Liquid Glass Nested Lens Pill with subtle #ff6600 accent tint */}
               <Box
                 ref={pillRef}
                 sx={{
                   position: 'absolute',
-                  top: '5px',
-                  bottom: '5px',
-                  left: '5px',
-                  width: 'calc((100% - 10px) / 4)',
+                  top: '6px',
+                  bottom: '6px',
+                  left: '6px',
+                  width: 'calc((100% - 12px) / 4)',
+                  height: 46,
                   borderRadius: '9999px',
-                  backgroundColor: 'var(--bg-card)',
-                  border: '1px solid var(--border-normal)',
-                  boxShadow: 'var(--shadow-card)',
-                  willChange: 'transform',
+                  backgroundColor: isPressing
+                    ? (isDark ? 'rgba(255, 102, 0, 0.08)' : 'rgba(255, 102, 0, 0.1)')
+                    : (isDark ? 'rgba(255, 102, 0, 0.12)' : 'rgba(255, 255, 255, 0.88)'),
+                  background: isPressing
+                    ? (isDark ? 'rgba(255, 102, 0, 0.08)' : 'rgba(255, 102, 0, 0.1)')
+                    : (isDark
+                        ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.16) 0%, rgba(255, 255, 255, 0.08) 100%)'
+                        : 'linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 243, 235, 0.84) 100%)'),
+                  backdropFilter: 'blur(16px)',
+                  border: isDark
+                    ? '1px solid rgba(255, 102, 0, 0.28)'
+                    : '1px solid rgba(255, 102, 0, 0.2)',
+                  boxShadow: isPressing
+                    ? (isDark
+                        ? '0 6px 18px rgba(0, 0, 0, 0.5), inset 0 2px 3px rgba(255, 255, 255, 0.25)'
+                        : '0 4px 12px rgba(15, 23, 42, 0.08), inset 0 2px 3px rgba(255, 255, 255, 0.95)')
+                    : (isDark
+                        ? '0 2px 8px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.3), inset 0 -0.5px 1px rgba(0, 0, 0, 0.3)'
+                        : '0 2px 6px rgba(15, 23, 42, 0.06), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.95), inset 0 -0.5px 1px rgba(0, 0, 0, 0.04)'),
+                  transform: isPressing ? 'scale(1.02, 1.15)' : 'scale(1, 1)',
+                  transition: 'background 0.18s ease, box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                  willChange: 'transform, left',
                   pointerEvents: 'none',
                   zIndex: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden',
                 }}
               >
-                {/* Subtle top glow highlight on active pill */}
+                {/* Specular curved lens rim highlight with warm orange touch */}
                 <Box
                   sx={{
                     position: 'absolute',
                     top: 0,
-                    left: '20%',
-                    right: '20%',
-                    height: '1.5px',
+                    left: '12%',
+                    right: '12%',
+                    height: '2px',
                     background: isDark
-                      ? 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent)'
-                      : 'linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.1), transparent)',
+                      ? 'linear-gradient(90deg, transparent, rgba(255, 102, 0, 0.6), transparent)'
+                      : 'linear-gradient(90deg, transparent, rgba(255, 102, 0, 0.45), transparent)',
                     borderRadius: '9999px',
+                    opacity: isPressing ? 1 : 0.85,
+                    transition: 'opacity 0.2s ease',
                   }}
                 />
               </Box>
 
               {TABS.map((tab, idx) => {
                 const isActive = activeTab === idx;
+                const isItemPressed = pressedIndex === idx;
+                const IconComponent = tab.icon;
                 return (
                   <Box
                     key={tab.id}
                     id={`tab-btn-${idx}`}
+                    data-tabbar-press
+                    onPointerDown={() => handlePointerDown(idx)}
                     onClick={() => handleTabClick(idx)}
                     sx={{
                       position: 'relative',
                       zIndex: 2,
-                      py: { xs: 0.9, md: 1.1 },
-                      px: { xs: 0.5, sm: 1.5 },
+                      height: 46,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      px: { xs: 0.5, sm: 1.2 },
                       borderRadius: '9999px',
                       cursor: 'pointer',
                       userSelect: 'none',
-                      textAlign: 'center',
-                      color: isActive ? 'var(--text-heading)' : 'var(--text-secondary)',
-                      fontWeight: isActive ? 600 : 500,
-                      fontSize: { xs: '0.74rem', sm: '0.84rem', md: '0.9rem' },
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      transition: 'color 0.28s ease',
+                      color: isActive
+                        ? '#ff6600'
+                        : (isDark ? 'rgba(255, 255, 255, 0.55)' : '#64748B'),
+                      transition: 'color 0.2s ease',
                       '&:hover': {
-                        color: 'var(--text-heading)',
+                        color: isActive ? '#ff6600' : (isDark ? '#FFFFFF' : '#1E293B'),
                       },
                     }}
                   >
-                    <Box component="span" sx={{ display: { xs: 'none', lg: 'inline' } }}>
-                      {tab.label}
-                    </Box>
-                    <Box component="span" sx={{ display: { xs: 'inline', lg: 'none' } }}>
-                      {tab.shortLabel || tab.label}
+                    {/* The sink target: contents sink under finger press */}
+                    <Box
+                      component="span"
+                      sx={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: { xs: 0.5, sm: 0.8 },
+                        transform: isItemPressed ? 'scale(0.9)' : 'scale(1)',
+                        transition: 'transform 0.15s cubic-bezier(0.2, 0, 0, 1)',
+                        pointerEvents: 'none',
+                        width: '100%',
+                      }}
+                    >
+                      {IconComponent && (
+                        <IconComponent
+                          sx={{
+                            fontSize: { xs: '1.05rem', sm: '1.18rem' },
+                            flexShrink: 0,
+                            color: isActive
+                              ? '#ff6600'
+                              : (isDark ? 'rgba(255, 255, 255, 0.5)' : '#94A3B8'),
+                            transition: 'color 0.2s ease',
+                          }}
+                        />
+                      )}
+                      <Typography
+                        component="span"
+                        sx={{
+                          fontFamily: '"Inter", -apple-system, sans-serif',
+                          fontWeight: isActive ? 600 : 500,
+                          fontSize: { xs: '0.72rem', sm: '0.82rem', md: '0.86rem' },
+                          lineHeight: 1,
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          letterSpacing: '-0.01em',
+                          color: isActive ? '#ff6600' : 'inherit',
+                          transition: 'color 0.2s ease',
+                        }}
+                      >
+                        <Box component="span" sx={{ display: { xs: 'none', md: 'inline' } }}>
+                          {tab.fullLabel || tab.label}
+                        </Box>
+                        <Box component="span" sx={{ display: { xs: 'inline', md: 'none' } }}>
+                          {tab.shortLabel || tab.label}
+                        </Box>
+                      </Typography>
                     </Box>
                   </Box>
                 );

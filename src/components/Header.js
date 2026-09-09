@@ -163,18 +163,36 @@ export default function Header() {
                   width: 26,
                   height: 26,
                   borderRadius: '50%',
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.15)' : '#E2E8F0',
-                  border: 'none',
+                  backdropFilter: 'blur(8px) saturate(180%)',
+                  WebkitBackdropFilter: 'blur(8px) saturate(180%)',
+                  background: isDark
+                    ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.22) 0%, rgba(255, 255, 255, 0.08) 100%)'
+                    : 'linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 243, 235, 0.88) 100%)',
+                  border: isDark ? '1px solid rgba(255, 102, 0, 0.35)' : '1px solid rgba(255, 102, 0, 0.25)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: isDark ? '#FFFFFF' : '#475569',
+                  color: '#ff6600',
+                  boxShadow: isDark
+                    ? '0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.3)'
+                    : '0 2px 6px rgba(15, 23, 42, 0.08), inset 0 1px 1px rgba(255, 255, 255, 1)',
                   cursor: 'pointer',
                   flexShrink: 0,
-                  transition: 'all 0.18s ease',
+                  transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
                   '&:hover': {
-                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.25)' : '#CBD5E1',
-                    color: isDark ? '#FFFFFF' : '#0F172A',
+                    transform: 'scale(1.06)',
+                    background: isDark
+                      ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.3) 0%, rgba(255, 255, 255, 0.12) 100%)'
+                      : 'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 238, 226, 0.95) 100%)',
+                    borderColor: isDark ? 'rgba(255, 102, 0, 0.5)' : 'rgba(255, 102, 0, 0.38)',
+                    backdropFilter: 'blur(16px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                    boxShadow: isDark
+                      ? '0 4px 10px rgba(0, 0, 0, 0.5), inset 0 1.5px 2px rgba(255, 255, 255, 0.45)'
+                      : '0 4px 10px rgba(15, 23, 42, 0.14), inset 0 1.5px 2px rgba(255, 255, 255, 1)',
+                  },
+                  '&:active': {
+                    transform: 'scale(0.92)',
                   },
                 }}
               >
@@ -233,19 +251,38 @@ export default function Header() {
             <Button
               sx={{
                 display: { xs: 'none', sm: 'inline-flex' },
-                borderRadius: '999px',
-                py: 0.5,
-                px: 2,
+                borderRadius: '9999px',
+                py: 0.6,
+                px: 2.2,
                 fontSize: '0.85rem',
                 fontWeight: 700,
                 textTransform: 'none',
-                color: orangeColor,
-                backgroundColor: 'transparent',
-                border: `1.5px solid ${orangeColor}`,
-                transition: 'all 0.2s ease',
+                color: '#ff6600',
+                backdropFilter: 'blur(8px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(8px) saturate(180%)',
+                background: isDark
+                  ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%)'
+                  : 'linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 243, 235, 0.84) 100%)',
+                border: isDark ? '1px solid rgba(255, 102, 0, 0.32)' : '1px solid rgba(255, 102, 0, 0.24)',
+                boxShadow: isDark
+                  ? '0 2px 8px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.35), inset 0 0 0 0.5px rgba(255, 102, 0, 0.28)'
+                  : '0 2px 6px rgba(15, 23, 42, 0.06), inset 0 1.5px 1.5px rgba(255, 255, 255, 1), inset 0 0 0 0.5px rgba(255, 102, 0, 0.18)',
+                transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
                 fontFamily: '"Inter", -apple-system, sans-serif',
                 '&:hover': {
-                  backgroundColor: isDark ? 'rgba(208, 96, 56, 0.1)' : 'rgba(208, 96, 56, 0.05)',
+                  background: isDark
+                    ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.26) 0%, rgba(255, 255, 255, 0.12) 100%)'
+                    : 'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 238, 226, 0.95) 100%)',
+                  borderColor: isDark ? 'rgba(255, 102, 0, 0.45)' : 'rgba(255, 102, 0, 0.35)',
+                  backdropFilter: 'blur(16px) saturate(200%)',
+                  WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                  boxShadow: isDark
+                    ? '0 4px 12px rgba(0, 0, 0, 0.45), inset 0 1.5px 2px rgba(255, 255, 255, 0.45), inset 0 0 0 0.5px rgba(255, 102, 0, 0.35)'
+                    : '0 4px 12px rgba(15, 23, 42, 0.1), inset 0 1.5px 2px rgba(255, 255, 255, 1), inset 0 0 0 0.5px rgba(255, 102, 0, 0.25)',
+                  transform: 'translateY(-1px)',
+                },
+                '&:active': {
+                  transform: 'scale(0.92)',
                 },
               }}
             >
@@ -348,14 +385,38 @@ export default function Header() {
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <Button
                 sx={{
-                  borderRadius: '999px',
+                  borderRadius: '9999px',
                   py: 0.8,
                   px: 2.5,
                   fontSize: '0.9rem',
                   fontWeight: 700,
                   textTransform: 'none',
-                  color: orangeColor,
-                  border: `1.5px solid ${orangeColor}`,
+                  color: '#ff6600',
+                  backdropFilter: 'blur(8px) saturate(180%)',
+                  WebkitBackdropFilter: 'blur(8px) saturate(180%)',
+                  background: isDark
+                    ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%)'
+                    : 'linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 243, 235, 0.84) 100%)',
+                  border: isDark ? '1px solid rgba(255, 102, 0, 0.32)' : '1px solid rgba(255, 102, 0, 0.24)',
+                  boxShadow: isDark
+                    ? '0 2px 8px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.3)'
+                    : '0 2px 6px rgba(15, 23, 42, 0.06), inset 0 1.5px 1.5px rgba(255, 255, 255, 1)',
+                  transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
+                  '&:hover': {
+                    background: isDark
+                      ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.26) 0%, rgba(255, 255, 255, 0.12) 100%)'
+                      : 'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 238, 226, 0.95) 100%)',
+                    borderColor: isDark ? 'rgba(255, 102, 0, 0.45)' : 'rgba(255, 102, 0, 0.35)',
+                    backdropFilter: 'blur(16px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                    boxShadow: isDark
+                      ? '0 4px 12px rgba(0, 0, 0, 0.45), inset 0 1.5px 2px rgba(255, 255, 255, 0.45)'
+                      : '0 4px 12px rgba(15, 23, 42, 0.1), inset 0 1.5px 2px rgba(255, 255, 255, 1)',
+                    transform: 'translateY(-1px)',
+                  },
+                  '&:active': {
+                    transform: 'scale(0.92)',
+                  },
                 }}
               >
                 $OPEN

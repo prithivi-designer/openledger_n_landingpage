@@ -18,7 +18,6 @@ import DownloadIcon from '@mui/icons-material/Download';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import SmartphoneIcon from '@mui/icons-material/Smartphone';
 import { useThemeMode } from '@/context/ThemeContext';
-import GlassSurface from './GlassSurface';
 
 export default function TrustBadges({ onIosClick, onAndroidClick }) {
   const { isDark } = useThemeMode();
@@ -77,32 +76,31 @@ export default function TrustBadges({ onIosClick, onAndroidClick }) {
           zIndex: 5,
         }}
       >
-        {/* React Bits GlassSurface Component - Pill background completely removed */}
-        <GlassSurface
+        {/* High-performance pure CSS Liquid Glass Pill */}
+        <Box
           id="mobile-app-badge-pill"
-          width="auto"
-          height="auto"
-          borderRadius={999}
-          borderWidth={0.08}
-          brightness={50}
-          opacity={0.94}
-          blur={8}
-          displace={0.5}
-          backgroundOpacity={isDark ? 0.08 : 0.15}
-          saturation={1}
-          distortionScale={-22}
-          redOffset={0}
-          greenOffset={0}
-          blueOffset={0}
-          xChannel="R"
-          yChannel="B"
           className="mobile-app-glass-pill"
-          style={{
+          sx={{
             display: 'inline-flex',
             cursor: 'pointer',
             userSelect: 'none',
-            boxShadow: 'none',
+            borderRadius: '999px',
+            backgroundColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.65)',
+            backdropFilter: 'blur(16px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(16px) saturate(180%)',
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.16)' : '1px solid rgba(0, 0, 0, 0.12)',
+            boxShadow: isDark
+              ? '0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+              : '0 8px 32px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
             transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+            '&:hover': {
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.85)',
+              borderColor: 'rgba(255, 102, 0, 0.4)',
+              transform: 'translateY(-2px)',
+              boxShadow: isDark
+                ? '0 12px 36px rgba(0, 0, 0, 0.45), 0 0 20px rgba(255, 102, 0, 0.15)'
+                : '0 12px 36px rgba(15, 23, 42, 0.12), 0 0 20px rgba(255, 102, 0, 0.15)',
+            },
           }}
         >
           <Box
@@ -273,7 +271,7 @@ export default function TrustBadges({ onIosClick, onAndroidClick }) {
               </Tooltip>
             </Box>
           </Box>
-        </GlassSurface>
+        </Box>
       </Box>
 
       {/* Interactive Mobile Download Modal */}
@@ -351,9 +349,12 @@ export default function TrustBadges({ onIosClick, onAndroidClick }) {
           <Box
             sx={{
               display: 'flex',
-              p: '4px',
-              borderRadius: '14px',
-              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.05)',
+              p: '5px',
+              borderRadius: '9999px',
+              backgroundColor: isDark ? 'rgba(20, 24, 30, 0.45)' : 'rgba(255, 255, 255, 0.45)',
+              border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(255, 255, 255, 0.72)',
+              backdropFilter: 'blur(8px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(8px) saturate(180%)',
               mb: 3,
             }}
           >
@@ -362,22 +363,46 @@ export default function TrustBadges({ onIosClick, onAndroidClick }) {
               onClick={() => setActivePlatform('ios')}
               sx={{
                 flex: 1,
-                py: 1,
+                py: 0.9,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 1,
-                borderRadius: '10px',
+                borderRadius: '9999px',
                 cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                backgroundColor: activePlatform === 'ios' ? (isDark ? '#FFFFFF' : '#0F172A') : 'transparent',
-                color: activePlatform === 'ios' ? (isDark ? '#000000' : '#FFFFFF') : (isDark ? 'rgba(255,255,255,0.7)' : 'rgba(15,23,42,0.7)'),
-                fontWeight: activePlatform === 'ios' ? 700 : 500,
-                boxShadow: activePlatform === 'ios' ? '0 4px 12px rgba(0,0,0,0.15)' : 'none',
+                userSelect: 'none',
+                backdropFilter: 'blur(8px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(8px) saturate(180%)',
+                backgroundColor: activePlatform === 'ios'
+                  ? (isDark ? 'rgba(255, 102, 0, 0.12)' : 'rgba(255, 255, 255, 0.88)')
+                  : 'transparent',
+                background: activePlatform === 'ios'
+                  ? (isDark
+                      ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%)'
+                      : 'linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 243, 235, 0.84) 100%)')
+                  : 'transparent',
+                color: activePlatform === 'ios'
+                  ? '#ff6600'
+                  : (isDark ? 'rgba(255, 255, 255, 0.65)' : '#64748B'),
+                border: activePlatform === 'ios'
+                  ? (isDark ? '1px solid rgba(255, 102, 0, 0.32)' : '1px solid rgba(255, 102, 0, 0.22)')
+                  : '1px solid transparent',
+                boxShadow: activePlatform === 'ios'
+                  ? (isDark
+                      ? '0 3px 12px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.35), inset 0 0 0 0.5px rgba(255, 102, 0, 0.28)'
+                      : '0 2px 8px rgba(15, 23, 42, 0.06), inset 0 1.5px 1.5px rgba(255, 255, 255, 1), inset 0 0 0 0.5px rgba(255, 102, 0, 0.18)')
+                  : 'none',
+                transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
+                '&:hover': {
+                  color: '#ff6600',
+                },
+                '&:active': {
+                  transform: 'scale(0.94)',
+                },
               }}
             >
               <AppleIcon sx={{ fontSize: 20 }} />
-              <Typography variant="body2" sx={{ fontWeight: 700 }}>
+              <Typography variant="body2" sx={{ fontWeight: 700, color: 'inherit' }}>
                 iOS (iPhone & iPad)
               </Typography>
             </Box>
@@ -387,22 +412,46 @@ export default function TrustBadges({ onIosClick, onAndroidClick }) {
               onClick={() => setActivePlatform('android')}
               sx={{
                 flex: 1,
-                py: 1,
+                py: 0.9,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 1,
-                borderRadius: '10px',
+                borderRadius: '9999px',
                 cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                backgroundColor: activePlatform === 'android' ? (isDark ? '#FFFFFF' : '#0F172A') : 'transparent',
-                color: activePlatform === 'android' ? (isDark ? '#000000' : '#FFFFFF') : (isDark ? 'rgba(255,255,255,0.7)' : 'rgba(15,23,42,0.7)'),
-                fontWeight: activePlatform === 'android' ? 700 : 500,
-                boxShadow: activePlatform === 'android' ? '0 4px 12px rgba(0,0,0,0.15)' : 'none',
+                userSelect: 'none',
+                backdropFilter: 'blur(8px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(8px) saturate(180%)',
+                backgroundColor: activePlatform === 'android'
+                  ? (isDark ? 'rgba(255, 102, 0, 0.12)' : 'rgba(255, 255, 255, 0.88)')
+                  : 'transparent',
+                background: activePlatform === 'android'
+                  ? (isDark
+                      ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%)'
+                      : 'linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 243, 235, 0.84) 100%)')
+                  : 'transparent',
+                color: activePlatform === 'android'
+                  ? '#ff6600'
+                  : (isDark ? 'rgba(255, 255, 255, 0.65)' : '#64748B'),
+                border: activePlatform === 'android'
+                  ? (isDark ? '1px solid rgba(255, 102, 0, 0.32)' : '1px solid rgba(255, 102, 0, 0.22)')
+                  : '1px solid transparent',
+                boxShadow: activePlatform === 'android'
+                  ? (isDark
+                      ? '0 3px 12px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.35), inset 0 0 0 0.5px rgba(255, 102, 0, 0.28)'
+                      : '0 2px 8px rgba(15, 23, 42, 0.06), inset 0 1.5px 1.5px rgba(255, 255, 255, 1), inset 0 0 0 0.5px rgba(255, 102, 0, 0.18)')
+                  : 'none',
+                transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
+                '&:hover': {
+                  color: '#ff6600',
+                },
+                '&:active': {
+                  transform: 'scale(0.94)',
+                },
               }}
             >
               <AndroidIcon sx={{ fontSize: 20, color: 'inherit' }} />
-              <Typography variant="body2" sx={{ fontWeight: 700 }}>
+              <Typography variant="body2" sx={{ fontWeight: 700, color: 'inherit' }}>
                 Android (Phones & Tablets)
               </Typography>
             </Box>
@@ -471,9 +520,8 @@ export default function TrustBadges({ onIosClick, onAndroidClick }) {
               </Box>
 
               {/* Action Buttons */}
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.2 }}>
                 <Button
-                  variant="contained"
                   fullWidth
                   onClick={() =>
                     handleSimulateAction(
@@ -485,16 +533,36 @@ export default function TrustBadges({ onIosClick, onAndroidClick }) {
                   startIcon={activePlatform === 'ios' ? <AppleIcon /> : <AndroidIcon />}
                   endIcon={<OpenInNewIcon sx={{ fontSize: 16 }} />}
                   sx={{
-                    py: 1,
-                    borderRadius: '10px',
-                    backgroundColor: isDark ? '#FFFFFF' : '#0F172A',
-                    color: isDark ? '#0F172A' : '#FFFFFF',
+                    py: 1.1,
+                    borderRadius: '9999px',
                     fontWeight: 700,
                     textTransform: 'none',
-                    fontSize: '0.9rem',
-                    border: isDark ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(0,0,0,0.1)',
+                    fontSize: '0.92rem',
+                    backdropFilter: 'blur(8px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(8px) saturate(180%)',
+                    background: isDark
+                      ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.2) 0%, rgba(255, 255, 255, 0.08) 100%)'
+                      : 'linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 243, 235, 0.88) 100%)',
+                    border: isDark ? '1px solid rgba(255, 102, 0, 0.35)' : '1px solid rgba(255, 102, 0, 0.25)',
+                    color: '#ff6600',
+                    boxShadow: isDark
+                      ? '0 3px 12px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.35), inset 0 0 0 0.5px rgba(255, 102, 0, 0.3)'
+                      : '0 2px 8px rgba(15, 23, 42, 0.08), inset 0 1.5px 1.5px rgba(255, 255, 255, 1), inset 0 0 0 0.5px rgba(255, 102, 0, 0.2)',
+                    transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
                     '&:hover': {
-                      backgroundColor: isDark ? 'rgba(255, 255, 255, 0.85)' : '#1E293B',
+                      transform: 'translateY(-1px)',
+                      background: isDark
+                        ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.28) 0%, rgba(255, 255, 255, 0.12) 100%)'
+                        : 'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 238, 226, 0.95) 100%)',
+                      borderColor: isDark ? 'rgba(255, 102, 0, 0.45)' : 'rgba(255, 102, 0, 0.35)',
+                      backdropFilter: 'blur(16px) saturate(200%)',
+                      WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                      boxShadow: isDark
+                        ? '0 4px 16px rgba(0, 0, 0, 0.45), inset 0 1.5px 2px rgba(255, 255, 255, 0.45), inset 0 0 0 0.5px rgba(255, 102, 0, 0.35)'
+                        : '0 4px 14px rgba(15, 23, 42, 0.1), inset 0 1.5px 2px rgba(255, 255, 255, 1), inset 0 0 0 0.5px rgba(255, 102, 0, 0.25)',
+                    },
+                    '&:active': {
+                      transform: 'scale(0.94)',
                     },
                   }}
                 >
@@ -504,38 +572,82 @@ export default function TrustBadges({ onIosClick, onAndroidClick }) {
                 <Box sx={{ display: 'flex', gap: 1 }}>
                   {activePlatform === 'android' && (
                     <Button
-                      variant="outlined"
                       size="small"
                       fullWidth
                       onClick={() => handleSimulateAction('Downloading OpenLedger.apk...')}
                       startIcon={<DownloadIcon sx={{ fontSize: 16 }} />}
                       sx={{
-                        py: 0.6,
-                        borderRadius: '8px',
+                        py: 0.75,
+                        borderRadius: '9999px',
                         textTransform: 'none',
-                        fontSize: '0.78rem',
+                        fontSize: '0.8rem',
                         fontWeight: 600,
-                        borderColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)',
-                        color: isDark ? '#FFFFFF' : '#0F172A',
+                        backdropFilter: 'blur(8px) saturate(180%)',
+                        WebkitBackdropFilter: 'blur(8px) saturate(180%)',
+                        backgroundColor: isDark ? 'rgba(20, 24, 30, 0.45)' : 'rgba(255, 255, 255, 0.55)',
+                        border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(255, 255, 255, 0.72)',
+                        color: 'var(--text-primary)',
+                        boxShadow: isDark
+                          ? '0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.12)'
+                          : '0 2px 8px rgba(15, 23, 42, 0.04), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.9)',
+                        transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
+                        '&:hover': {
+                          background: isDark
+                            ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%)'
+                            : 'linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.8) 100%)',
+                          borderColor: isDark ? 'rgba(255, 102, 0, 0.4)' : 'rgba(255, 102, 0, 0.35)',
+                          color: '#ff6600',
+                          backdropFilter: 'blur(16px) saturate(200%)',
+                          WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                          boxShadow: isDark
+                            ? '0 3px 10px rgba(0, 0, 0, 0.35), inset 0 1.5px 2px rgba(255, 255, 255, 0.3)'
+                            : '0 3px 10px rgba(15, 23, 42, 0.08), inset 0 1.5px 2px rgba(255, 255, 255, 1)',
+                          transform: 'translateY(-1px)',
+                        },
+                        '&:active': {
+                          transform: 'scale(0.94)',
+                        },
                       }}
                     >
                       Download APK
                     </Button>
                   )}
                   <Button
-                    variant="outlined"
                     size="small"
                     fullWidth
                     onClick={handleCopyLink}
                     startIcon={<ContentCopyIcon sx={{ fontSize: 15 }} />}
                     sx={{
-                      py: 0.6,
-                      borderRadius: '8px',
+                      py: 0.75,
+                      borderRadius: '9999px',
                       textTransform: 'none',
-                      fontSize: '0.78rem',
+                      fontSize: '0.8rem',
                       fontWeight: 600,
-                      borderColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)',
-                      color: isDark ? '#FFFFFF' : '#0F172A',
+                      backdropFilter: 'blur(8px) saturate(180%)',
+                      WebkitBackdropFilter: 'blur(8px) saturate(180%)',
+                      backgroundColor: isDark ? 'rgba(20, 24, 30, 0.45)' : 'rgba(255, 255, 255, 0.55)',
+                      border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(255, 255, 255, 0.72)',
+                      color: 'var(--text-primary)',
+                      boxShadow: isDark
+                        ? '0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.12)'
+                        : '0 2px 8px rgba(15, 23, 42, 0.04), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.9)',
+                      transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
+                      '&:hover': {
+                        background: isDark
+                          ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%)'
+                          : 'linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.8) 100%)',
+                        borderColor: isDark ? 'rgba(255, 102, 0, 0.4)' : 'rgba(255, 102, 0, 0.35)',
+                        color: '#ff6600',
+                        backdropFilter: 'blur(16px) saturate(200%)',
+                        WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                        boxShadow: isDark
+                          ? '0 3px 10px rgba(0, 0, 0, 0.35), inset 0 1.5px 2px rgba(255, 255, 255, 0.3)'
+                          : '0 3px 10px rgba(15, 23, 42, 0.08), inset 0 1.5px 2px rgba(255, 255, 255, 1)',
+                        transform: 'translateY(-1px)',
+                      },
+                      '&:active': {
+                        transform: 'scale(0.94)',
+                      },
                     }}
                   >
                     Copy Link
@@ -672,19 +784,39 @@ export default function TrustBadges({ onIosClick, onAndroidClick }) {
                 />
                 <Button
                   type="submit"
-                  variant="contained"
                   sx={{
                     whiteSpace: 'nowrap',
-                    px: 2.5,
+                    px: 3,
                     py: 1,
-                    borderRadius: '10px',
+                    borderRadius: '9999px',
                     fontWeight: 700,
                     textTransform: 'none',
                     fontSize: '0.85rem',
-                    backgroundColor: isDark ? '#FFFFFF' : '#0F172A',
-                    color: isDark ? '#000000' : '#FFFFFF',
+                    backdropFilter: 'blur(8px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(8px) saturate(180%)',
+                    background: isDark
+                      ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.2) 0%, rgba(255, 255, 255, 0.08) 100%)'
+                      : 'linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 243, 235, 0.88) 100%)',
+                    border: isDark ? '1px solid rgba(255, 102, 0, 0.35)' : '1px solid rgba(255, 102, 0, 0.25)',
+                    color: '#ff6600',
+                    boxShadow: isDark
+                      ? '0 3px 12px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.35)'
+                      : '0 2px 8px rgba(15, 23, 42, 0.08), inset 0 1.5px 1.5px rgba(255, 255, 255, 1)',
+                    transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
                     '&:hover': {
-                      backgroundColor: isDark ? 'rgba(255,255,255,0.85)' : '#1E293B',
+                      background: isDark
+                        ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.28) 0%, rgba(255, 255, 255, 0.12) 100%)'
+                        : 'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 238, 226, 0.95) 100%)',
+                      borderColor: isDark ? 'rgba(255, 102, 0, 0.45)' : 'rgba(255, 102, 0, 0.35)',
+                      backdropFilter: 'blur(16px) saturate(200%)',
+                      WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                      boxShadow: isDark
+                        ? '0 4px 16px rgba(0, 0, 0, 0.45), inset 0 1.5px 2px rgba(255, 255, 255, 0.45), inset 0 0 0 0.5px rgba(255, 102, 0, 0.35)'
+                        : '0 4px 14px rgba(15, 23, 42, 0.1), inset 0 1.5px 2px rgba(255, 255, 255, 1), inset 0 0 0 0.5px rgba(255, 102, 0, 0.25)',
+                      transform: 'translateY(-1px)',
+                    },
+                    '&:active': {
+                      transform: 'scale(0.94)',
                     },
                   }}
                 >

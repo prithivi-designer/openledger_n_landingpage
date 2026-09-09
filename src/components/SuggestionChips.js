@@ -61,33 +61,39 @@ export default function SuggestionChips({ onSelectPrompt }) {
               <IconComponent
                 sx={{
                   fontSize: '17px !important',
-                  color: 'rgba(255, 255, 255, 0.65)',
+                  color: 'rgba(255, 255, 255, 0.7)',
                   transition: 'color 0.2s ease',
                 }}
               />
             }
             sx={{
-              borderRadius: '999px',
+              borderRadius: '9999px',
               py: 0.8,
-              px: 2,
+              px: 2.2,
               fontSize: '0.88rem',
               fontWeight: 500,
-              color: 'rgba(255, 255, 255, 0.85)',
-              backgroundColor: 'rgba(22, 25, 32, 0.65)',
-              backdropFilter: 'blur(16px)',
-              WebkitBackdropFilter: 'blur(16px)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-              transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+              textTransform: 'none',
+              color: 'rgba(255, 255, 255, 0.9)',
+              backgroundColor: 'rgba(20, 24, 30, 0.52)',
+              backdropFilter: 'blur(8px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(8px) saturate(180%)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              boxShadow: '0 4px 14px rgba(0, 0, 0, 0.3), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.2)',
+              transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
               '&:hover': {
-                backgroundColor: 'rgba(38, 43, 54, 0.85)',
-                borderColor: 'rgba(255, 255, 255, 0.25)',
-                color: '#FFFFFF',
-                transform: 'translateY(-2px)',
-                boxShadow: '0 6px 18px rgba(0, 0, 0, 0.45)',
+                background: 'linear-gradient(180deg, rgba(255, 102, 0, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%)',
+                borderColor: 'rgba(255, 102, 0, 0.45)',
+                color: '#ff6600',
+                backdropFilter: 'blur(16px) saturate(200%)',
+                WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                transform: 'translateY(-1px)',
+                boxShadow: '0 4px 14px rgba(0, 0, 0, 0.4), inset 0 1.5px 2px rgba(255, 255, 255, 0.45), inset 0 0 0 0.5px rgba(255, 102, 0, 0.3)',
                 '& .MuiButton-startIcon svg': {
-                  color: '#FFFFFF',
+                  color: '#ff6600',
                 },
+              },
+              '&:active': {
+                transform: 'scale(0.93)',
               },
             }}
           >

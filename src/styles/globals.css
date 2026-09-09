@@ -128,8 +128,8 @@ html[data-theme="light"] {
 }
 
 /* ---- Global resets reading from CSS vars ---- */
-html {
-  scroll-behavior: smooth;
+html.lenis, html.lenis body {
+  height: auto;
 }
 
 html, body {
@@ -179,7 +179,7 @@ html[data-theme="dark"] #center-hub-logo {
 
 /* Smooth color transitions on all interactive UI */
 button, a, input, select {
-  transition-property: background-color, border-color, color, box-shadow, transform;
+  transition-property: background-color, border-color, color, box-shadow;
   transition-duration: 0.25s;
   transition-timing-function: ease;
 }

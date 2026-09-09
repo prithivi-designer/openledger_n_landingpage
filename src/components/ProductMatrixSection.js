@@ -88,6 +88,7 @@ const GlassCard = ({ children, sx = {}, borderRadius = 24, ...props }) => {
 };
 
 export default function ProductMatrixSection() {
+  const { isDark } = useThemeMode();
   const [activeIdx, setActiveIdx] = React.useState(0);
   const activeTab = OPTIONS[activeIdx];
 
@@ -106,10 +107,8 @@ export default function ProductMatrixSection() {
       sx={{
         backgroundColor: 'var(--bg-section)',
         color: 'var(--text-primary)',
-        py: { xs: 4, md: 6 },
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
+        py: { xs: 8, md: 12 },
+        transition: 'background-color 0.35s ease',
         fontFamily: '"Inter", "Roboto", sans-serif',
         position: 'relative',
         overflow: 'hidden'
@@ -118,35 +117,53 @@ export default function ProductMatrixSection() {
       {/* Soft background glow for glass effect enhancement */}
       <Box sx={{ position: 'absolute', top: '-10%', left: '50%', transform: 'translateX(-50%)', width: '80%', height: '80%', background: 'radial-gradient(circle, rgba(100,150,255,0.03) 0%, transparent 70%)', zIndex: 0, pointerEvents: 'none' }} />
 
-      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
-        {/* Top Header Row */}
-        <Grid container spacing={3} sx={{ mb: { xs: 3, md: 4 } }}>
-          <Grid item xs={12} md={7} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-              <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-secondary)' }}>
-                BUILT
-              </Typography>
-            </Box>
-            <Typography variant="h2" sx={{ fontSize: { xs: '2.5rem', md: '3.5rem' }, fontWeight: 600, letterSpacing: '-0.03em', lineHeight: 1.05, color: 'var(--text-heading)', mb: 2 }}>
-              Built to handle<br/>
-              <Box component="span" sx={{ color: 'var(--text-secondary)', display: 'inline-block' }}>
-                complexity
-              </Box>
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, px: { xs: 2.5, sm: 3, md: 4 } }}>
+        {/* Top Header */}
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'flex-end' }, mb: { xs: 4, md: 6 } }}>
+          <Box>
+            <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-secondary)', mb: 1 }}>
+              Complete AI Ecosystem
             </Typography>
-            <Typography sx={{ fontSize: '1rem', color: 'var(--text-secondary)', maxWidth: '500px', lineHeight: 1.6 }}>
-              A unified platform to build, govern, and scale enterprise AI agents — securely and effortlessly.
+            <Typography variant="h2" sx={{ fontSize: { xs: '2.5rem', md: '3.5rem' }, fontWeight: 500, letterSpacing: '-0.03em', color: 'var(--text-heading)' }}>
+              Everything in one matrix.
             </Typography>
-          </Grid>
-          
-          <Grid item xs={12} md={5} sx={{ display: 'flex', gap: 2, alignItems: 'center', justifyContent: { xs: 'flex-start', md: 'flex-end' } }}>
-             <GlassCard sx={{ maxWidth: '240px', p: 2.5 }}>
+          </Box>
+          <Typography sx={{ fontSize: '1rem', color: 'var(--text-secondary)', maxWidth: 360, mt: { xs: 2, md: 0 }, lineHeight: 1.5 }}>
+            Seamlessly navigate between private interaction, autonomous agents, and model intelligence.
+          </Typography>
+        </Box>
+
+        {/* 4 Feature Value Highlights */}
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          <Grid item xs={12} sm={6} md={3}>
+             <GlassCard sx={{ p: 2.5, borderRadius: '24px' }}>
                 <Box sx={{ width: 28, height: 28, borderRadius: '6px', backgroundColor: 'var(--bg-pill)', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1.5 }}>
-                  <LockOutlinedIcon sx={{ fontSize: '1rem', color: '#3B82F6' }} />
+                  <BoltRoundedIcon sx={{ fontSize: '1rem', color: '#EAB308' }} />
                 </Box>
-                <Typography sx={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-heading)', mb: 0.5 }}>Uncensored Access</Typography>
-                <Typography sx={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>Text, image, video, audio, code and search all in one place without restrictive guardrails.</Typography>
+                <Typography sx={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-heading)', mb: 0.5 }}>Rapid Inference</Typography>
+                <Typography sx={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>Low-latency streaming responses optimized for high-throughput enterprise execution.</Typography>
              </GlassCard>
-             <GlassCard sx={{ maxWidth: '240px', p: 2.5 }}>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+             <GlassCard sx={{ p: 2.5, borderRadius: '24px' }}>
+                <Box sx={{ width: 28, height: 28, borderRadius: '6px', backgroundColor: 'var(--bg-pill)', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1.5 }}>
+                  <AppsRoundedIcon sx={{ fontSize: '1rem', color: '#10B981' }} />
+                </Box>
+                <Typography sx={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-heading)', mb: 0.5 }}>Multi-Agent Cohesion</Typography>
+                <Typography sx={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>Deploy swarms of specialized agents that share unified memory and state instantly.</Typography>
+             </GlassCard>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+             <GlassCard sx={{ p: 2.5, borderRadius: '24px' }}>
+                <Box sx={{ width: 28, height: 28, borderRadius: '6px', backgroundColor: 'var(--bg-pill)', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1.5 }}>
+                  <BarChartRoundedIcon sx={{ fontSize: '1rem', color: '#EC4899' }} />
+                </Box>
+                <Typography sx={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-heading)', mb: 0.5 }}>Token Optimization</Typography>
+                <Typography sx={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>Cut inference overhead by up to 60% through proactive smart routing and context pruning.</Typography>
+             </GlassCard>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+             <GlassCard sx={{ p: 2.5, borderRadius: '24px' }}>
                 <Box sx={{ width: 28, height: 28, borderRadius: '6px', backgroundColor: 'var(--bg-pill)', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1.5 }}>
                   <SecurityOutlinedIcon sx={{ fontSize: '1rem', color: '#3B82F6' }} />
                 </Box>
@@ -160,14 +177,14 @@ export default function ProductMatrixSection() {
         <Grid container spacing={3} alignItems="stretch" sx={{ flexGrow: 1 }}>
           
           {/* Left Sidebar */}
-          <Grid item xs={12} md={3} sx={{ display: 'flex' }}>
+          <Grid item xs={12} md={4} sx={{ display: 'flex' }}>
             <GlassCard sx={{ width: '100%', display: 'flex', flexDirection: 'column', p: { xs: 2, md: 3 }, borderRadius: '32px' }}>
               
               <Typography sx={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6, px: 1, mb: 4 }}>
                 The fastest way to build, govern, and scale enterprise AI agents.
               </Typography>
 
-              <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, gap: 1 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, gap: 1.2 }}>
                 {OPTIONS.map((opt, idx) => {
                   const isActive = idx === activeIdx;
                   return (
@@ -181,41 +198,88 @@ export default function ProductMatrixSection() {
                         p: 2,
                         borderRadius: '16px',
                         cursor: 'pointer',
-                        transition: 'all 0.2s',
-                        backgroundColor: isActive ? 'var(--bg-pill)' : 'transparent',
-                        '&:hover': { backgroundColor: isActive ? 'var(--bg-pill)' : 'var(--bg-card-hover)' }
+                        userSelect: 'none',
+                        backdropFilter: 'blur(8px) saturate(180%)',
+                        WebkitBackdropFilter: 'blur(8px) saturate(180%)',
+                        backgroundColor: isActive
+                          ? (isDark ? 'rgba(255, 102, 0, 0.12)' : 'rgba(255, 255, 255, 0.88)')
+                          : 'transparent',
+                        background: isActive
+                          ? (isDark
+                              ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%)'
+                              : 'linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 243, 235, 0.84) 100%)')
+                          : 'transparent',
+                        border: isActive
+                          ? (isDark ? '1px solid rgba(255, 102, 0, 0.32)' : '1px solid rgba(255, 102, 0, 0.22)')
+                          : '1px solid transparent',
+                        boxShadow: isActive
+                          ? (isDark
+                              ? '0 3px 12px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.35), inset 0 0 0 0.5px rgba(255, 102, 0, 0.28)'
+                              : '0 2px 8px rgba(15, 23, 42, 0.06), inset 0 1.5px 1.5px rgba(255, 255, 255, 1), inset 0 0 0 0.5px rgba(255, 102, 0, 0.18)')
+                          : 'none',
+                        transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
+                        '&:hover': { 
+                          backgroundColor: isActive ? undefined : (isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.6)'),
+                          borderColor: isActive ? undefined : (isDark ? 'rgba(255, 102, 0, 0.2)' : 'rgba(255, 102, 0, 0.15)'),
+                          '& .opt-title, & .opt-icon, & .opt-chevron': { color: '#ff6600' }
+                        },
+                        '&:active': {
+                          transform: 'scale(0.96)',
+                        },
                       }}
                     >
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <opt.icon sx={{ fontSize: '1.2rem', color: isActive ? 'var(--text-heading)' : 'var(--text-secondary)' }} />
-                        <Typography sx={{ fontSize: '1rem', fontWeight: isActive ? 500 : 400, color: isActive ? 'var(--text-heading)' : 'var(--text-secondary)' }}>
+                        <opt.icon className="opt-icon" sx={{ fontSize: '1.2rem', color: isActive ? '#ff6600' : 'var(--text-secondary)', transition: 'color 0.2s' }} />
+                        <Typography className="opt-title" sx={{ fontSize: '1rem', fontWeight: isActive ? 600 : 400, color: isActive ? '#ff6600' : 'var(--text-heading)', transition: 'color 0.2s' }}>
                           {opt.title}
                         </Typography>
                       </Box>
-                      <ChevronRightRoundedIcon sx={{ fontSize: '1.1rem', color: 'var(--text-secondary)', opacity: isActive ? 1 : 0.4 }} />
+                      <ChevronRightRoundedIcon className="opt-chevron" sx={{ fontSize: '1.1rem', color: isActive ? '#ff6600' : 'var(--text-secondary)', opacity: isActive ? 1 : 0.4, transition: 'all 0.2s' }} />
                     </Box>
                   );
                 })}
               </Box>
 
               <Box component="button" sx={{ 
-                mt: 4, width: '100%', py: 2, px: 3, 
-                borderRadius: '30px', 
-                backgroundColor: 'var(--text-heading)', 
-                color: 'var(--bg-section)', 
+                mt: 4, width: '100%', py: 1.6, px: 3, 
+                borderRadius: '9999px', 
+                backdropFilter: 'blur(12px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+                background: isDark
+                  ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.16) 0%, rgba(255, 255, 255, 0.06) 100%)'
+                  : 'linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 243, 235, 0.85) 100%)',
+                border: isDark ? '1px solid rgba(255, 102, 0, 0.3)' : '1px solid rgba(255, 102, 0, 0.22)',
+                color: '#ff6600',
+                boxShadow: isDark
+                  ? '0 2px 10px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.25), inset 0 -1px 1px rgba(0, 0, 0, 0.3)'
+                  : '0 2px 8px rgba(15, 23, 42, 0.06), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.95), inset 0 -1px 1px rgba(0, 0, 0, 0.04)',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                border: 'none', cursor: 'pointer',
-                transition: 'transform 0.2s',
-                '&:hover': { transform: 'scale(0.98)' }
+                cursor: 'pointer',
+                transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
+                '&:hover': { 
+                  transform: 'translateY(-1px)',
+                  background: isDark
+                    ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.24) 0%, rgba(255, 255, 255, 0.1) 100%)'
+                    : 'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 238, 226, 0.95) 100%)',
+                  borderColor: isDark ? 'rgba(255, 102, 0, 0.45)' : 'rgba(255, 102, 0, 0.35)',
+                  backdropFilter: 'blur(16px) saturate(200%)',
+                  WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                  boxShadow: isDark
+                    ? '0 4px 14px rgba(0, 0, 0, 0.45), inset 0 1.5px 2px rgba(255, 255, 255, 0.45), inset 0 0 0 0.5px rgba(255, 102, 0, 0.35)'
+                    : '0 4px 12px rgba(15, 23, 42, 0.1), inset 0 1.5px 2px rgba(255, 255, 255, 1), inset 0 0 0 0.5px rgba(255, 102, 0, 0.25)',
+                },
+                '&:active': {
+                  transform: 'scale(0.95)',
+                }
               }}>
-                <Typography sx={{ fontSize: '0.95rem', fontWeight: 600 }}>Explore Platform</Typography>
+                <Typography sx={{ fontSize: '0.95rem', fontWeight: 700 }}>Explore Platform</Typography>
                 <ArrowForwardRoundedIcon sx={{ fontSize: '1.2rem' }} />
               </Box>
             </GlassCard>
           </Grid>
 
           {/* Right Content */}
-          <Grid item xs={12} md={9} sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 2, md: 3 } }}>
+          <Grid item xs={12} md={8} sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 2, md: 3 } }}>
             
             {/* Image Display */}
             <Box sx={{ position: 'relative', flexGrow: 1, minHeight: { xs: '300px', md: '350px' }, borderRadius: '32px', overflow: 'hidden', backgroundColor: '#000' }}>

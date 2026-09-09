@@ -6,7 +6,6 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
-import StarBorder from './ui/StarBorder';
 import SuggestionChips from './SuggestionChips';
 
 const SUPPORTED_MODELS = [
@@ -154,7 +153,6 @@ export default function HeroChatBox({ prompt, setPrompt }) {
         visibility: 'visible',
       }}
     >
-      <StarBorder color="#c0c0c0" speed="4s">
         <Box
           sx={{
             backgroundColor: 'rgba(18, 20, 26, 0.92)',
@@ -167,6 +165,11 @@ export default function HeroChatBox({ prompt, setPrompt }) {
             overflow: 'hidden',
             display: 'flex',
             flexDirection: 'column',
+            transition: 'border-color 0.25s ease, box-shadow 0.25s ease',
+            '&:focus-within': {
+              borderColor: 'rgba(255, 102, 0, 0.45)',
+              boxShadow: '0 25px 70px -15px rgba(0, 0, 0, 0.75), 0 0 20px rgba(255, 102, 0, 0.15), 0 0 0 1px rgba(255, 102, 0, 0.25) inset',
+            },
           }}
         >
           {/* Upper Composer Area */}
@@ -336,19 +339,28 @@ export default function HeroChatBox({ prompt, setPrompt }) {
                 sx={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  py: 0.5,
-                  px: 1.3,
-                  borderRadius: '10px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.25)',
+                  py: 0.6,
+                  px: 1.6,
+                  borderRadius: '9999px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                  backdropFilter: 'blur(8px) saturate(180%)',
+                  WebkitBackdropFilter: 'blur(8px) saturate(180%)',
+                  border: '1px solid rgba(255, 255, 255, 0.14)',
+                  boxShadow: '0 2px 10px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
                   cursor: 'pointer',
                   userSelect: 'none',
-                  transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                  transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
                   '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.09)',
-                    borderColor: 'rgba(255, 255, 255, 0.22)',
+                    background: 'linear-gradient(180deg, rgba(255, 102, 0, 0.16) 0%, rgba(255, 255, 255, 0.08) 100%)',
+                    borderColor: 'rgba(255, 102, 0, 0.45)',
+                    backdropFilter: 'blur(16px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                    boxShadow: '0 3px 12px rgba(0, 0, 0, 0.35), inset 0 1.5px 2px rgba(255, 255, 255, 0.3), inset 0 0 0 0.5px rgba(255, 102, 0, 0.3)',
                     transform: 'translateY(-1px)',
+                    '& .model-name': { color: '#ff6600' },
+                  },
+                  '&:active': {
+                    transform: 'scale(0.94)',
                   },
                 }}
               >
@@ -488,16 +500,20 @@ export default function HeroChatBox({ prompt, setPrompt }) {
                   sx={{
                     width: 34,
                     height: 34,
-                    backgroundColor: '#FFFFFF',
-                    color: '#0D0F14',
-                    boxShadow: '0 2px 8px rgba(255, 255, 255, 0.25)',
-                    transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                    background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 243, 235, 0.88) 100%)',
+                    border: '1px solid rgba(255, 102, 0, 0.28)',
+                    color: '#ff6600',
+                    boxShadow: '0 2px 6px rgba(15, 23, 42, 0.08), inset 0 1.5px 1.5px rgba(255, 255, 255, 1), inset 0 0 0 0.5px rgba(255, 102, 0, 0.2)',
+                    transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
                     '&:hover': {
-                      backgroundColor: '#F3F4F6',
+                      background: 'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 235, 220, 0.95) 100%)',
+                      borderColor: 'rgba(255, 102, 0, 0.45)',
                       transform: 'scale(1.06)',
-                      boxShadow: '0 4px 14px rgba(255, 255, 255, 0.4)',
+                      backdropFilter: 'blur(16px) saturate(200%)',
+                      WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                      boxShadow: '0 4px 12px rgba(15, 23, 42, 0.12), inset 0 2px 2px rgba(255, 255, 255, 1), inset 0 0 0 0.5px rgba(255, 102, 0, 0.3)',
                     },
-                    '&:active': { transform: 'scale(0.96)' },
+                    '&:active': { transform: 'scale(0.92)' },
                   }}
                 >
                   <ArrowUpwardIcon sx={{ fontSize: 18, fontWeight: 700 }} />
@@ -506,7 +522,6 @@ export default function HeroChatBox({ prompt, setPrompt }) {
             </Box>
           </Box>
         </Box>
-      </StarBorder>
 
       {/* Suggestion Chips */}
       <Box sx={{ mt: 2.5 }}>

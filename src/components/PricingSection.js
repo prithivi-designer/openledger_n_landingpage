@@ -360,20 +360,73 @@ export default function PricingSection() {
         {/* Buttons Added Below Calculator */}
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 6, mb: { xs: 8, md: 10 } }}>
           <Button sx={{ 
-            backgroundColor: isDark ? '#fff' : '#0F172A', 
-            color: isDark ? '#000' : '#fff', 
-            py: 1.2, px: 4, borderRadius: '99px', 
-            fontWeight: 600, fontSize: '0.95rem', textTransform: 'none',
-            '&:hover': { opacity: 0.9, backgroundColor: isDark ? '#fff' : '#0F172A' }
+            borderRadius: '9999px',
+            py: 1.2,
+            px: 4,
+            fontWeight: 700,
+            fontSize: '0.95rem',
+            textTransform: 'none',
+            backdropFilter: 'blur(12px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+            background: isDark
+              ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.16) 0%, rgba(255, 255, 255, 0.06) 100%)'
+              : 'linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 243, 235, 0.85) 100%)',
+            border: isDark ? '1px solid rgba(255, 102, 0, 0.3)' : '1px solid rgba(255, 102, 0, 0.22)',
+            color: '#ff6600',
+            boxShadow: isDark
+              ? '0 2px 10px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.25), inset 0 -1px 1px rgba(0, 0, 0, 0.3)'
+              : '0 2px 8px rgba(15, 23, 42, 0.06), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.95), inset 0 -1px 1px rgba(0, 0, 0, 0.04)',
+            transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
+            '&:hover': {
+              background: isDark
+                ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.24) 0%, rgba(255, 255, 255, 0.1) 100%)'
+                : 'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 238, 226, 0.95) 100%)',
+              borderColor: isDark ? 'rgba(255, 102, 0, 0.45)' : 'rgba(255, 102, 0, 0.35)',
+              backdropFilter: 'blur(16px) saturate(200%)',
+              WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+              boxShadow: isDark
+                ? '0 4px 14px rgba(0, 0, 0, 0.45), inset 0 1.5px 2px rgba(255, 255, 255, 0.45), inset 0 0 0 0.5px rgba(255, 102, 0, 0.35)'
+                : '0 4px 12px rgba(15, 23, 42, 0.1), inset 0 1.5px 2px rgba(255, 255, 255, 1), inset 0 0 0 0.5px rgba(255, 102, 0, 0.25)',
+              transform: 'translateY(-1px)',
+            },
+            '&:active': {
+              transform: 'scale(0.95)',
+            },
           }}>
             Try for free
           </Button>
           <Button sx={{ 
-            border: `1px solid ${isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'}`, 
-            backgroundColor: 'transparent',
-            color: 'var(--text-primary)', py: 1.2, px: 4, borderRadius: '99px', 
-            fontWeight: 600, fontSize: '0.95rem', textTransform: 'none',
-            '&:hover': { backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }
+            borderRadius: '9999px',
+            py: 1.2,
+            px: 4,
+            fontWeight: 600,
+            fontSize: '0.95rem',
+            textTransform: 'none',
+            backdropFilter: 'blur(12px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+            backgroundColor: isDark ? 'rgba(20, 24, 30, 0.45)' : 'rgba(255, 255, 255, 0.55)',
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(255, 255, 255, 0.72)',
+            color: 'var(--text-primary)',
+            boxShadow: isDark
+              ? '0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15)'
+              : '0 2px 6px rgba(15, 23, 42, 0.04), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.9)',
+            transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
+            '&:hover': {
+              background: isDark
+                ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%)'
+                : 'linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.8) 100%)',
+              borderColor: isDark ? 'rgba(255, 102, 0, 0.35)' : 'rgba(255, 102, 0, 0.3)',
+              color: '#ff6600',
+              backdropFilter: 'blur(16px) saturate(200%)',
+              WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+              boxShadow: isDark
+                ? '0 4px 14px rgba(0, 0, 0, 0.35), inset 0 1.5px 2px rgba(255, 255, 255, 0.3)'
+                : '0 4px 12px rgba(15, 23, 42, 0.08), inset 0 1.5px 2px rgba(255, 255, 255, 1)',
+              transform: 'translateY(-1px)',
+            },
+            '&:active': {
+              transform: 'scale(0.95)',
+            },
           }}>
             Check all pricing
           </Button>

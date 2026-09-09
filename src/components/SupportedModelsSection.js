@@ -586,7 +586,7 @@ export default function SupportedModelsSection() {
               alignItems: 'center',
               gap: 1,
               overflowX: 'auto',
-              py: 0.4,
+              py: 0.5,
               px: { xs: 0.2, lg: 0 },
               scrollbarWidth: 'none',
               '&::-webkit-scrollbar': { display: 'none' },
@@ -599,43 +599,55 @@ export default function SupportedModelsSection() {
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
                   sx={{
-                    px: { xs: 1.6, sm: 2 },
-                    py: 0.75,
+                    px: { xs: 1.8, sm: 2.2 },
+                    py: 0.8,
                     borderRadius: '9999px',
-                    fontSize: '0.82rem',
-                    fontWeight: 600,
+                    fontSize: '0.84rem',
+                    fontWeight: isSelected ? 600 : 500,
                     cursor: 'pointer',
                     userSelect: 'none',
                     whiteSpace: 'nowrap',
-                    transition: 'all 0.22s ease',
+                    backdropFilter: 'blur(8px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(8px) saturate(180%)',
                     backgroundColor: isSelected
-                      ? isDark
-                        ? '#FFFFFF'
-                        : '#0F172A'
-                      : isDark
-                      ? 'rgba(255, 255, 255, 0.04)'
-                      : 'rgba(255, 255, 255, 0.65)',
+                      ? (isDark ? 'rgba(255, 102, 0, 0.12)' : 'rgba(255, 255, 255, 0.88)')
+                      : (isDark ? 'rgba(20, 24, 30, 0.45)' : 'rgba(255, 255, 255, 0.45)'),
+                    background: isSelected
+                      ? (isDark
+                          ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%)'
+                          : 'linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 243, 235, 0.84) 100%)')
+                      : (isDark ? 'rgba(20, 24, 30, 0.45)' : 'rgba(255, 255, 255, 0.45)'),
                     color: isSelected
-                      ? isDark
-                        ? '#0F172A'
-                        : '#FFFFFF'
-                      : 'var(--text-secondary)',
+                      ? '#ff6600'
+                      : (isDark ? 'rgba(255, 255, 255, 0.65)' : '#64748B'),
                     border: isSelected
-                      ? '1px solid transparent'
-                      : isDark
-                      ? '1px solid rgba(255, 255, 255, 0.08)'
-                      : '1px solid rgba(255, 255, 255, 0.75)',
-                    backdropFilter: 'blur(12px)',
+                      ? (isDark ? '1px solid rgba(255, 102, 0, 0.32)' : '1px solid rgba(255, 102, 0, 0.22)')
+                      : (isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(255, 255, 255, 0.72)'),
                     boxShadow: isSelected
-                      ? '0 4px 14px rgba(0,0,0,0.15)'
-                      : 'none',
+                      ? (isDark
+                          ? '0 2px 8px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.25), inset 0 -0.5px 1px rgba(0, 0, 0, 0.2)'
+                          : '0 2px 6px rgba(15, 23, 42, 0.06), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.95), inset 0 -0.5px 1px rgba(0, 0, 0, 0.04)')
+                      : (isDark
+                          ? '0 2px 6px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.08)'
+                          : '0 2px 6px rgba(15, 23, 42, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.8)'),
+                    transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
                     '&:hover': {
-                      backgroundColor: isSelected
+                      color: '#ff6600',
+                      borderColor: isDark ? 'rgba(255, 102, 0, 0.4)' : 'rgba(255, 102, 0, 0.35)',
+                      background: isSelected
                         ? undefined
-                        : isDark
-                        ? 'rgba(255, 255, 255, 0.08)'
-                        : 'rgba(255, 255, 255, 0.95)',
-                      color: isSelected ? undefined : 'var(--text-heading)',
+                        : (isDark
+                            ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%)'
+                            : 'linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.8) 100%)'),
+                      backdropFilter: 'blur(16px) saturate(200%)',
+                      WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                      boxShadow: isDark
+                        ? '0 3px 10px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.3)'
+                        : '0 3px 10px rgba(15, 23, 42, 0.08), inset 0 1.5px 1.5px rgba(255, 255, 255, 1)',
+                      transform: 'translateY(-1px)',
+                    },
+                    '&:active': {
+                      transform: 'scale(0.95)',
                     },
                   }}
                 >
@@ -656,17 +668,33 @@ export default function SupportedModelsSection() {
                 px: 2.2,
                 py: 0.85,
                 borderRadius: '9999px',
-                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(255, 255, 255, 0.75)',
-                backdropFilter: 'blur(16px)',
-                WebkitBackdropFilter: 'blur(16px)',
-                border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.85)',
+                backgroundColor: isDark ? 'rgba(20, 24, 30, 0.45)' : 'rgba(255, 255, 255, 0.55)',
+                backdropFilter: 'blur(8px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(8px) saturate(180%)',
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(255, 255, 255, 0.72)',
+                boxShadow: isDark
+                  ? '0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.12)'
+                  : '0 2px 8px rgba(15, 23, 42, 0.04), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.9)',
                 cursor: 'pointer',
                 userSelect: 'none',
                 whiteSpace: 'nowrap',
                 flexShrink: 0,
-                transition: 'all 0.2s ease',
+                transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
                 '&:hover': {
-                  borderColor: isDark ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.2)',
+                  background: isDark
+                    ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%)'
+                    : 'linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.8) 100%)',
+                  borderColor: isDark ? 'rgba(255, 102, 0, 0.4)' : 'rgba(255, 102, 0, 0.35)',
+                  color: '#ff6600',
+                  backdropFilter: 'blur(16px) saturate(200%)',
+                  WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                  boxShadow: isDark
+                    ? '0 3px 10px rgba(0, 0, 0, 0.35), inset 0 1.5px 2px rgba(255, 255, 255, 0.3)'
+                    : '0 3px 10px rgba(15, 23, 42, 0.08), inset 0 1.5px 2px rgba(255, 255, 255, 1)',
+                  transform: 'translateY(-1px)',
+                },
+                '&:active': {
+                  transform: 'scale(0.94)',
                 },
               }}
             >
@@ -914,14 +942,34 @@ export default function SupportedModelsSection() {
                 }}
                 sx={{
                   display: 'inline-block',
-                  px: 2,
-                  py: 0.6,
+                  px: 2.5,
+                  py: 0.8,
                   borderRadius: '9999px',
-                  backgroundColor: 'var(--bg-section)',
-                  border: '1px solid var(--border-normal)',
-                  fontSize: '0.82rem',
+                  backgroundColor: isDark ? 'rgba(20, 24, 30, 0.45)' : 'rgba(255, 255, 255, 0.55)',
+                  backdropFilter: 'blur(8px) saturate(180%)',
+                  WebkitBackdropFilter: 'blur(8px) saturate(180%)',
+                  border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(255, 255, 255, 0.72)',
+                  fontSize: '0.84rem',
                   fontWeight: 600,
+                  color: '#ff6600',
                   cursor: 'pointer',
+                  userSelect: 'none',
+                  transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
+                  '&:hover': {
+                    background: isDark
+                      ? 'linear-gradient(180deg, rgba(255, 102, 0, 0.16) 0%, rgba(255, 255, 255, 0.08) 100%)'
+                      : 'linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 240, 228, 0.85) 100%)',
+                    borderColor: isDark ? 'rgba(255, 102, 0, 0.4)' : 'rgba(255, 102, 0, 0.35)',
+                    backdropFilter: 'blur(16px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                    boxShadow: isDark
+                      ? '0 3px 10px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.3)'
+                      : '0 3px 10px rgba(15, 23, 42, 0.08), inset 0 1.5px 1.5px rgba(255, 255, 255, 1)',
+                    transform: 'translateY(-1px)',
+                  },
+                  '&:active': {
+                    transform: 'scale(0.95)',
+                  },
                 }}
               >
                 Reset filter
@@ -959,15 +1007,37 @@ export default function SupportedModelsSection() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 0.6,
+                px: 2,
+                py: 0.7,
+                borderRadius: '9999px',
                 cursor: 'pointer',
                 userSelect: 'none',
+                backdropFilter: 'blur(8px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(8px) saturate(180%)',
+                backgroundColor: isDark ? 'rgba(20, 24, 30, 0.45)' : 'rgba(255, 255, 255, 0.55)',
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(255, 255, 255, 0.72)',
                 color: 'var(--text-heading)',
                 fontSize: '0.84rem',
-                fontWeight: 700,
-                transition: 'opacity 0.2s, transform 0.2s',
+                fontWeight: 600,
+                boxShadow: isDark
+                  ? '0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.12)'
+                  : '0 2px 8px rgba(15, 23, 42, 0.04), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.9)',
+                transition: 'all 0.2s cubic-bezier(0.2, 0, 0, 1)',
                 '&:hover': {
-                  opacity: 0.75,
-                  transform: 'translateX(2px)',
+                  background: isDark
+                    ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%)'
+                    : 'linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.8) 100%)',
+                  borderColor: isDark ? 'rgba(255, 102, 0, 0.4)' : 'rgba(255, 102, 0, 0.35)',
+                  color: '#ff6600',
+                  backdropFilter: 'blur(16px) saturate(200%)',
+                  WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+                  boxShadow: isDark
+                    ? '0 3px 10px rgba(0, 0, 0, 0.35), inset 0 1.5px 2px rgba(255, 255, 255, 0.3)'
+                    : '0 3px 10px rgba(15, 23, 42, 0.08), inset 0 1.5px 2px rgba(255, 255, 255, 1)',
+                  transform: 'translateY(-1px)',
+                },
+                '&:active': {
+                  transform: 'scale(0.94)',
                 },
               }}
             >

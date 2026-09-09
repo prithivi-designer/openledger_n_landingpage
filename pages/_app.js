@@ -8,7 +8,6 @@ import createEmotionCache from '@/utils/createEmotionCache';
 import SmoothScroll from '@/components/SmoothScroll';
 import { ThemeProvider } from '@/context/ThemeContext';
 import '@/styles/globals.css';
-import '@/components/GlassSurface.css';
 import 'lenis/dist/lenis.css';
 
 // Client-side cache, shared for the whole session of the user in the browser.
@@ -25,6 +24,8 @@ export default function MyApp(props) {
       return (
         message.includes('MetaMask') ||
         message.includes('Failed to connect to MetaMask') ||
+        message.includes('listener indicated an asynchronous response') ||
+        message.includes('message channel closed') ||
         stack.includes('chrome-extension://') ||
         stack.includes('moz-extension://') ||
         stack.includes('safari-web-extension://')
@@ -63,6 +64,8 @@ export default function MyApp(props) {
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <title>OpenLedger | AI-Powered Infrastructure</title>
+        <link rel="icon" href="/openchat_icon_mark.svg" type="image/svg+xml" />
+        <link rel="alternate icon" href="/favicon.ico" />
       </Head>
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
