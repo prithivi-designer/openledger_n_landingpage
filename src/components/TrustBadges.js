@@ -76,202 +76,45 @@ export default function TrustBadges({ onIosClick, onAndroidClick }) {
           zIndex: 5,
         }}
       >
-        {/* High-performance pure CSS Liquid Glass Pill */}
-        <Box
-          id="mobile-app-badge-pill"
-          className="mobile-app-glass-pill"
+        {/* Join the Waitlist Button */}
+        <Button
+          variant="contained"
           sx={{
             display: 'inline-flex',
             cursor: 'pointer',
             userSelect: 'none',
             borderRadius: '999px',
-            backgroundColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.65)',
-            backdropFilter: 'blur(16px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(16px) saturate(180%)',
-            border: isDark ? '1px solid rgba(255, 255, 255, 0.16)' : '1px solid rgba(0, 0, 0, 0.12)',
+            px: { xs: 4, sm: 5 },
+            py: { xs: 1.2, sm: 1.5 },
+            fontSize: { xs: '0.95rem', sm: '1.05rem' },
+            fontWeight: 700,
+            letterSpacing: '0.02em',
+            textTransform: 'none',
+            backgroundColor: '#ff6600',
+            color: '#ffffff',
+            border: isDark ? '1px solid rgba(255, 102, 0, 0.4)' : '1px solid rgba(255, 102, 0, 0.2)',
             boxShadow: isDark
-              ? '0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-              : '0 8px 32px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
+              ? '0 8px 32px rgba(255, 102, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+              : '0 8px 32px rgba(255, 102, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
             transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
             '&:hover': {
-              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.85)',
-              borderColor: 'rgba(255, 102, 0, 0.4)',
+              backgroundColor: '#e65c00',
               transform: 'translateY(-2px)',
               boxShadow: isDark
-                ? '0 12px 36px rgba(0, 0, 0, 0.45), 0 0 20px rgba(255, 102, 0, 0.15)'
-                : '0 12px 36px rgba(15, 23, 42, 0.12), 0 0 20px rgba(255, 102, 0, 0.15)',
+                ? '0 12px 36px rgba(255, 102, 0, 0.45), 0 0 20px rgba(255, 102, 0, 0.2)'
+                : '0 12px 36px rgba(255, 102, 0, 0.35), 0 0 20px rgba(255, 102, 0, 0.2)',
+            },
+            '&:active': {
+              transform: 'scale(0.96)',
             },
           }}
+          onClick={() => {
+            // Optional: You can handle the waitlist click here
+            console.log('Join the waitlist clicked');
+          }}
         >
-          <Box
-            onClick={(e) => handleOpenPlatform('ios', e)}
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              px: { xs: 3.2, sm: 4.8 },
-              py: { xs: 0.9, sm: 1.15 },
-              background: 'none',
-              backgroundColor: 'transparent',
-            }}
-          >
-            {/* Top Caption: ALSO ON */}
-            <Typography
-              variant="caption"
-              sx={{
-                display: 'block',
-                color: isDark ? 'rgba(255, 255, 255, 0.85)' : '#475569',
-                fontSize: '0.73rem',
-                fontWeight: 700,
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                mb: 0.5,
-                textShadow: isDark
-                  ? '0 1px 3px rgba(0,0,0,0.5)'
-                  : '0 1px 1px rgba(255,255,255,0.9)',
-              }}
-            >
-              Also on
-            </Typography>
-
-            {/* Platform Logos & Labels Row */}
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: { xs: 2, sm: 3 },
-              }}
-            >
-              {/* iOS Button */}
-              <Tooltip title="OpenLedger for iOS • Click to view" arrow>
-                <Box
-                  id="badge-btn-ios"
-                  onClick={(e) => handleOpenPlatform('ios', e)}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 0.85,
-                    px: 1.4,
-                    py: 0.4,
-                    borderRadius: '999px',
-                    backgroundColor: 'transparent',
-                    border: '1px solid transparent',
-                    transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-                    '&:hover': {
-                      backgroundColor: isDark
-                        ? 'rgba(255, 255, 255, 0.18)'
-                        : 'rgba(255, 255, 255, 0.55)',
-                      borderColor: isDark
-                        ? 'rgba(255, 255, 255, 0.35)'
-                        : 'rgba(255, 255, 255, 0.8)',
-                      backdropFilter: 'blur(8px)',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
-                      transform: 'scale(1.05)',
-                    },
-                    '&:active': {
-                      transform: 'scale(0.96)',
-                    },
-                  }}
-                >
-                  <AppleIcon
-                    sx={{
-                      fontSize: { xs: '1.35rem', md: '1.5rem' },
-                      color: isDark ? '#FFFFFF' : '#0F172A',
-                      filter: isDark
-                        ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))'
-                        : 'drop-shadow(0 1px 1px rgba(255,255,255,0.8))',
-                    }}
-                  />
-                  <Typography
-                    sx={{
-                      fontFamily: '"Inter", sans-serif',
-                      fontSize: { xs: '1.05rem', md: '1.18rem' },
-                      fontWeight: 700,
-                      letterSpacing: '-0.01em',
-                      color: isDark ? '#FFFFFF' : '#0F172A',
-                      textShadow: isDark
-                        ? '0 2px 4px rgba(0,0,0,0.4)'
-                        : '0 1px 1px rgba(255,255,255,0.8)',
-                    }}
-                  >
-                    iOS
-                  </Typography>
-                </Box>
-              </Tooltip>
-
-              {/* Liquid Hairline Divider */}
-              <Box
-                sx={{
-                  width: '1px',
-                  height: 18,
-                  background: isDark
-                    ? 'linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.4), transparent)'
-                    : 'linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.2), transparent)',
-                }}
-              />
-
-              {/* Android Button */}
-              <Tooltip title="OpenLedger for Android • Click to view" arrow>
-                <Box
-                  id="badge-btn-android"
-                  onClick={(e) => handleOpenPlatform('android', e)}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 0.85,
-                    px: 1.4,
-                    py: 0.4,
-                    borderRadius: '999px',
-                    backgroundColor: 'transparent',
-                    border: '1px solid transparent',
-                    transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-                    '&:hover': {
-                      backgroundColor: isDark
-                        ? 'rgba(255, 255, 255, 0.18)'
-                        : 'rgba(255, 255, 255, 0.55)',
-                      borderColor: isDark
-                        ? 'rgba(255, 255, 255, 0.35)'
-                        : 'rgba(255, 255, 255, 0.8)',
-                      backdropFilter: 'blur(8px)',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
-                      transform: 'scale(1.05)',
-                    },
-                    '&:active': {
-                      transform: 'scale(0.96)',
-                    },
-                  }}
-                >
-                  <AndroidIcon
-                    className="android-icon"
-                    sx={{
-                      fontSize: { xs: '1.35rem', md: '1.5rem' },
-                      color: isDark ? '#FFFFFF' : '#0F172A',
-                      transition: 'color 0.2s ease',
-                      filter: isDark
-                        ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))'
-                        : 'drop-shadow(0 1px 1px rgba(255,255,255,0.8))',
-                    }}
-                  />
-                  <Typography
-                    sx={{
-                      fontFamily: '"Inter", sans-serif',
-                      fontSize: { xs: '1.05rem', md: '1.18rem' },
-                      fontWeight: 700,
-                      letterSpacing: '-0.01em',
-                      color: isDark ? '#FFFFFF' : '#0F172A',
-                      textShadow: isDark
-                        ? '0 2px 4px rgba(0,0,0,0.4)'
-                        : '0 1px 1px rgba(255,255,255,0.8)',
-                    }}
-                  >
-                    Android
-                  </Typography>
-                </Box>
-              </Tooltip>
-            </Box>
-          </Box>
-        </Box>
+          Join the waitlist
+        </Button>
       </Box>
 
       {/* Interactive Mobile Download Modal */}
